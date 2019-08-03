@@ -1,0 +1,15 @@
+{
+  "presets": [
+    "env",
+    "stage-0",
+    "react"
+  ],
+  "plugins": [
+    "syntax-dynamic-import",
+    "react-hot-loader/babel",
+    "transform-decorators-legacy",
+    ["direct-import", [      
+      "react-router-dom"
+    ]]
+  ]
+}
