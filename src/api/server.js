@@ -69,7 +69,6 @@ export default class Server {
                 if (error.response) {
                     console.log(window.location.href.split('/#/')[0] + '/');
                     if (error.response.status === 404 || 302) {
-                        alert(window.location.href.split('/#/')[0])
                         window.location.href = window.location.href.split('/#/')[0] + '/#/login';
                     }
                     reject(error.response.data)

@@ -8,18 +8,12 @@ export const getList = (params) => {
   return async dispatch => {
     try{
       dispatch({
-        type: types.GET_LIST,
+        type: types.GET_SEND_LIST,
       })
-      let result = await API.getList(params);
-      // 如果不成功，则将不成功的信息打印出来
-      if(!result.success) {
-        if(result.code!==900015){
-          message.error(result.message);
-        }
-      }
+      let result = await API.sendList(params);
       dispatch({
-        type: types.GET_LIST,
-        list: result,
+        type: types.GET_SEND_LIST,
+        sendList: result,
       })
     }catch(err){
       console.error(err);

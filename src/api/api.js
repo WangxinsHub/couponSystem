@@ -5,10 +5,9 @@ class API extends Server{
   /**
    *  用途：获取验证码
    */
-  async getList(params = {}){
-    console.error(params)
+  async couponList(params = {}){
     try{
-      let result = await this.axiosCommon('post', Url.list, params);
+      let result = await this.axiosCommon('post', Url.couponList, params);
       if(result) {
         return result;
       }
@@ -16,6 +15,51 @@ class API extends Server{
       throw err;
     }
   }
+
+  async platformList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.platformList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async updateCoupon(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.updateCoupon, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async createCoupon(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.createCoupon, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async sendList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.sendList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
   /**
    *  用途：登陆
    */

@@ -6,7 +6,7 @@ let defaultState = {
   detail: null, 
 }
 
-export const couponReducer = (state = defaultState, action) => {
+export const couponPlantReducer = (state = defaultState, action) => {
   switch(action.type){
     case types.GET_LIST:
       return {

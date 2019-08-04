@@ -66,7 +66,7 @@ export default class Router extends React.Component {
                         <Route exact path="/" component={this.login}/>
                         <Route exact path="/couponList" component={this.couponList}/>
                         <Route exact path="/couponSend" component={this.couponSend}/>
-                        <Route exact path="/couponPlant" component={this.couponSend}/>
+                        <Route exact path="/couponPlant" component={this.couponPlant}/>
                     </Nav>
                 </Switch>
             </HashRouter>

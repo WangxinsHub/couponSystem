@@ -14,6 +14,24 @@ export const couponReducer = (state = defaultState, action) => {
         list: action.list,
         loading: false
       }
+    case types.GET_PLATFORM_LIST:
+      return {
+        ...state,
+        platformList: action.list,
+        loading: false
+      }
+    case types.UPDATE_COUPON:
+      return {
+        ...state,
+        result: action.result,
+        loading: false
+      }
+    case types.CREATE_COUPON:
+      return {
+        ...state,
+        result: action.result,
+        loading: false
+      }
     default: 
       return state;
   }

@@ -53,15 +53,16 @@ export default {
             //         label: '待支付',
             //         value: 0,
             //     }, {
-            //         label: '已支付',
+                   //         label: '已支付',
             //         value: 1,
             //     }],
-            // }, {
-            //     id: 'rangeTime',
-            //     label: '开始时间',
-            //     type: 'rangePicker',
-            //     placeholder: '请选择开始时间'
             // },
+            {
+                id: 'rangeTime',
+                label: '时间',
+                type: 'rangePicker',
+                placeholder: '请选择开始至结束时间'
+            },
         ],
     },
 }

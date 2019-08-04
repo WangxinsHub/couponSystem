@@ -8,7 +8,6 @@ import Define from './define';
 import {getList} from './action';
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
-import NewForm from './edit';
 import api from '../../api/api'
 
 class Home extends Component {
@@ -43,7 +42,7 @@ class Home extends Component {
      */
     componentDidMount() {
         this.props.getList({
-            startPage:this.state.currentNo,
+            pageNo:this.state.currentNo,
             pageSize:this.state.pageSize
         });
     }
@@ -118,87 +117,52 @@ class Home extends Component {
      */
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, showTwo} = this.state;
-        const {loading, list} = this.props.oneSupplierReducer;
+        const {loading, list} = this.props.couponPlantReducer;
 
-        console.error(this.props.oneSupplierReducer)
+        console.error(this.props.couponPlantReducer)
 
-        let {breadMenu, searchMenu} = Define;
-        searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
-        searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
+        let {breadMenu, } = Define;
+
         // 列表表头
         const columns = [
             {
                 title: 'ID',
-                key: 'orderNo',
-                dataIndex: 'orderNo',
+                key: 'id',
+                dataIndex: 'id',
             },
             {
                 title: '平台名称',
-                dataIndex: 'mobile',
-                key: 'mobile',
-                render: (text, record) => <a onClick={() => {
-                    this.setState({
-                        showDetail: true,
-                        showDrawerId: record.id,
-                    })
-                }}>{text}</a>
+                dataIndex: 'platformName',
+                key: 'platformName',
             },
             {
                 title: '联系人',
-                key: 'payStatus',
-                dataIndex: 'payStatus',
-                render: (text) => {
-                    if (text === 0) {
-                        return '待支付'
-                    } else {
-                        return '已支付'
-                    }
-                }
+                key: 'contact',
+                dataIndex: 'contact',
 
             },
             {
                 title: '联系电话',
-                key: 'rechargeStatus',
-                dataIndex: 'rechargeStatus',
-                render: ((text) => {
-                    if (text === 0) {
-                        return '已提交'
-                    } else if (text === 1) {
-                        return '成功'
-                    } else {
-                        return '失败'
-                    }
-                })
+                key: 'mobile',
+                dataIndex: 'mobile',
             },
 
             {
                 title: '创建时间',
-                key: 'rechargeAmount',
-                dataIndex: 'rechargeAmount',
-                render: (text) => {
-                    return (text / 100).toFixed(2)
-                }
+                key: 'createTime',
+                dataIndex: 'createTime',
+
             },
             {
                 title: '更新时间',
-                key: 'payAmount',
-                dataIndex: 'payAmount',
-                render: (text) => {
-                    return (text / 100).toFixed(2)
-                }
+                key: 'updateTime',
+                dataIndex: 'updateTime',
             },
 
             {
                 title: '操作人',
-                key: 'useCard',
-                dataIndex: 'useCard',
-                render: (text, record) => {
-                    if (text) {
-                        return '是'
-                    } else {
-                        return '否'
-                    }
-                }
+                key: 'lastModifyUser',
+                dataIndex: 'lastModifyUser',
             },
             {
                 title: '操作',
@@ -210,15 +174,7 @@ class Home extends Component {
                         </Popconfirm>
                     </Fragment>
                 ),
-            }, {
-                title: '发放批次号',
-                key: 'payTime',
-                dataIndex: 'payTime',
-                render: (text, record) => {
-                    return text.slice(0, 19)
-                }
-            },
-        ];
+            },];
         // 定义表格的数据
         const data = {
             list: list && list.data,
@@ -235,11 +191,8 @@ class Home extends Component {
                 <Spin tip={tips} spinning={tips ? true : false}>
                     <Card bordered={false}>
                         <div className='tableList'>
-                            <div className='tableListForm'>
-                                <TableSearch {...searchMenu} />
-                            </div>
                             <div className='tableListOperator'>
-                                {/*<Button type="primary" icon="plus" onClick={() => {
+                                <Button type="primary" icon="plus" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
                                     var urlEncode = function(param, key, encode) {
@@ -262,14 +215,6 @@ class Home extends Component {
                                     window.location.href = "http://shande.xajhzx.cn/service/export?"+s.slice(1);
                                 }}>
                                     导出
-                                </Button>*/}
-                                <Button type="primary" icon="plus" onClick={() =>{
-                                    this.setState({
-                                        showDrawer: true,
-                                        showDrawerId: null,
-                                    })
-                                }}>
-                                    新增
                                 </Button>
                             </div>
                             <StandardTable
@@ -282,41 +227,14 @@ class Home extends Component {
                             />
                         </div>
                     </Card>
-                    <Drawer
-                        title={showDrawerId ? '编辑闪屏' : '新增闪屏'}
-                        width='560'
-                        visible={showDrawer}
-                        maskClosable={false}
-                        onClose={()=>{
-                            this.setState({
-                                showDrawer: false,
-                                showDrawerId: null,
-                                appSource: null
-                            });
-                        }}
-                    >
-                        { showDrawer && <NewForm
-                            id={showDrawerId}
-                            // appSource={appSource}
-                            onClose={(bool)=>{
-                                this.setState({
-                                    showDrawer: false,
-                                    showDrawerId: null,
-                                    appSource: null
-                                });
-                                // 如果点击的确定，则刷新列表
-                                let searchList = this.state.searchList || {};
-                                // if(bool) this.props.getSplashScreenList({pageSize, pageNo, ...searchList});
-                            }}
-                        />}
-                    </Drawer>
+
                 </Spin>
             </PageHeaderLayout>);
     }
 }
 
 export default connect((state) => ({
-    oneSupplierReducer: state.oneSupplierReducer
+    couponPlantReducer: state.couponPlantReducer
 }), {
     getList,
 })(Home);

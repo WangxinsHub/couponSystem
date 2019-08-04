@@ -11,6 +11,4 @@ export default {
         path: '',
         title: '第三方平台'
     }],
-    // 搜索数据，默认一行显示3条
-    searchMenu:{},
 }

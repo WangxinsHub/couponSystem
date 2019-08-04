@@ -10,13 +10,8 @@ export const getList = (params) => {
       dispatch({
         type: types.GET_LIST,
       })
-      let result = await API.getList(params);
+      let result = await API.platformList(params);
       // 如果不成功，则将不成功的信息打印出来
-      if(!result.success) {
-        if(result.code!==900015){
-          message.error(result.message);
-        }
-      }
       dispatch({
         type: types.GET_LIST,
         list: result,

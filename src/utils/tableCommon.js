@@ -13,14 +13,14 @@ export default {
 
     let searchList = {
       ...state.searchList,
-      startPage: pagination.current,
+      pageNo: pagination.current,
       pageSize: pagination.pageSize,
     }
     if(!is(fromJS(state.searchList), fromJS(searchList))){
       callBack({
         searchList,
         currentNo: pagination.current,
-        startPage: pagination.current,
+        pageNo: pagination.current,
         pageSize: pagination.pageSize,
       })
     }
@@ -34,16 +34,17 @@ export default {
   tableSearch: ({state, values, callBack})=>{
     let text = {
       ...values,
-    }   
+    }
+    console.error(state)
     // 将所有的""空，转为null，方便后台接收
     text = JSON.parse(JSON.stringify(text).replace(/""/g,null));  
     if(text.status >= 0) text.status = [text.status];
-    console.log(text, 7)
     // 对比两次的搜索条件，如果不同的话执行搜索请求
     if(!is(fromJS(state.searchList), fromJS(text))){
       callBack({
         searchList: text,
-        currentNo: 1,
+        pageNo: 1,
+        pageSize: state.pageSize,
       })
     }
   },

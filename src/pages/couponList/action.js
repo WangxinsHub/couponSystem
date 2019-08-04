@@ -10,13 +10,9 @@ export const getList = (params) => {
       dispatch({
         type: types.GET_LIST,
       })
-      let result = await API.getList(params);
+      let result = await API.couponList(params);
       // 如果不成功，则将不成功的信息打印出来
-      if(!result.success) {
-        if(result.code!==900015){
-          message.error(result.message);
-        }
-      }
+      console.error(result)
       dispatch({
         type: types.GET_LIST,
         list: result,
@@ -25,4 +21,60 @@ export const getList = (params) => {
       console.error(err);
     }
   } 
+}
+
+export const platformList = (params) => {
+  // 返回函数，异步dispatch
+  return async dispatch => {
+    try{
+      dispatch({
+        type: types.GET_PLATFORM_LIST,
+      })
+      let result = await API.platformList(params);
+      // 如果不成功，则将不成功的信息打印出来
+      dispatch({
+        type: types.GET_PLATFORM_LIST,
+        list: result.data,
+      })
+    }catch(err){
+      console.error(err);
+    }
+  }
+}
+
+export const updateCoupon = (params) => {
+  // 返回函数，异步dispatch
+  return async dispatch => {
+    try{
+      dispatch({
+        type: types.UPDATE_COUPON,
+      })
+      let result = await API.updateCoupon(params);
+      // 如果不成功，则将不成功的信息打印出来
+      dispatch({
+        type: types.UPDATE_COUPON,
+        result: result,
+      })
+    }catch(err){
+      console.error(err);
+    }
+  }
+}
+export const createCoupon = (params) => {
+  // 返回函数，异步dispatch
+  return async dispatch => {
+    try{
+      dispatch({
+        type: types.CREATE_COUPON,
+      })
+      let result = await API.createCoupon(params);
+      // 如果不成功，则将不成功的信息打印出来
+      dispatch({
+        type: types.CREATE_COUPON,
+        result: result,
+      })
+    }catch(err){
+      console.error(err);
+    }
+  }
 }

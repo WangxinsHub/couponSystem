@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {object, func} from 'prop-types';
-import { Form, Input, Select, Button, Divider, message, Spin, Popconfirm, Radio ,DatePicker, Checkbox} from 'antd';
+import { Form, Input, Select, Button, Upload,Icon, message, Spin, Popconfirm, Radio ,DatePicker, Checkbox} from 'antd';
 import UploadImage from '@/components/uploadImage/index';
 import apiUrl from '@/api/url';
-// import {getSplashScreenInfoById, getSourceList, findAllCities} from './action';
+import {getList,platformList,createCoupon,updateCoupon} from './action';
 import API from '@/api/api';
-import {editFormDrawer} from '@/utils/formStyle'
+import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
+import Url from '@/api/url'
 
 const { TextArea } = Input;
 const RadioGroup = Radio.Group;
@@ -27,29 +28,12 @@ class Home extends Component {
    * @return {[type]} [description]
    */
   componentDidMount(){
-    alert(1)
-    // if(this.props.id) {
-    //   this.props.getSplashScreenInfoById({id: this.props.id});
-    // }
-    // this.props.getSourceList();
-    // this.props.findAllCities({appSource:this.props.appSource});
+    this.props.platformList({
+      pageNo:1,
+      pageSize:100
+    })
   }
-  
-   /**
-   * [getDerivedStateFromProps 父组件传参数进来改变子组件]
-   * @param  {[type]} nextProps [description]
-   * @param  {[type]} prevState [description]
-   * @return {[type]}           [description]
-   */
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if(nextProps.screenReducer !== prevState.screenReducer) {
-      return {
-        screenReducer: nextProps.screenReducer,
-        imageUrl: nextProps.screenReducer.splashScreenDetailInfo.image,
-      };
-    }
-    return null;
-  }
+
 
   /*
   上传表单数据
@@ -58,9 +42,9 @@ class Home extends Component {
     try{
       let result;
       if(this.props.id){
-        result = await API.modifySplashScreen(values);
+        result = await API.updateCoupon(values);
       } else{
-        result = await API.createSplashScreen(values);
+        result = await API.createCoupon(values);
       }      
       if(result.message==='success') {
         message.success('保存成功！');
@@ -88,9 +72,7 @@ class Home extends Component {
     let that = this;
     this.props.form.validateFieldsAndScroll({force:true},(err, values) => {
       if(!err){
-        values.startTime = values.startTime.format('YYYY-MM-DD HH:mm:ss');
-        values.endTime = values.endTime.format('YYYY-MM-DD HH:mm:ss');
-        values.image = this.state.imageUrl;
+        values.validEnd = values.validEnd.format('YYYY/MM/DD HH:mm:ss');
         if(that.props.id) values.id = that.props.id;
         // 提交表单
       that.postData(values);
@@ -104,181 +86,99 @@ class Home extends Component {
     });
   }
 
-   // 与下线时间校验 应早于下线时间
-   validateStartTime = (rule, value, callback) => {
-    const form = this.props.form;
-    if ((value && value.isBefore(form.getFieldValue('endTime'))) || !form.getFieldValue('endTime')) {
-      callback();
-    } else {
-      callback('上线时间应早于下线时间');
+  //  // 与下线时间校验 应早于下线时间
+  //  validateStartTime = (rule, value, callback) => {
+  //   const form = this.props.form;
+  //   if ((value && value.isBefore(form.getFieldValue('endTime'))) || !form.getFieldValue('endTime')) {
+  //     callback();
+  //   } else {
+  //     callback('上线时间应早于下线时间');
+  //   }
+  // }
+  /**
+   * 上传文件
+   * @param info
+   */
+  handleFileChange = (info,) => {
+    this.props.form.validateFieldsAndScroll({ force: true });
+
+    let fileList = info.fileList;
+    fileList = fileList.slice(-1);
+    this.setState({ fileList,canInput: fileList.length === 0 })
+
+    if(fileList && fileList[0]){
+      if(info.file && info.file.response) this.setState({fileUrl:fileList[0].response.data})
     }
   }
-  // 与上线时间校验 应晚于上线时间
-  validateEndTime = (rule, value, callback) => {
-    const form = this.props.form;
-    if ((value && value.isAfter(form.getFieldValue('startTime'))) || !form.getFieldValue('startTime')) {
-      callback();
-    } else {
-      callback('下线时间应晚于上线时间');
-    }
-  }
-
-  // 校验详情链接格式
-  validateUrl =(rule, value, callback)=>{
-  // 链接格式正则
-  const regExp =  /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
-  if(value&&!regExp.test(value)){
-    callback('链接格式不正确');
-  }
-  callback();
-}
 
 
-  // 选择app源
-  selectScrollAppSources = (key) => {
-    const {form} = this.props;
-    //清空之前的选择内容
-    form.setFieldsValue({'cityCodeList': []});
-    //获取城市列表
-    this.props.findAllCities({appSource:key});  
-  }
 
   render() {
     const {imageUrl} = this.state;
-    let {splashScreenDetailInfo, sourceList, citiesList} ={} || this.props.screenReducer ;
-    const { title ='', appSource='', osType=[], advertising, brief='', needLogin, cityCodeList, startTime, endTime} = splashScreenDetailInfo;
-    const linkUrl = splashScreenDetailInfo.url||''
+    let {record} = this.props ;
     const { submitting, form, onClose } = this.props;
+    const {  platformList } = this.props.couponReducer;
     const { getFieldDecorator } = form;
-    if(!this.props.id){
-      splashScreenDetailInfo = null;
-    };
+
     return (<Form style={{paddingBottom: 30}}>
-      <Spin spinning={ this.props.id && !splashScreenDetailInfo ? true : false}>
-        <FormItem {...editFormDrawer} label="标题" key='title'> 
-          {getFieldDecorator('title', {
-            initialValue: splashScreenDetailInfo && title,
+      <Spin spinning={ this.props.id && !record ? true : false}>
+        <FormItem {...stationEditFormDrawer} label="券名称" key='couponName'>
+          {getFieldDecorator('couponName', {
+            initialValue: record && record.couponName,
             rules: [{ required: true, max:30, whitespace: true, message: '请输入最多30位的标题' }],
           })(
             <Input style={{ width: '80%' }} maxLength={30} placeholder="请输入标题" />
           )}
         </FormItem>
-        <FormItem label='APP源' {...editFormDrawer} key="appSource">
-          {getFieldDecorator('appSource', {
-            initialValue:  splashScreenDetailInfo && appSource, 
-            rules: [{ required: true, message: '必填项' }],
-          })(
-            <RadioGroup  disabled={splashScreenDetailInfo ? true : false}>
-              {
-                sourceList && sourceList.map((item)=>{
-                  return <Radio value={item.key} key={item.key} onClick={()=>{this.selectScrollAppSources(item.key)}}>{item.value}</Radio>
-                })
-              }
-            </RadioGroup>
-          )}
-        </FormItem>
-        <FormItem label='城市' {...editFormDrawer} key="cityCodeList">
-          {getFieldDecorator('cityCodeList',{
-            initialValue: splashScreenDetailInfo ? cityCodeList : [] ,
-            rules: [{ required: true, message: '必填项' }],
-          })(
-            <Select style={{width: '70%'}} disabled={splashScreenDetailInfo ? true : false} mode='multiple' allowClear={true} optionFilterProp="children" filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0} placeholder="请选择">{
-              citiesList && citiesList.map((item, index) => {
-                return (<Option key={item.cityCode} value={item.cityCode}>{item.cityName}</Option>)
-                })
-            }</Select>
-          )}
-        </FormItem>
-        <FormItem label='是否需要登录'{...editFormDrawer} key="needLogin">
-            {getFieldDecorator('needLogin', {
-              initialValue:  splashScreenDetailInfo && needLogin,
-              rules: [{ required: true, message: '必填项' }],
-            })(
-              <RadioGroup >
-                <Radio value={true}>是</Radio>
-                <Radio value={false}>否</Radio>
-              </RadioGroup>
-            )}
-        </FormItem>
-        <FormItem label='是否设为广告'{...editFormDrawer} key="advertising">
-            {getFieldDecorator('advertising', {
-              initialValue:  splashScreenDetailInfo && advertising,
-              rules: [{ required: true, message: '必填项' }],
-            })(
-              <RadioGroup>
-                <Radio value={true}>是</Radio>
-                <Radio value={false}>否</Radio>
-              </RadioGroup>
-            )}
-        </FormItem>
-        <FormItem label='设备类型'{...editFormDrawer} key="osType">
-          {getFieldDecorator('osType', {
-            initialValue: splashScreenDetailInfo && osType,
-            rules: [{ required: true, message: '必填项' }],
-          })(
-            <CheckboxGroup>
-              <Checkbox value='Android'>Android</Checkbox>
-              <Checkbox value='iOS'>iOS </Checkbox>
-            </CheckboxGroup>
-          )}
-        </FormItem>
-        <FormItem label="详情链接" {...editFormDrawer}  key='url'> 
-          {getFieldDecorator('url', {
-            initialValue: splashScreenDetailInfo && linkUrl,
-            rules: [{ required: false, whitespace: true, message: '请输入链接' },
-                    { validator: this.validateUrl}],
-          })(
-            <Input style={{ width: '90%' }} placeholder="请输入链接" />
-          )}
-        </FormItem>
-        <FormItem label='上线时间'{...editFormDrawer}>
-          {getFieldDecorator('startTime', {
-            initialValue:  splashScreenDetailInfo && moment(startTime), 
+
+        <FormItem label='截止日期'{...stationEditFormDrawer}>
+          {getFieldDecorator('validEnd', {
+            initialValue:  record && moment(record.validEnd),
             rules: [{ required: true, message: '必填项' },
-                  { validator: this.validateStartTime}],
+              // { validator: this.validateStartTime}
+            ],
           })(
-            <DatePicker style={{ width: '90%' }} showTime format="YYYY-MM-DD HH:mm:ss" placeholder="请选择上线时间" />
+              <DatePicker style={{ width: '70%' }} showTime format="YYYY-MM-DD HH:mm:ss" placeholder="请选择上线时间" />
           )}
         </FormItem>
-        <FormItem label='下线时间'{...editFormDrawer}>
-          {getFieldDecorator('endTime', {
-            initialValue: splashScreenDetailInfo && moment(endTime), 
-            rules: [{ required: true, message: '必填项' },
-                {validator: this.validateEndTime}
-              ],
+
+        <FormItem label='券平台' {...stationEditFormDrawer} key="platformId">
+          {getFieldDecorator('platformId',{
+            initialValue: record && record.platformName ? record.platformName : '',
+            rules: [{ required: true, message: '必填项' }],
           })(
-            <DatePicker style={{ width: '90%' }} showTime format="YYYY-MM-DD HH:mm:ss" placeholder="请选择下线时间" />
+              <Select style={{width: '50%'}}
+                      //onSelect={this.selectCity}
+                      allowClear={true}
+                      optionFilterProp="children"
+                      placeholder="请选择">
+                {
+                  platformList && platformList.map((item, index) => {
+                  return (<Option key={item.id} value={item.id}>{item.platformName}</Option>)
+                })
+              }</Select>
           )}
         </FormItem>
-        <FormItem label='图片'{...editFormDrawer} key="image" extra='建议尺寸大小：1080x1556 支持格式：PNG JPG JPEG GIF'>
-          {getFieldDecorator('image', {
-            rules: [{
-              required: true,
-              validator: (rule, value, callback)=>{
-                if(!imageUrl){
-                  callback('请上传图片');
-                }
-                callback();
-              },         
-            }],
-            validateTrigger: 'onClick'
-          })(
-          <UploadImage 
-            url={apiUrl.uploadAnnoucementImage}
-            name='file'
-            imageUrl={splashScreenDetailInfo && imageUrl}
-            uploadImage= {(imageUrl)=>{
-              this.setState({
-                imageUrl
-              }) 
-            }}/>)}
-        </FormItem>
-        <FormItem label='简介'{...editFormDrawer} key="brief">
-          {getFieldDecorator('brief', {
-            initialValue:  splashScreenDetailInfo && brief,
-          }
-          )(<TextArea style={{ width: '100%' }} autosize={{ minRows: 6, maxRows: 8 }} placeholder="请输入内容简介"/>)}
-        </FormItem>
+
+        {
+          record &&  <FormItem {...stationEditFormDrawer}>
+            <Upload
+                {...{
+                  action:Url.uploadFile,
+                  onChange: this.handleFileChange,
+                  multiple: false,
+                  accept:'.xlsx,.xls'
+                }}
+                fileList={this.state.fileList}>
+              <Button >
+                <Icon type="upload"/> 导入券码
+              </Button>
+              <span className='extra'> 支持扩展名：.xlsx，.xls</span>
+            </Upload>
+          </FormItem>
+        }
+
+
       </Spin>
       <div className="drawerBtns">
         <Popconfirm
@@ -304,7 +204,8 @@ const WrappedRegistrationForm = Form.create()(Home);
 export default connect((state) => ({
   couponReducer: state.couponReducer,
 }), {
-  // getSplashScreenInfoById,
-  // getSourceList,
-  // findAllCities
+  getList,
+  createCoupon,
+  updateCoupon,
+  platformList
 })(WrappedRegistrationForm);

@@ -1,17 +1,17 @@
 import * as types from './action-type';
 
 
-let defaultState = {  
-  list: null,
+let defaultState = {
+  sendList: null,
   detail: null, 
 }
 
-export const couponReducer = (state = defaultState, action) => {
+export const couponSendReducer = (state = defaultState, action) => {
   switch(action.type){
-    case types.GET_LIST:
+    case types.GET_SEND_LIST:
       return {
         ...state,
-        list: action.list,
+        sendList: action.sendList,
         loading: false
       }
     default: 

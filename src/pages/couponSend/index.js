@@ -8,7 +8,7 @@ import Define from './define';
 import {getList} from './action';
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
-import NewForm from './edit';
+import util from '../../utils/base'
 import api from '../../api/api'
 
 class Home extends Component {
@@ -43,7 +43,7 @@ class Home extends Component {
      */
     componentDidMount() {
         this.props.getList({
-            startPage:this.state.currentNo,
+            pageNo:this.state.currentNo,
             pageSize:this.state.pageSize
         });
     }
@@ -59,13 +59,17 @@ class Home extends Component {
             values,
             callBack: (json) => {
                 if( json.searchList.rangeTime){
-                    json.searchList.startTime = json.searchList.rangeTime[0]
-                    json.searchList.endTime =json.searchList.rangeTime[1]
+                    json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0],'YYYY/MM/dd hh:mm:ss')
+                    json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1],'YYYY/MM/dd hh:mm:ss')
                     delete json.searchList.rangeTime;
                 }
 
                 this.setState(json);
-                this.props.getList(json.searchList);
+                this.props.getList({
+                    ...json.searchList,
+                    pageNo:json.pageNo,
+                    pageSize:json.pageSize
+                });
             }
         });
     }
@@ -76,7 +80,7 @@ class Home extends Component {
      */
     handleFormReset = () => {
         this.props.getList({
-            startPage:this.state.currentNo,
+            pageNo:this.state.currentNo,
             pageSize:this.state.pageSize
         });
         this.setState({
@@ -98,15 +102,16 @@ class Home extends Component {
             pagination,
             callBack: (json) => {
                 if( json.searchList.rangeTime){
-                    json.searchList.startTime = json.searchList.rangeTime[0]
-                    json.searchList.endTime =json.searchList.rangeTime[1]
+                    json.searchList.startTime = json.searchList.rangeTime[0].format('YYYY/MM/DD HH:mm:ss')
+                    json.searchList.endTime =json.searchList.rangeTime[1].format('YYYY/MM/DD HH:mm:ss')
                     delete json.searchList.rangeTime;
                 }
 
                 this.setState(json);
                 this.props.getList({
                     ...json.searchList,
-
+                    pageNo:json.pageNo,
+                    pageSize:json.pageSize
                 });
             }
         });
@@ -118,10 +123,7 @@ class Home extends Component {
      */
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, showTwo} = this.state;
-        const {loading, list} = this.props.oneSupplierReducer;
-
-        console.error(this.props.oneSupplierReducer)
-
+        const {loading, sendList} = this.props.couponSendReducer;
         let {breadMenu, searchMenu} = Define;
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
@@ -129,108 +131,76 @@ class Home extends Component {
         const columns = [
             {
                 title: '流水号',
-                key: 'orderNo',
-                dataIndex: 'orderNo',
+                key: 'sendId',
+                dataIndex: 'sendId',
             },
             {
                 title: '券ID',
-                dataIndex: 'mobile',
-                key: 'mobile',
-                render: (text, record) => <a onClick={() => {
-                    this.setState({
-                        showDetail: true,
-                        showDrawerId: record.id,
-                    })
-                }}>{text}</a>
+                dataIndex: 'couponId',
+                key: 'couponId',
             },
             {
                 title: '券名称',
-                key: 'payStatus',
-                dataIndex: 'payStatus',
-                render: (text) => {
-                    if (text === 0) {
-                        return '待支付'
-                    } else {
-                        return '已支付'
-                    }
-                }
-
+                key: 'couponName',
+                dataIndex: 'couponName',
             },
             {
                 title: '码值',
-                key: 'rechargeStatus',
-                dataIndex: 'rechargeStatus',
-                render: ((text) => {
-                    if (text === 0) {
-                        return '已提交'
-                    } else if (text === 1) {
-                        return '成功'
-                    } else {
-                        return '失败'
-                    }
-                })
+                key: 'code',
+                dataIndex: 'code',
             },
 
             {
                 title: '手机号',
-                key: 'rechargeAmount',
-                dataIndex: 'rechargeAmount',
-                render: (text) => {
-                    return (text / 100).toFixed(2)
-                }
+                key: 'mobile',
+                dataIndex: 'mobile',
             },
             {
                 title: '渠道商',
-                key: 'payAmount',
-                dataIndex: 'payAmount',
-                render: (text) => {
-                    return (text / 100).toFixed(2)
-                }
+                key: 'departmentValue',
+                dataIndex: 'departmentValue',
             },
 
             {
                 title: '发放账号',
-                key: 'useCard',
-                dataIndex: 'useCard',
-                render: (text, record) => {
-                    if (text) {
-                        return '是'
-                    } else {
-                        return '否'
-                    }
-                }
+                key: 'modifyUser',
+                dataIndex: 'modifyUser',
             },
             {
                 title: '发放时间',
-                key: 'payTime',
-                dataIndex: 'payTime',
+                key: 'sendTime',
+                dataIndex: 'sendTime',
                 render: (text, record) => {
-                    return text.slice(0, 19)
+                    return text && text.slice(0, 19)
                 }
             },
             {
                 title: '短信状态',
-                key: 'payTime',
-                dataIndex: 'payTime',
-                render: (text, record) => {
-                    return text.slice(0, 19)
+                key: 'messageState',
+                dataIndex: 'messageState',
+                render:(text)=>{
+                    if(text==='SUCCESS'){
+                        return '成功'
+                    }else if(text==='SENDING'){
+                        return '发送中'
+                    }else{
+                        return '失败'
+                    }
                 }
+
             },
             {
                 title: '失败原因',
-                key: 'payTime',
-                dataIndex: 'payTime',
-                render: (text, record) => {
-                    return text.slice(0, 19)
+                key: 'failMessage',
+                dataIndex: 'failMessage',
+                render:(text)=>{
+                    return text ? text :'无'
                 }
             },
             {
                 title: '发放批次号',
-                key: 'payTime',
-                dataIndex: 'payTime',
-                render: (text, record) => {
-                    return text.slice(0, 19)
-                }
+                key: 'sendBatchId',
+                dataIndex: 'sendBatchId',
             },
             {
                 title: '操作',
@@ -242,24 +212,18 @@ class Home extends Component {
                         </Popconfirm>
                     </Fragment>
                 ),
-            }, {
-                title: '发放批次号',
-                key: 'payTime',
-                dataIndex: 'payTime',
-                render: (text, record) => {
-                    return text.slice(0, 19)
-                }
             },
         ];
         // 定义表格的数据
         const data = {
-            list: list && list.data,
+            list: sendList && sendList.data,
             pagination: {
-                total: list ? list.total : 1,
+                total: sendList ? sendList.total : 1,
                 pageSize: pageSize,
                 current: currentNo,
             },
         }
+
         return (
             <PageHeaderLayout
                 nav={breadMenu}
@@ -271,7 +235,7 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                                {/*<Button type="primary" icon="plus" onClick={() => {
+                                <Button type="primary" icon="plus" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
                                     var urlEncode = function(param, key, encode) {
@@ -294,14 +258,6 @@ class Home extends Component {
                                     window.location.href = "http://shande.xajhzx.cn/service/export?"+s.slice(1);
                                 }}>
                                     导出
-                                </Button>*/}
-                                <Button type="primary" icon="plus" onClick={() =>{
-                                    this.setState({
-                                        showDrawer: true,
-                                        showDrawerId: null,
-                                    })
-                                }}>
-                                    新增
                                 </Button>
                             </div>
                             <StandardTable
@@ -314,41 +270,13 @@ class Home extends Component {
                             />
                         </div>
                     </Card>
-                    <Drawer
-                        title={showDrawerId ? '编辑闪屏' : '新增闪屏'}
-                        width='560'
-                        visible={showDrawer}
-                        maskClosable={false}
-                        onClose={()=>{
-                            this.setState({
-                                showDrawer: false,
-                                showDrawerId: null,
-                                appSource: null
-                            });
-                        }}
-                    >
-                        { showDrawer && <NewForm
-                            id={showDrawerId}
-                            // appSource={appSource}
-                            onClose={(bool)=>{
-                                this.setState({
-                                    showDrawer: false,
-                                    showDrawerId: null,
-                                    appSource: null
-                                });
-                                // 如果点击的确定，则刷新列表
-                                let searchList = this.state.searchList || {};
-                                // if(bool) this.props.getSplashScreenList({pageSize, pageNo, ...searchList});
-                            }}
-                        />}
-                    </Drawer>
                 </Spin>
             </PageHeaderLayout>);
     }
 }
 
 export default connect((state) => ({
-    oneSupplierReducer: state.oneSupplierReducer
+    couponSendReducer: state.couponSendReducer
 }), {
     getList,
 })(Home);
