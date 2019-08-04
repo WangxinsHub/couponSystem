@@ -6,6 +6,7 @@ import {createStore, applyMiddleware} from 'redux';
 
 import createReducer from './reducer';
 import * as oneSupplier from '@/pages/oneSupplier/reducer';
+import * as couponList from '@/pages/couponList/reducer';
 
 import thunk from 'redux-thunk';
 
@@ -18,6 +19,7 @@ export default function configureStore(initialState) {
   const store = createStore(
     createReducer({
       ...oneSupplier,
+      ...couponList
     }),
     initialState,
     applyMiddleware(thunk)
