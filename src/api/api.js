@@ -60,6 +60,28 @@ class API extends Server{
     }
   }
 
+  async createPlantForm(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.createPlantForm, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async updatePlantForm(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.updatePlantForm, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
   /**
    *  用途：登陆
    */

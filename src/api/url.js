@@ -13,5 +13,7 @@ export default {
     createCoupon: `${API_HOSTNAME}/service/coupon/create`,
     uploadFile:`${API_HOSTNAME}/service/code/import`,
 
-    sendList:`${API_HOSTNAME}/service/sendDetail/list`
+    sendList:`${API_HOSTNAME}/service/sendDetail/list`,
+    createPlantForm:`${API_HOSTNAME}/service/platform/create`,
+    updatePlantForm:`${API_HOSTNAME}/service/platform/update`,
 }

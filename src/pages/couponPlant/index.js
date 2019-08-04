@@ -9,6 +9,7 @@ import {getList} from './action';
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
 import api from '../../api/api'
+import NewForm from "./edit";
 
 class Home extends Component {
     static propTypes = {
@@ -116,7 +117,7 @@ class Home extends Component {
      * @return {[type]} [description]
      */
     render() {
-        const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, showTwo} = this.state;
+        const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, record, } = this.state;
         const {loading, list} = this.props.couponPlantReducer;
 
         console.error(this.props.couponPlantReducer)
@@ -169,9 +170,13 @@ class Home extends Component {
                 key: 'deal',
                 render: (record) => (
                     <Fragment>
-                        <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
-                            <a>编辑</a>
-                        </Popconfirm>
+                        <a onClick={() =>{
+                            this.setState({
+                                showDrawer: true,
+                                showDrawerId: record.id,
+                                record: record
+                            })
+                        }}>编辑</a>
                     </Fragment>
                 ),
             },];
@@ -192,29 +197,14 @@ class Home extends Component {
                     <Card bordered={false}>
                         <div className='tableList'>
                             <div className='tableListOperator'>
-                                <Button type="primary" icon="plus" onClick={() => {
-                                    //window.location.href = "http://shande.xajhzx.cn/service/export";
-                                    // urlEncode
-                                    var urlEncode = function(param, key, encode) {
-                                        if (param==null) return '';
-                                        var paramStr = '';
-                                        var t = typeof (param);
-                                        if (t == 'string' || t == 'number' || t == 'boolean') {
-                                            paramStr += '&' + key + '='  + ((encode==null||encode) ? encodeURIComponent(param) : param);
-                                        } else {
-                                            for (var i in param) {
-                                                var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
-                                                paramStr += urlEncode(param[i], k, encode)
-                                            }
-                                        }
-                                        return paramStr;
-
-                                    }
-                                    var s = urlEncode({...this.state.searchList});
-                                    console.log(s.slice(1));
-                                    window.location.href = "http://shande.xajhzx.cn/service/export?"+s.slice(1);
+                                <Button type="primary" icon="plus" onClick={() =>{
+                                    this.setState({
+                                        showDrawer: true,
+                                        showDrawerId: null,
+                                        record:null
+                                    })
                                 }}>
-                                    导出
+                                    新增
                                 </Button>
                             </div>
                             <StandardTable
@@ -226,8 +216,35 @@ class Home extends Component {
                                 noCheck={true}
                             />
                         </div>
+                        <Drawer
+                            title={showDrawerId ? '编辑闪屏' : '新增闪屏'}
+                            width='560'
+                            visible={showDrawer}
+                            maskClosable={false}
+                            onClose={()=>{
+                                this.setState({
+                                    showDrawer: false,
+                                    showDrawerId: null,
+                                    record: null
+                                });
+                            }}
+                        >
+                            { showDrawer && <NewForm
+                                id={showDrawerId}
+                                record={record}
+                                onClose={(bool)=>{
+                                    this.setState({
+                                        showDrawer: false,
+                                        showDrawerId: null,
+                                        record: null
+                                    });
+                                    // 如果点击的确定，则刷新列表
+                                    let searchList = this.state.searchList || {};
+                                    // if(bool) this.props.getSplashScreenList({pageSize, pageNo, ...searchList});
+                                }}
+                            />}
+                        </Drawer>
                     </Card>
-
                 </Spin>
             </PageHeaderLayout>);
     }
