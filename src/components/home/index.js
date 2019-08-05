@@ -117,6 +117,25 @@ export default class SiderMenuWrapper extends React.PureComponent {
             menuName:'券平台'
           }
         ]
+      },
+      {
+        menuCode:'hd',
+        menuName:'活动',
+        childMenus:[
+          {
+            menuCode:'activeConfig',
+            menuName:'活动配置'
+          },{
+            menuCode:'activeList',
+            menuName:'活动列表'
+          },{
+            menuCode:'SendRecord',
+            menuName:'发放记录'
+          },{
+            menuCode:'SendDetail',
+            menuName:'发放明细'
+          }
+        ]
       }
     ].map((item)=>{
       item.code = item.menuCode;

@@ -51,6 +51,40 @@ export default class Router extends React.Component {
                 return null
             },
         });
+
+
+        this.activeConfig = lodable({
+            loader: () => {
+                return import('@/pages/activeConfig/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
+        this.activeList = lodable({
+            loader: () => {
+                return import('@/pages/activeList/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
+        this.sendRecord = lodable({
+            loader: () => {
+                return import('@/pages/sendRecord/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
+        this.sendDetail = lodable({
+            loader: () => {
+                return import('@/pages/sendDetail/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
     };
 
     /**
@@ -67,6 +101,11 @@ export default class Router extends React.Component {
                         <Route exact path="/couponList" component={this.couponList}/>
                         <Route exact path="/couponSend" component={this.couponSend}/>
                         <Route exact path="/couponPlant" component={this.couponPlant}/>
+
+                        <Route exact path="/activeConfig" component={this.activeConfig}/>
+                        <Route exact path="/activeList" component={this.activeList}/>
+                        <Route exact path="/sendRecord" component={this.sendRecord}/>
+                        <Route exact path="/sendDetail" component={this.sendDetail}/>
                     </Nav>
                 </Switch>
             </HashRouter>

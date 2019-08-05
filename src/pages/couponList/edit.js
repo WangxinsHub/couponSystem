@@ -125,7 +125,7 @@ class Home extends Component {
         <FormItem {...stationEditFormDrawer} label="券名称" key='couponName'>
           {getFieldDecorator('couponName', {
             initialValue: record && record.couponName,
-            rules: [{ required: true, max:30, whitespace: true, message: '请输入最多30位的标题' }],
+            rules: [{ required: true, max:30, whitespace: true, message: '请输入最多30位的券名称' }],
           })(
             <Input style={{ width: '80%' }} maxLength={30} placeholder="请输入标题" />
           )}

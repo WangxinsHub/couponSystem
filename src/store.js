@@ -9,6 +9,7 @@ import * as oneSupplier from '@/pages/oneSupplier/reducer';
 import * as couponList from '@/pages/couponList/reducer';
 import * as couponSendReducer from '@/pages/couponSend/reducer';
 import * as couponPlantReducer from '@/pages/couponPlant/reducer'
+import * as activeConfigReducer from '@/pages/activeConfig/reducer'
 
 import thunk from 'redux-thunk';
 
@@ -23,7 +24,8 @@ export default function configureStore(initialState) {
             ...oneSupplier,
             ...couponList,
             ...couponSendReducer,
-            ...couponPlantReducer
+            ...couponPlantReducer,
+            ...activeConfigReducer
         }),
         initialState,
         applyMiddleware(thunk)

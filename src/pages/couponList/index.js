@@ -58,15 +58,12 @@ class Home extends Component {
             state: this.state,
             values,
             callBack: (json) => {
-                if( json.searchList.rangeTime){
-                    json.searchList.startTime = json.searchList.rangeTime[0]
-                    json.searchList.endTime =json.searchList.rangeTime[1]
-                    delete json.searchList.rangeTime;
-                }
-
                 this.setState(json);
-                this.props.getList(json.searchList);
-            }
+                this.props.getList({
+                    ...json.searchList,
+                    pageNo:json.pageNo,
+                    pageSize:json.pageSize
+                });            }
         });
     }
 
@@ -329,7 +326,14 @@ class Home extends Component {
                                 });
                                 // 如果点击的确定，则刷新列表
                                 let searchList = this.state.searchList || {};
-                                // if(bool) this.props.getSplashScreenList({pageSize, pageNo, ...searchList});
+
+                                if(bool) {
+                                    this.props.getList({
+                                        pageNo:this.state.currentNo,
+                                        pageSize:this.state.pageSize,
+                                        ...searchList
+                                    });
+                                }
                             }}
                         />}
                     </Drawer>

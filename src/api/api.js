@@ -82,6 +82,30 @@ class API extends Server{
     }
   }
 
+  async activeList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.activeList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async departmentList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.departmentList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
+
   /**
    *  用途：登陆
    */

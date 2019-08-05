@@ -16,4 +16,7 @@ export default {
     sendList:`${API_HOSTNAME}/service/sendDetail/list`,
     createPlantForm:`${API_HOSTNAME}/service/platform/create`,
     updatePlantForm:`${API_HOSTNAME}/service/platform/update`,
+
+    activeList:`${API_HOSTNAME}/service/activity/list`,
+    departmentList:`${API_HOSTNAME}/service/department/list`,
 }

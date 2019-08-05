@@ -119,9 +119,8 @@ class Home extends Component {
      */
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, record, } = this.state;
-        const {loading, list} = this.props.couponPlantReducer;
+        const {loading, list} = this.props.activeConfigReducer;
 
-        console.error(this.props.couponPlantReducer)
 
         let {breadMenu, } = Define;
 
@@ -133,36 +132,62 @@ class Home extends Component {
                 dataIndex: 'id',
             },
             {
-                title: '平台名称',
-                dataIndex: 'platformName',
-                key: 'platformName',
+                title: '活动名称',
+                dataIndex: 'activityName',
+                key: 'activityName',
             },
             {
-                title: '联系人',
-                key: 'contact',
-                dataIndex: 'contact',
+                title: '渠道商',
+                key: 'departmentValue',
+                dataIndex: 'departmentValue',
 
             },
             {
-                title: '联系电话',
-                key: 'mobile',
-                dataIndex: 'mobile',
+                title: '券',
+                key: 'activityCoupons',
+                dataIndex: 'activityCoupons',
             },
 
             {
-                title: '创建时间',
-                key: 'createTime',
-                dataIndex: 'createTime',
-
+                title: '状态',
+                key: 'state',
+                dataIndex: 'state',
+                //DRAFT 草案
+                //ONLINE 已上线
+                //READY 待上线
+                //OVER 已结束
+                render:(text,record)=>{
+                    if(text === 'ONLINE'){
+                        return '已上线'
+                    } else if(text ==='READY'){
+                        return '待上线'
+                    }else if(text === 'DRAFT'){
+                        return '草案'
+                    }else {
+                        return '已结束'
+                    }
+                }
             },
+            {
+                title: '活动有效期',
+                key: 'validStart',
+                dataIndex: 'validStart',
+                render:(text,record)=>{
+                    if(record.validStart){
+                        return record.validStart + '至' + record.validEnd
+                    }else {
+                        return  null
+                    }
+                }
+            },
+
             {
                 title: '更新时间',
                 key: 'updateTime',
                 dataIndex: 'updateTime',
             },
-
             {
-                title: '操作人',
+                title: '更新人',
                 key: 'lastModifyUser',
                 dataIndex: 'lastModifyUser',
             },
@@ -259,7 +284,7 @@ class Home extends Component {
 }
 
 export default connect((state) => ({
-    couponPlantReducer: state.couponPlantReducer
+    activeConfigReducer: state.couponPlantReducer
 }), {
     getList,
 })(Home);
