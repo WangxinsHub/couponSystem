@@ -19,4 +19,5 @@ export default {
 
     activeList:`${API_HOSTNAME}/service/activity/list`,
     departmentList:`${API_HOSTNAME}/service/department/list`,
+    batchList:`${API_HOSTNAME}/service/batch/list`,
 }

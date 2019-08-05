@@ -6,7 +6,7 @@ let defaultState = {
   detail: null, 
 }
 
-export const couponSendReducer = (state = defaultState, action) => {
+export const sendRecordReducer = (state = defaultState, action) => {
   switch(action.type){
     case types.GET_SEND_LIST:
       return {

@@ -123,84 +123,56 @@ class Home extends Component {
      */
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, showTwo} = this.state;
-        const {loading, sendList} = this.props.couponSendReducer;
+        const {loading, sendList} = this.props.sendRecordReducer;
         let {breadMenu, searchMenu} = Define;
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
         // 列表表头
         const columns = [
             {
-                title: '流水号',
+                title: 'ID',
                 key: 'sendId',
                 dataIndex: 'sendId',
             },
             {
-                title: '券ID',
+                title: '活动名称',
                 dataIndex: 'couponId',
                 key: 'couponId',
             },
             {
-                title: '券名称',
+                title: '渠道商',
                 key: 'couponName',
                 dataIndex: 'couponName',
             },
             {
-                title: '码值',
+                title: '券',
                 key: 'code',
                 dataIndex: 'code',
             },
 
             {
-                title: '手机号',
+                title: '状态',
                 key: 'mobile',
                 dataIndex: 'mobile',
             },
             {
-                title: '渠道商',
+                title: '活动有效期',
                 key: 'departmentValue',
                 dataIndex: 'departmentValue',
             },
 
             {
-                title: '发放账号',
+                title: '更新时间',
                 key: 'modifyUser',
                 dataIndex: 'modifyUser',
             },
             {
-                title: '发放时间',
+                title: '更新人',
                 key: 'sendTime',
                 dataIndex: 'sendTime',
                 render: (text, record) => {
                     return text && text.slice(0, 19)
                 }
-            },
-            {
-                title: '短信状态',
-                key: 'messageState',
-                dataIndex: 'messageState',
-                render:(text)=>{
-                    if(text==='SUCCESS'){
-                        return '成功'
-                    }else if(text==='SENDING'){
-                        return '发送中'
-                    }else{
-                        return '失败'
-                    }
-                }
-
-            },
-            {
-                title: '失败原因',
-                key: 'failMessage',
-                dataIndex: 'failMessage',
-                render:(text)=>{
-                    return text ? text :'无'
-                }
-            },
-            {
-                title: '发放批次号',
-                key: 'sendBatchId',
-                dataIndex: 'sendBatchId',
             },
             {
                 title: '操作',
@@ -276,7 +248,7 @@ class Home extends Component {
 }
 
 export default connect((state) => ({
-    couponSendReducer: state.couponSendReducer
+    sendRecordReducer: state.sendRecordReducer
 }), {
     getList,
 })(Home);

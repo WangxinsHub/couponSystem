@@ -10,7 +10,7 @@ export const getList = (params) => {
       dispatch({
         type: types.GET_SEND_LIST,
       })
-      let result = await API.sendList(params);
+      let result = await API.batchList(params);
       dispatch({
         type: types.GET_SEND_LIST,
         sendList: result,

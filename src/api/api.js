@@ -104,6 +104,16 @@ class API extends Server{
     }
   }
 
+  async batchList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.batchList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
 
 
   /**
