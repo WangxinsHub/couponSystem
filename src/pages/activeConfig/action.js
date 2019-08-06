@@ -8,12 +8,12 @@ export const getList = (params) => {
   return async dispatch => {
     try{
       dispatch({
-        type: types.GET_LIST,
+        type: types.GET_ACTIVELIST,
       })
       let result = await API.activeList(params);
       // 如果不成功，则将不成功的信息打印出来
       dispatch({
-        type: types.GET_LIST,
+        type: types.GET_ACTIVELIST,
         list: result,
       })
     }catch(err){

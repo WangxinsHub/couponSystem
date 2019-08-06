@@ -120,7 +120,7 @@ class Home extends Component {
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, record, } = this.state;
         const {loading, list} = this.props.activeConfigReducer;
-
+        console.error(list)
 
         let {breadMenu, } = Define;
 
@@ -243,7 +243,7 @@ class Home extends Component {
                             />
                         </div>
                         <Drawer
-                            title={showDrawerId ? '编辑闪屏' : '新增闪屏'}
+                            title={showDrawerId ? '编辑活动' : '新增活动'}
                             width='560'
                             visible={showDrawer}
                             maskClosable={false}
@@ -284,7 +284,9 @@ class Home extends Component {
 }
 
 export default connect((state) => ({
-    activeConfigReducer: state.couponPlantReducer
+    activeConfigReducer: state.activeConfigReducer
+
+
 }), {
     getList,
 })(Home);

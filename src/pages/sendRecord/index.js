@@ -130,58 +130,48 @@ class Home extends Component {
         // 列表表头
         const columns = [
             {
-                title: 'ID',
-                key: 'sendId',
-                dataIndex: 'sendId',
+                title: '批次号',
+                key: 'batchId',
+                dataIndex: 'batchId',
             },
             {
                 title: '活动名称',
-                dataIndex: 'couponId',
-                key: 'couponId',
+                dataIndex: 'departmentValue',
+                key: 'departmentValue',
             },
             {
-                title: '渠道商',
+                title: '券名',
                 key: 'couponName',
                 dataIndex: 'couponName',
             },
-            {
-                title: '券',
-                key: 'code',
-                dataIndex: 'code',
-            },
 
             {
-                title: '状态',
-                key: 'mobile',
-                dataIndex: 'mobile',
+                title: '发放账号',
+                key: 'sendRealCount',
+                dataIndex: 'sendRealCount',
             },
             {
-                title: '活动有效期',
-                key: 'departmentValue',
-                dataIndex: 'departmentValue',
-            },
-
-            {
-                title: '更新时间',
-                key: 'modifyUser',
-                dataIndex: 'modifyUser',
-            },
-            {
-                title: '更新人',
+                title: '发放时间',
                 key: 'sendTime',
                 dataIndex: 'sendTime',
-                render: (text, record) => {
-                    return text && text.slice(0, 19)
-                }
+            },
+
+            {
+                title: '上传量',
+                key: 'sendTotalCount',
+                dataIndex: 'sendTotalCount',
+            },
+            {
+                title: '发放量',
+                key: 'sendRealCount',
+                dataIndex: 'sendRealCount',
             },
             {
                 title: '操作',
                 key: 'deal',
                 render: (record) => (
                     <Fragment>
-                        <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
-                            <a>重新发送</a>
-                        </Popconfirm>
+                        <a>发送明细</a>
                     </Fragment>
                 ),
             },

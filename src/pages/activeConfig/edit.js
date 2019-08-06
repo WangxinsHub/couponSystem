@@ -2,8 +2,20 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import {object, func} from 'prop-types';
-import {Form, Input, Select, Button, Upload, Icon, message, Spin, Popconfirm, Radio, InputNumber, Checkbox} from 'antd';
-import UploadImage from '@/components/uploadImage/index';
+import {
+    Form,
+    Input,
+    Select,
+    Button,
+    DatePicker,
+    Icon,
+    message,
+    Spin,
+    Popconfirm,
+    Radio,
+    InputNumber,
+    Checkbox
+} from 'antd';
 import apiUrl from '@/api/url';
 import {getList, getDepartmentList,} from './action';
 import API from '@/api/api';
@@ -12,11 +24,11 @@ import Url from '@/api/url'
 import Verify from '../../utils/verify'
 import {getList as getCouponList} from '../couponList/action'
 
-const {TextArea} = Input;
-const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const {Option} = Select;
 const CheckboxGroup = Checkbox.Group;
+const {RangePicker,} = DatePicker;
+const {TextArea} = Input;
 
 
 class Home extends Component {
@@ -27,7 +39,7 @@ class Home extends Component {
     state = {
         btnDisabled: false,
         activityCouponMessage: [{}],
-        errorMsg:''
+        errorMsg: ''
     }
 
     /**
@@ -43,7 +55,15 @@ class Home extends Component {
             pageNo: 1,
             pageSize: 1000
         })
+        console.warn(this.props.record);
+
+        if(this.props.record){
+            this.setState({
+                departmentValue:this.props.record.departmentValue
+            })
+        }
     }
+
 
 
     /*
@@ -53,9 +73,9 @@ class Home extends Component {
         try {
             let result;
             if (this.props.id) {
-                result = await API.updatePlantForm(values);
+                result = await API.updateActive(values);
             } else {
-                result = await API.createPlantForm(values);
+                result = await API.createActive(values);
             }
             if (result.message === 'success') {
                 message.success('保存成功！');
@@ -85,10 +105,22 @@ class Home extends Component {
             if (!err && !this.state.errorMsg) {
                 const {activityCouponMessage} = this.state;
                 if (that.props.id) values.id = that.props.id;
-                values.activityCouponMessage = that.state.activityCouponMessage;
+                values.activityCouponMessage = that.state.activityCouponMessage.map((item => (
+                    {
+                        couponId: item.couponId,
+                        couponName: item.couponName,
+                        totalCount: item.totalCount,
+                        endTime: item.endTime,
+                    }
+                )));
+                values.validStart = values.rangeTime[0].format("YYYY/MM/DD HH:mm:ss");
+                values.validEnd = values.rangeTime[1].format("YYYY/MM/DD HH:mm:ss");
+                delete values.rangeTime;
+                values.departmentValue = this.state.departmentValue;
+
                 // 提交表单
                 console.log(values);
-                //that.postData(values);
+                that.postData(values);
             } else {
                 this.setState({
                     btnDisabled: false
@@ -129,7 +161,7 @@ class Home extends Component {
         let coupon = list.data[couponIndex];
 
         const {activityCouponMessage} = this.state;
-        activityCouponMessage[activeIndex]= {
+        activityCouponMessage[activeIndex] = {
             couponId: coupon.id,
             couponName: coupon.name,
             totalCount: coupon.totalCount,
@@ -143,6 +175,11 @@ class Home extends Component {
         console.log(list.data[couponIndex]);
     }
 
+    handleSelect = (val,opt) => {
+        this.setState({
+            departmentValue:opt.props.children
+        })
+    }
 
     render() {
         const {activityCouponMessage} = this.state;
@@ -152,11 +189,22 @@ class Home extends Component {
         const {departmentList,} = this.props.activeConfigReducer;
         const {getFieldDecorator} = form;
 
+        let validStart, validEnd;
+
+        if (record) {
+            if (record.validStart) {
+                validStart = moment(new Date(record.validStart))
+            }
+            if (record.validEnd) {
+                validEnd = moment(new Date(record.validEnd))
+            }
+        }
+
         return (<Form style={{paddingBottom: 30}}>
-                <Spin spinning={this.props.id && !record ? true : false}>
+                <Spin spinning={!!(this.props.id && !record)}>
                     <FormItem {...stationEditFormDrawer} label="活动名称" key='activityName'>
                         {getFieldDecorator('activityName', {
-                            initialValue: record && record.platformName,
+                            initialValue: record && record.activityName,
                             rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位的活动名称'}],
                         })(
                             <Input style={{width: '80%'}} maxLength={30} placeholder="请输入活动名称"/>
@@ -169,9 +217,9 @@ class Home extends Component {
                             rules: [{required: true, message: '必填项'}],
                         })(
                             <Select style={{width: '50%'}}
-                                //onSelect={this.selectCity}
                                     allowClear={true}
                                     optionFilterProp="children"
+                                    onSelect={this.handleSelect}
                                     placeholder="请选择">
                                 {
                                     departmentList && departmentList.data.map((item, index) => {
@@ -213,19 +261,24 @@ class Home extends Component {
                                         当前可用量<b>{active.stockCount - active.lockedCount}</b>，使用
                                         <InputNumber
                                             precision={0}
-                                            onChange={(number)=>{
+                                            onChange={(number) => {
                                                 function check() {
-                                                    if (number === 11) {
-                                                        return {
-                                                            validateStatus: 'success',
-                                                            errorMsg: null,
-                                                        };
-                                                    }
+                                                    // if (number === 11) {
+                                                    //     return {
+                                                    //         validateStatus: 'success',
+                                                    //         errorMsg: null,
+                                                    //     };x
+                                                    // }
+                                                    // return {
+                                                    //     validateStatus: 'error',
+                                                    //     errorMsg: 'The prime between 8 and 12 is 11!',
+                                                    // };
                                                     return {
-                                                        validateStatus: 'error',
-                                                        errorMsg: 'The prime between 8 and 12 is 11!',
+                                                        validateStatus: 'success',
+                                                        errorMsg: null,
                                                     };
                                                 }
+
                                                 const {activityCouponMessage} = this.state;
                                                 let {
                                                     validateStatus,
@@ -233,6 +286,7 @@ class Home extends Component {
                                                 } = check(number)
                                                 activityCouponMessage[activeIndex].validateStatus = validateStatus
                                                 activityCouponMessage[activeIndex].errorMsg = errorMsg
+                                                activityCouponMessage[activeIndex].totalCount = number
                                                 this.setState({
                                                     activityCouponMessage
                                                 })
@@ -256,6 +310,25 @@ class Home extends Component {
                             })
                         }}>新增券</a>
                     </Fragment>
+
+                    <FormItem label='活动有效期' {...stationEditFormDrawer} key="rangeTime">
+                        {getFieldDecorator('rangeTime', {
+                            initialValue: validStart && validEnd ? [validStart, validEnd] : '',
+                            rules: [{required: true, message: '必填项'}],
+                        })(
+                            <RangePicker/>
+                        )}
+                    </FormItem>
+
+                    <FormItem label='活动说明' {...stationEditFormDrawer} key="description">
+                        {getFieldDecorator('description', {
+                            //initialValue: [moment(new Date()),moment(new Date())],
+                            rules: [{required: true, message: '必填项'}],
+                        })(
+                            <TextArea rows={4}/>,
+                        )}
+                    </FormItem>
+
                 </Spin>
                 <div className="drawerBtns">
                     <Popconfirm
@@ -270,7 +343,7 @@ class Home extends Component {
                         </Button>
                     </Popconfirm>
                     <Button loading={submitting} onClick={(e) => {
-                        this.validate(e)
+                        this.validate(e,)
                     }} disabled={this.state.btnDisabled} type="primary">保存</Button>
                 </div>
             </Form>

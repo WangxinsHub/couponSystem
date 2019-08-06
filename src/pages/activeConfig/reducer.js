@@ -8,7 +8,7 @@ let defaultState = {
 
 export const activeConfigReducer = (state = defaultState, action) => {
   switch(action.type){
-    case types.GET_LIST:
+    case types.GET_ACTIVELIST:
       return {
         ...state,
         list: action.list,

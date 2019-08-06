@@ -10,6 +10,7 @@ import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
 import util from '../../utils/base'
 import api from '../../api/api'
+import NewForm from "./send";
 
 class Home extends Component {
     static propTypes = {
@@ -130,86 +131,79 @@ class Home extends Component {
         // 列表表头
         const columns = [
             {
-                title: '流水号',
-                key: 'sendId',
-                dataIndex: 'sendId',
+                title: 'ID',
+                key: 'id',
+                dataIndex: 'id',
             },
             {
-                title: '券ID',
-                dataIndex: 'couponId',
-                key: 'couponId',
-            },
-            {
-                title: '券名称',
-                key: 'couponName',
-                dataIndex: 'couponName',
-            },
-            {
-                title: '码值',
-                key: 'code',
-                dataIndex: 'code',
-            },
-
-            {
-                title: '手机号',
-                key: 'mobile',
-                dataIndex: 'mobile',
+                title: '活动名称',
+                dataIndex: 'activityName',
+                key: 'activityName',
             },
             {
                 title: '渠道商',
                 key: 'departmentValue',
                 dataIndex: 'departmentValue',
             },
-
             {
-                title: '发放账号',
-                key: 'modifyUser',
-                dataIndex: 'modifyUser',
-            },
-            {
-                title: '发放时间',
-                key: 'sendTime',
-                dataIndex: 'sendTime',
-                render: (text, record) => {
-                    return text && text.slice(0, 19)
-                }
-            },
-            {
-                title: '短信状态',
-                key: 'messageState',
-                dataIndex: 'messageState',
-                render:(text)=>{
-                    if(text==='SUCCESS'){
-                        return '成功'
-                    }else if(text==='SENDING'){
-                        return '发送中'
-                    }else{
-                        return '失败'
+                title: '状态',
+                key: 'state',
+                dataIndex: 'state',
+                //DRAFT 草案
+                //ONLINE 已上线
+                //READY 待上线
+                //OVER 已结束
+                render:(text,record)=>{
+                    if(text === 'ONLINE'){
+                        return '已上线'
+                    } else if(text ==='READY'){
+                        return '待上线'
+                    }else if(text === 'DRAFT'){
+                        return '草案'
+                    }else {
+                        return '已结束'
                     }
                 }
-
             },
             {
-                title: '失败原因',
-                key: 'failMessage',
-                dataIndex: 'failMessage',
-                render:(text)=>{
-                    return text ? text :'无'
+                title: '活动有效期',
+                key: 'validStart',
+                dataIndex: 'validStart',
+                render:(text,record)=>{
+                    if(record.validStart){
+                        return record.validStart + '至' + record.validEnd
+                    }else {
+                        return  null
+                    }
                 }
-            },
-            {
-                title: '发放批次号',
-                key: 'sendBatchId',
-                dataIndex: 'sendBatchId',
             },
             {
                 title: '操作',
                 key: 'deal',
-                render: (record) => (
+                render: (text,record) => (
                     <Fragment>
-                        <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
-                            <a>重新发送</a>
-                        </Popconfirm>
+                        {
+                            record.state === 'ONLINE'?
+                                <div>
+                                    <a onClick={()=>{
+                                        this.setState({
+                                            showDrawer: true,
+                                            showDrawerId: record.id,
+                                        })
+                                    }}>发放券码</a>
+                                    <Divider type="vertical" />
+                                    <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
+                                        <a>发放记录</a>
+                                    </Popconfirm>
+                                    <Divider type="vertical" />
+                                    <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
+                                        <a>活动明细</a>
+                                    </Popconfirm>
+                                </div>:
+                                <div>
+                                    <a>活动明细</a>
+                                </div>
+                        }
                     </Fragment>
                 ),
             },
@@ -269,6 +263,41 @@ class Home extends Component {
                                 noCheck={true}
                             />
                         </div>
+
+                        <Drawer
+                            title={'发送券码'}
+                            width='560'
+                            visible={showDrawer}
+                            maskClosable={false}
+                            onClose={()=>{
+                                this.setState({
+                                    showDrawer: false,
+                                    showDrawerId: null,
+                                    record: null
+                                });
+                            }}
+                        >
+                            { showDrawer && <NewForm
+                                id={showDrawerId}
+                                onClose={(bool)=>{
+                                    this.setState({
+                                        showDrawer: false,
+                                        showDrawerId: null,
+                                        record: null
+                                    });
+                                    // 如果点击的确定，则刷新列表
+                                    let searchList = this.state.searchList || {};
+
+                                    if(bool){
+                                        this.props.getList({
+                                            pageNo:this.state.currentNo,
+                                            pageSize:this.state.pageSize,
+                                            ...searchList
+                                        });
+                                    }
+                                }}
+                            />}
+                        </Drawer>
                     </Card>
                 </Spin>
             </PageHeaderLayout>);

@@ -20,4 +20,8 @@ export default {
     activeList:`${API_HOSTNAME}/service/activity/list`,
     departmentList:`${API_HOSTNAME}/service/department/list`,
     batchList:`${API_HOSTNAME}/service/batch/list`,
+    sendCode:`${API_HOSTNAME}/service/activity/send`,
+
+    createActive:`${API_HOSTNAME}/service/activity/create`,
+    updateActive:`${API_HOSTNAME}/service/activity/update`,
 }

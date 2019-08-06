@@ -114,6 +114,50 @@ class API extends Server{
       throw err;
     }
   }
+  async sendCode(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.sendCode, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async createActive(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.createActive, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async updateActive(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.updateActive, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
+  async sendCode(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.sendCode, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
 
 
   /**
