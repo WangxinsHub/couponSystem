@@ -9,7 +9,8 @@ import {getList} from './action';
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
 import util from '../../utils/base'
-import api from '../../api/api'
+import {Link} from 'react-router-dom';
+
 import NewForm from "./send";
 
 class Home extends Component {
@@ -124,7 +125,7 @@ class Home extends Component {
      */
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, showTwo} = this.state;
-        const {loading, sendList} = this.props.couponSendReducer;
+        const {loading, list} = this.props.activeListReducer;
         let {breadMenu, searchMenu} = Define;
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
@@ -192,16 +193,12 @@ class Home extends Component {
                                         })
                                     }}>发放券码</a>
                                     <Divider type="vertical" />
-                                    <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
-                                        <a>发放记录</a>
-                                    </Popconfirm>
+                                    <Link to='/sendRecord'>发放记录</Link>
                                     <Divider type="vertical" />
-                                    <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
-                                        <a>活动明细</a>
-                                    </Popconfirm>
+                                    <Link to='sendDetail'>发放明细</Link>
                                 </div>:
                                 <div>
-                                    <a>活动明细</a>
+                                    <Link to='sendDetail'>发放明细</Link>
                                 </div>
                         }
                     </Fragment>
@@ -210,9 +207,9 @@ class Home extends Component {
         ];
         // 定义表格的数据
         const data = {
-            list: sendList && sendList.data,
+            list: list && list.data,
             pagination: {
-                total: sendList ? sendList.total : 1,
+                total: list ? list.total : 1,
                 pageSize: pageSize,
                 current: currentNo,
             },
@@ -305,7 +302,7 @@ class Home extends Component {
 }
 
 export default connect((state) => ({
-    couponSendReducer: state.couponSendReducer
+    activeListReducer: state.activeListReducer
 }), {
     getList,
 })(Home);

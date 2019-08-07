@@ -110,7 +110,7 @@ class Home extends Component {
                         couponId: item.couponId,
                         couponName: item.couponName,
                         totalCount: item.totalCount,
-                        endTime: item.endTime,
+                        // endTime: item.endTime,
                     }
                 )));
                 values.validStart = values.rangeTime[0].format("YYYY/MM/DD HH:mm:ss");

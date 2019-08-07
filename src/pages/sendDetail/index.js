@@ -135,7 +135,7 @@ class Home extends Component {
                 dataIndex: 'sendId',
             },
             {
-                title: '券ID',
+                title: '活动名称',
                 dataIndex: 'couponId',
                 key: 'couponId',
             },
@@ -154,11 +154,6 @@ class Home extends Component {
                 title: '手机号',
                 key: 'mobile',
                 dataIndex: 'mobile',
-            },
-            {
-                title: '渠道商',
-                key: 'departmentValue',
-                dataIndex: 'departmentValue',
             },
 
             {
@@ -193,25 +188,11 @@ class Home extends Component {
                 title: '失败原因',
                 key: 'failMessage',
                 dataIndex: 'failMessage',
-                render:(text)=>{
-                    return text ? text :'无'
-                }
             },
             {
                 title: '发放批次号',
                 key: 'sendBatchId',
                 dataIndex: 'sendBatchId',
-            },
-            {
-                title: '操作',
-                key: 'deal',
-                render: (record) => (
-                    <Fragment>
-                        <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
-                            <a>重新发送</a>
-                        </Popconfirm>
-                    </Fragment>
-                ),
             },
         ];
         // 定义表格的数据

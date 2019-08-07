@@ -85,6 +85,33 @@ export default class Router extends React.Component {
                 return null
             },
         });
+
+        this.department = lodable({
+            loader: () => {
+                return import('@/pages/department/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+        this.user = lodable({
+            loader: () => {
+                return import('@/pages/user/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+        this.roleList = lodable({
+            loader: () => {
+                return import('@/pages/role/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
     };
 
     /**
@@ -106,6 +133,10 @@ export default class Router extends React.Component {
                         <Route exact path="/activeList" component={this.activeList}/>
                         <Route exact path="/sendRecord" component={this.sendRecord}/>
                         <Route exact path="/sendDetail" component={this.sendDetail}/>
+
+                        <Route exact path="/departmentList" component={this.department}/>
+                        <Route exact path="/userList" component={this.user}/>
+                        <Route exact path="/roleList" component={this.roleList}/>
                     </Nav>
                 </Switch>
             </HashRouter>

@@ -19,9 +19,15 @@ export default {
 
     activeList:`${API_HOSTNAME}/service/activity/list`,
     departmentList:`${API_HOSTNAME}/service/department/list`,
+    updateDepartment:`${API_HOSTNAME}/service/department/update`,
+    createDepartment:`${API_HOSTNAME}/service/department/create`,
+
     batchList:`${API_HOSTNAME}/service/batch/list`,
     sendCode:`${API_HOSTNAME}/service/activity/send`,
 
     createActive:`${API_HOSTNAME}/service/activity/create`,
     updateActive:`${API_HOSTNAME}/service/activity/update`,
+
+    roleList:`${API_HOSTNAME}/service/permission/role/list`,
+    userList:`${API_HOSTNAME}/service/user/list`,
 }

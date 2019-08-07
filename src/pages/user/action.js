@@ -8,12 +8,14 @@ export const getList = (params) => {
   return async dispatch => {
     try{
       dispatch({
-        type: types.GET_ACTIVE_LIST,
+        type: types.GET_USER_LIST,
       })
-      let result = await API.activeList(params);
+      let result = await API.userList(params);
+      // 如果不成功，则将不成功的信息打印出来
+      console.error(result)
       dispatch({
-        type: types.GET_ACTIVE_LIST,
-        data: result,
+        type: types.GET_USER_LIST,
+        list: result,
       })
     }catch(err){
       console.error(err);

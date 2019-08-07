@@ -6,22 +6,19 @@ export default {
     /*面包屑导航*/
     breadMenu: [{
         path: '',
-        title: '活动'
+        title: '系统'
     }, {
         path: '',
-        title: '活动管理'
-    },{
-        path: '',
-        title: '发放记录'
+        title: '用户列表'
     }],
     // 搜索数据，默认一行显示3条
     searchMenu: {
         // 常在的选项
         open: [{
-            id: 'batchId',
-            label: '批次号',
+            id: 'loginAccount',
+            label: '用户名',
             type: 'input', // input输入框
-            placeholder: '请输入批次号',
+            placeholder: '请输入用户名',
         }],
     },
 }

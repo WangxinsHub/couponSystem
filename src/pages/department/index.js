@@ -8,9 +8,7 @@ import Define from './define';
 import {getList} from './action';
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
-import util from '../../utils/base'
-import api from '../../api/api'
-import {getList as getActiveList} from '../activeList/action'
+import NewForm from './edit';
 import {Link} from "react-router-dom";
 
 class Home extends Component {
@@ -29,10 +27,6 @@ class Home extends Component {
         pageSize: 10, // 每页显示条数,
     }
 
-    constructor(props){
-        super(props);
-        this.canAddSearch = true
-    }
     /**
      * [shouldComponentUpdate 如果state值没有改变时就算调用了setState方法，页面也不会重新渲染]
      * @param  {[type]} nextProps [description]
@@ -49,13 +43,9 @@ class Home extends Component {
      */
     componentDidMount() {
         this.props.getList({
-            pageNo: this.state.currentNo,
-            pageSize: this.state.pageSize
+            pageNo:this.state.currentNo,
+            pageSize:this.state.pageSize
         });
-        this.props.getActiveList({
-            pageNo: 1,
-            pageSize: 1000
-        })
     }
 
     /**
@@ -68,19 +58,12 @@ class Home extends Component {
             state: this.state,
             values,
             callBack: (json) => {
-                if (json.searchList.rangeTime) {
-                    json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd hh:mm:ss')
-                    json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd hh:mm:ss')
-                    delete json.searchList.rangeTime;
-                }
-
                 this.setState(json);
                 this.props.getList({
                     ...json.searchList,
-                    pageNo: json.pageNo,
-                    pageSize: json.pageSize
-                });
-            }
+                    pageNo:json.pageNo,
+                    pageSize:json.pageSize
+                });            }
         });
     }
 
@@ -90,8 +73,8 @@ class Home extends Component {
      */
     handleFormReset = () => {
         this.props.getList({
-            pageNo: this.state.currentNo,
-            pageSize: this.state.pageSize
+            pageNo:this.state.currentNo,
+            pageSize:this.state.pageSize
         });
         this.setState({
             searchList: null,
@@ -106,22 +89,20 @@ class Home extends Component {
      * @return {[type]}            [description]
      */
     handleStandardTableChange = (pagination, filtersArg, sorter) => {
-
         tableCommon.tableChange({
             state: this.state,
             pagination,
             callBack: (json) => {
-                if (json.searchList.rangeTime) {
-                    json.searchList.startTime = json.searchList.rangeTime[0].format('YYYY/MM/DD HH:mm:ss')
-                    json.searchList.endTime = json.searchList.rangeTime[1].format('YYYY/MM/DD HH:mm:ss')
+                if( json.searchList.rangeTime){
+                    json.searchList.startTime = json.searchList.rangeTime[0]
+                    json.searchList.endTime =json.searchList.rangeTime[1]
                     delete json.searchList.rangeTime;
                 }
 
                 this.setState(json);
                 this.props.getList({
                     ...json.searchList,
-                    pageNo: json.pageNo,
-                    pageSize: json.pageSize
+
                 });
             }
         });
@@ -132,87 +113,64 @@ class Home extends Component {
      * @return {[type]} [description]
      */
     render() {
-        const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, showTwo} = this.state;
-        const {loading, sendList} = this.props.sendRecordReducer;
-        const {list} = this.props.activeListReducer;
+        const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, record} = this.state;
+        const {loading, list} = this.props.departmentReducer;
+
+
         let {breadMenu, searchMenu} = Define;
-
-        if (list && list.data && this.canAddSearch) {
-
-            let option = list.data.map((item) => ({
-                value: item.id,
-                label: item.activityName
-            }));
-
-            Define.searchMenu.open.push({
-                id: 'activityId',
-                label: '请选择活动',
-                type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
-                option
-            })
-            this.canAddSearch = false
-        }
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
-        // 列表表头
+
         const columns = [
             {
-                title: '批次号',
-                key: 'batchId',
-                dataIndex: 'batchId',
+                title: 'ID',
+                key: 'id',
+                dataIndex: 'id',
             },
             {
-                title: '活动名称',
-                dataIndex: 'activityName',
-                key: 'activityName',
+                title: '名称',
+                dataIndex: 'departmentValue',
+                key: 'departmentValue',
             },
             {
-                title: '券名',
-                key: 'couponName',
-                dataIndex: 'couponName',
-            },
-
-            {
-                title: '发放账号',
-                key: 'sendRealCount',
-                dataIndex: 'sendRealCount',
+                title: '联系人',
+                key: 'contact',
+                dataIndex: 'contact',
             },
             {
-                title: '发放时间',
-                key: 'sendTime',
-                dataIndex: 'sendTime',
-            },
-
-            {
-                title: '上传量',
-                key: 'sendTotalCount',
-                dataIndex: 'sendTotalCount',
-            },
-            {
-                title: '发放量',
-                key: 'sendRealCount',
-                dataIndex: 'sendRealCount',
+                title: '联系电话',
+                key: 'mobile',
+                dataIndex: 'mobile',
             },
             {
                 title: '操作',
                 key: 'deal',
-                render: (record) => (
+                render: (text, record) => (
                     <Fragment>
-                        <Link to='sendDetail'>发放明细</Link>
+                        <a onClick={() =>{
+                            this.setState({
+                                showDrawer: true,
+                                showDrawerId: record.id,
+                                record: record
+                            })
+                        }}>编辑</a>
+                        <Divider type="vertical" />
+                        <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
+                            <Link to='user'>用户</Link>
+                        </Popconfirm>
                     </Fragment>
                 ),
             },
         ];
         // 定义表格的数据
         const data = {
-            list: sendList && sendList.data,
+            list: list && list.data,
             pagination: {
-                total: sendList ? sendList.total : 1,
+                total: list ? list.total : 1,
                 pageSize: pageSize,
                 current: currentNo,
             },
         }
-
         return (
             <PageHeaderLayout
                 nav={breadMenu}
@@ -224,29 +182,14 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                                <Button type="primary" icon="plus" onClick={() => {
-                                    //window.location.href = "http://shande.xajhzx.cn/service/export";
-                                    // urlEncode
-                                    var urlEncode = function (param, key, encode) {
-                                        if (param == null) return '';
-                                        var paramStr = '';
-                                        var t = typeof (param);
-                                        if (t == 'string' || t == 'number' || t == 'boolean') {
-                                            paramStr += '&' + key + '=' + ((encode == null || encode) ? encodeURIComponent(param) : param);
-                                        } else {
-                                            for (var i in param) {
-                                                var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
-                                                paramStr += urlEncode(param[i], k, encode)
-                                            }
-                                        }
-                                        return paramStr;
-
-                                    }
-                                    var s = urlEncode({...this.state.searchList});
-                                    console.log(s.slice(1));
-                                    window.location.href = "http://shande.xajhzx.cn/service/export?" + s.slice(1);
+                                <Button type="primary" icon="plus" onClick={() =>{
+                                    this.setState({
+                                        showDrawer: true,
+                                        showDrawerId: null,
+                                        record:null
+                                    })
                                 }}>
-                                    导出
+                                    新增
                                 </Button>
                             </div>
                             <StandardTable
@@ -259,15 +202,49 @@ class Home extends Component {
                             />
                         </div>
                     </Card>
+                    <Drawer
+                        title={showDrawerId ? '编辑闪屏' : '新增闪屏'}
+                        width='560'
+                        visible={showDrawer}
+                        maskClosable={false}
+                        onClose={()=>{
+                            this.setState({
+                                showDrawer: false,
+                                showDrawerId: null,
+                                record: null
+                            });
+                        }}
+                    >
+                        { showDrawer && <NewForm
+                            id={showDrawerId}
+                            record={record}
+                            onClose={(bool)=>{
+                                this.setState({
+                                    showDrawer: false,
+                                    showDrawerId: null,
+                                    record: null
+                                });
+                                // 如果点击的确定，则刷新列表
+                                let searchList = this.state.searchList || {};
+
+                                if(bool) {
+                                    this.props.getList({
+                                        pageNo:this.state.currentNo,
+                                        pageSize:this.state.pageSize,
+                                        ...searchList
+                                    });
+                                }
+                            }}
+                        />}
+                    </Drawer>
                 </Spin>
-            </PageHeaderLayout>);
+            </PageHeaderLayout>
+        );
     }
 }
 
 export default connect((state) => ({
-    sendRecordReducer: state.sendRecordReducer,
-    activeListReducer: state.activeListReducer,
+    departmentReducer: state.departmentReducer
 }), {
     getList,
-    getActiveList
 })(Home);

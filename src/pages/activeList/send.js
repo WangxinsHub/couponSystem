@@ -14,7 +14,7 @@ import {
     Popconfirm,
     Radio,
     InputNumber,
-    Checkbox, Upload
+    Checkbox, Upload, Modal
 } from 'antd';
 import apiUrl from '@/api/url';
 import {getList, getDepartmentList,} from '../activeConfig/action';
@@ -63,18 +63,38 @@ class Home extends Component {
      */
     postData = async (values) => {
         try {
-            let result;
-
+            let result,that=this;
             result = await API.sendCode(values);
-
             if (result.message === 'success') {
-                message.success('保存成功！');
-                this.props.onClose(true);
+                message.success('已发送！');
+                Modal.info({
+                    title: '提示',
+                    content: (
+                        <div>
+                            <p>本次成功导入 <b>{result.data.batchCount}</b> 条手机号码</p>
+                            {this.state.failMobile &&<a href={result.data.failMobile}>下载失败的手机号码</a>}
+                            <p>本次发送任务的批次号为:</p>
+                            <p> <b>{result.data.batchId}</b></p>
+                            <p>请以此批次号查询发送结果</p>
+                        </div>
+                    ),
+                    onOk() {
+                        that.props.onClose(true);
+                    },
+                });
             } else {
                 this.setState({
                     btnDisabled: false
                 })
-                message.error(result.message);
+                Modal.info({
+                    title: '提示',
+                    content: (
+                        <div>
+                            <p>{result.message}</p>
+                        </div>
+                    ),
+                    onOk() {},
+                });
             }
         } catch (err) {
             this.setState({

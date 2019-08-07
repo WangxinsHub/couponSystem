@@ -5,8 +5,8 @@
  */
 import React from 'react';
 import API from '@/api/api';
-// import SiderMenu from '@/components/SiderMenu/SiderMenu';
-import {SiderMenu} from 'dt-antd';
+import SiderMenu from '@/components/SiderMenu/SiderMenu';
+// import {SiderMenu} from 'dt-antd';
 import { message} from 'antd';
 const {
   LOGIN_PAGE_ADDRESS,
@@ -136,6 +136,29 @@ export default class SiderMenuWrapper extends React.PureComponent {
             menuName:'发放明细'
           }
         ]
+      },
+      {
+        menuCode:'qd',
+        menuName:'渠道管理',
+        childMenus:[
+          {
+            menuCode:'departmentList',
+            menuName:'渠道列表'
+          }
+        ]
+      },
+      {
+        menuCode:'yh',
+        menuName:'用户管理',
+        childMenus:[
+          {
+            menuCode:'userList',
+            menuName:'用户管理'
+          },{
+            menuCode:'roleList',
+            menuName:'角色管理'
+          }
+        ]
       }
     ].map((item)=>{
       item.code = item.menuCode;
@@ -171,7 +194,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
     let path = {
       ...this.props,
       siderMenu: {
-        title: '云公交管理后台',
+        title: '',
         menu: this.state.menu
       },
       pageHead: {

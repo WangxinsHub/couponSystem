@@ -6,9 +6,12 @@ export default {
     /*面包屑导航*/
     breadMenu: [{
         path: '',
-        title: '权益'
+        title: '活动'
     }, {
         path: '',
-        title: '第三方平台'
+        title: '活动管理'
+    },{
+        path: '',
+        title: '活动配置'
     }],
 }
