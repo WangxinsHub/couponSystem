@@ -6,6 +6,7 @@ import {getList} from './action';
 import API from '@/api/api';
 import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
 import {getDepartmentList} from "../activeConfig/action";
+import {getList as getRoleList} from '../role/action'
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -29,6 +30,10 @@ class Home extends Component {
             pageSize: 100
         })
         this.props.getDepartmentList({
+            pageNo: 1,
+            pageSize: 1000
+        })
+        this.props.getRoleList({
             pageNo: 1,
             pageSize: 1000
         })
@@ -89,6 +94,7 @@ class Home extends Component {
         const {submitting, form, onClose} = this.props;
         const {getFieldDecorator} = form;
         const {departmentList} = this.props.activeConfigReducer
+        const {list} = this.props.roleReducer
 
         return (<Form style={{paddingBottom: 30}}>
                 <Spin spinning={this.props.id && !record ? true : false}>
@@ -119,6 +125,48 @@ class Home extends Component {
                             rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位用户名称'}],
                         })(
                             <Input style={{width: '80%'}} maxLength={30} placeholder="请输入用户名"/>
+                        )}
+                    </FormItem>
+
+                    <FormItem label='职务' {...stationEditFormDrawer} key="position">
+                        {getFieldDecorator('position', {
+                            initialValue: record && record.position ? record.position : '',
+                            rules: [{required: true, message: '必填项'}],
+                        })(
+                            <Select style={{width: '50%'}}
+                                    allowClear={true}
+                                    optionFilterProp="children"
+                                    placeholder="请选择">
+                                <Option
+                                    value={0}>
+                                    员工
+                                </Option>
+                                <Option
+                                    value={1}>
+                                    主管
+                                </Option>
+                            </Select>
+                        )}
+                    </FormItem>
+
+                    <FormItem label='角色' {...stationEditFormDrawer} key="departmentKey">
+                        {getFieldDecorator('departmentKey', {
+                            initialValue: record && record.departmentKey ? record.departmentKey : '',
+                            rules: [{required: true, message: '必填项'}],
+                        })(
+                            <Select style={{width: '50%'}}
+                                    allowClear={true}
+                                    optionFilterProp="children"
+                                    onSelect={this.handleSelect}
+                                    placeholder="请选择">
+                                {
+                                    list && list.data.map((item, index) => {
+                                        return (<Option key={item.departmentKey}
+                                                        value={item.departmentKey}>
+                                            {item.departmentValue}
+                                        </Option>)
+                                    })
+                                }</Select>
                         )}
                     </FormItem>
 
@@ -155,8 +203,10 @@ class Home extends Component {
 const WrappedRegistrationForm = Form.create()(Home);
 export default connect((state) => ({
     userReducer: state.userReducer,
-    activeConfigReducer:state.activeConfigReducer
+    activeConfigReducer: state.activeConfigReducer,
+    roleReducer:state.roleReducer
 }), {
     getList,
-    getDepartmentList
+    getDepartmentList,
+    getRoleList
 })(WrappedRegistrationForm);
