@@ -125,8 +125,8 @@ class Home extends Component {
         const columns = [
             {
                 title: 'ID',
-                key: 'id',
-                dataIndex: 'id',
+                key: 'userId',
+                dataIndex: 'userId',
             },
             {
                 title: '用户名',
@@ -147,11 +147,18 @@ class Home extends Component {
                 title: '职务',
                 key: 'position',
                 dataIndex: 'position',
+                render:(text)=>{
+                    if(text == 1){
+                        return '主管'
+                    }else {
+                        return '员工'
+                    }
+                }
             },
             {
                 title: '角色',
-                key: 'credentialsSalt',
-                dataIndex: 'credentialsSalt',
+                key: 'roleKey',
+                dataIndex: 'roleKey',
             },
             {
                 title: '创建时间',
@@ -171,14 +178,10 @@ class Home extends Component {
                         <a onClick={() =>{
                             this.setState({
                                 showDrawer: true,
-                                showDrawerId: record.id,
+                                showDrawerId: record.userId,
                                 record: record
                             })
                         }}>编辑</a>
-                        <Divider type="vertical" />
-                        <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
-                            <Link to='user'>用户</Link>
-                        </Popconfirm>
                     </Fragment>
                 ),
             },
@@ -224,7 +227,7 @@ class Home extends Component {
                         </div>
                     </Card>
                     <Drawer
-                        title={showDrawerId ? '编辑闪屏' : '新增闪屏'}
+                        title={showDrawerId ? '编辑用户' : '新增用户'}
                         width='560'
                         visible={showDrawer}
                         maskClosable={false}

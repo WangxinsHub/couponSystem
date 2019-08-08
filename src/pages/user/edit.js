@@ -45,20 +45,33 @@ class Home extends Component {
      */
     postData = async (values) => {
         try {
-            let result;
+            let result, roleReust;
             if (this.props.id) {
-                result = await API.updateDepartment(values);
+                result = await API.updateRole({
+                    position:values.position,
+                    userPhone:values.userPhone,
+                    departmentKey:values.departmentKey,
+                    id:values.id
+                });
+                roleReust = await API.connectRole({
+                    userId: values.id,
+                    roleIds: values.roleIds.join() //多选
+                })
             } else {
-                result = await API.createDepartment(values);
+                result = await API.createRole(values);
             }
-            if (result.message === 'success') {
+            if (result.message === 'success' && roleReust.message === 'success') {
                 message.success('保存成功！');
                 this.props.onClose(true);
             } else {
                 this.setState({
                     btnDisabled: false
                 })
-                message.error(result.message);
+                if(result.message !== 'success' ){
+                    message.error(result.message);
+                }else{
+                    message.error(roleReust.message);
+                }
             }
         } catch (err) {
             this.setState({
@@ -100,14 +113,15 @@ class Home extends Component {
                 <Spin spinning={this.props.id && !record ? true : false}>
                     <FormItem label='渠道商' {...stationEditFormDrawer} key="departmentKey">
                         {getFieldDecorator('departmentKey', {
-                            initialValue: record && record.departmentKey ? record.departmentKey : '',
+                            initialValue: record && record.departmentKey ? record.departmentKey : undefined,
                             rules: [{required: true, message: '必填项'}],
                         })(
                             <Select style={{width: '50%'}}
                                     allowClear={true}
                                     optionFilterProp="children"
                                     onSelect={this.handleSelect}
-                                    placeholder="请选择">
+                                    placeholder="请选择"
+                            >
                                 {
                                     departmentList && departmentList.data.map((item, index) => {
                                         return (<Option key={item.departmentKey}
@@ -115,22 +129,26 @@ class Home extends Component {
                                             {item.departmentValue}
                                         </Option>)
                                     })
-                                }</Select>
+                                }
+                            </Select>
                         )}
                     </FormItem>
 
-                    <FormItem {...stationEditFormDrawer} label="用户名" key='loginAccount'>
-                        {getFieldDecorator('contact', {
-                            initialValue: record && record.loginAccount,
-                            rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位用户名称'}],
-                        })(
-                            <Input style={{width: '80%'}} maxLength={30} placeholder="请输入用户名"/>
-                        )}
-                    </FormItem>
+                    {
+                        !this.props.id && <FormItem {...stationEditFormDrawer} label="用户名" key='userName'>
+                            {getFieldDecorator('userName', {
+                                initialValue: record && record.userName,
+                                rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位用户名称'}],
+                            })(
+                                <Input style={{width: '80%'}} maxLength={30} placeholder="请输入用户名"/>
+                            )}
+                        </FormItem>
+                    }
+
 
                     <FormItem label='职务' {...stationEditFormDrawer} key="position">
                         {getFieldDecorator('position', {
-                            initialValue: record && record.position ? record.position : '',
+                            initialValue: record && record.position ? record.position : undefined,
                             rules: [{required: true, message: '必填项'}],
                         })(
                             <Select style={{width: '50%'}}
@@ -149,35 +167,60 @@ class Home extends Component {
                         )}
                     </FormItem>
 
-                    <FormItem label='角色' {...stationEditFormDrawer} key="departmentKey">
-                        {getFieldDecorator('departmentKey', {
-                            initialValue: record && record.departmentKey ? record.departmentKey : '',
-                            rules: [{required: true, message: '必填项'}],
-                        })(
-                            <Select style={{width: '50%'}}
-                                    allowClear={true}
-                                    optionFilterProp="children"
-                                    onSelect={this.handleSelect}
-                                    placeholder="请选择">
-                                {
-                                    list && list.data.map((item, index) => {
-                                        return (<Option key={item.departmentKey}
-                                                        value={item.departmentKey}>
-                                            {item.departmentValue}
-                                        </Option>)
-                                    })
-                                }</Select>
-                        )}
-                    </FormItem>
+                    {
+                        !this.props.id && <FormItem {...stationEditFormDrawer} label="账号" key='loginAccount'>
+                            {getFieldDecorator('loginAccount', {
+                                initialValue: record && record.loginAccount,
+                                rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位用户名称'}],
+                            })(
+                                <Input style={{width: '80%'}} maxLength={30} placeholder="请输入用户名"/>
+                            )}
+                        </FormItem>
+                    }
 
-                    <FormItem {...stationEditFormDrawer} label="联系电话" key='mobile'>
-                        {getFieldDecorator('mobile', {
-                            initialValue: record && record.mobile,
+                    {
+                        !this.props.id && <FormItem {...stationEditFormDrawer} label="密码" key='loginPass'>
+                            {getFieldDecorator('loginPass', {
+                                rules: [{required: true}],
+                            })(
+                                <Input style={{width: '80%'}} placeholder="请填写密码"/>
+                            )}
+                        </FormItem>
+                    }
+
+
+                    {
+                        this.props.id && <FormItem label='角色' {...stationEditFormDrawer} key="roleIds">
+                            {getFieldDecorator('roleIds', {
+                                initialValue: record && record.roleIds ? record.roleIds : undefined,
+                                rules: [{required: true, message: '必填项'}],
+                            })(
+                                <Select style={{width: '50%'}}
+                                        allowClear={true}
+                                        optionFilterProp="children"
+                                        mode="multiple"
+                                        onSelect={this.handleSelect}
+                                        placeholder="请选择">
+                                    {
+                                        list && list.data.map((item, index) => {
+                                            return (<Option key={item.roleId}
+                                                            value={item.roleId}>
+                                                {item.roleKey}
+                                            </Option>)
+                                        })
+                                    }</Select>
+                            )}
+                        </FormItem>
+                    }
+                    <FormItem {...stationEditFormDrawer} label="联系电话" key='userPhone'>
+                        {getFieldDecorator('userPhone', {
+                            initialValue: record && record.userPhone,
                             rules: [{required: true, max: 11, whitespace: true, message: '请输入11位电话号'}],
                         })(
                             <Input style={{width: '80%'}} maxLength={11} placeholder="请输入联系电话"/>
                         )}
                     </FormItem>
+
                 </Spin>
                 <div className="drawerBtns">
                     <Popconfirm
@@ -204,7 +247,7 @@ const WrappedRegistrationForm = Form.create()(Home);
 export default connect((state) => ({
     userReducer: state.userReducer,
     activeConfigReducer: state.activeConfigReducer,
-    roleReducer:state.roleReducer
+    roleReducer: state.roleReducer
 }), {
     getList,
     getDepartmentList,

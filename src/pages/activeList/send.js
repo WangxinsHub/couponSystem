@@ -7,27 +7,18 @@ import {
     Input,
     Select,
     Button,
-    DatePicker,
     Icon,
     message,
-    Spin,
     Popconfirm,
-    Radio,
-    InputNumber,
-    Checkbox, Upload, Modal
+    Upload, Modal
 } from 'antd';
-import apiUrl from '@/api/url';
 import {getList, getDepartmentList,} from '../activeConfig/action';
 import API from '@/api/api';
 import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
-import Url from '@/api/url'
-import Verify from '../../utils/verify'
 import {getList as getCouponList} from '../couponList/action'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const CheckboxGroup = Checkbox.Group;
-const {RangePicker,} = DatePicker;
 const {TextArea} = Input;
 
 
@@ -63,7 +54,7 @@ class Home extends Component {
      */
     postData = async (values) => {
         try {
-            let result,that=this;
+            let result, that = this;
             result = await API.sendCode(values);
             if (result.message === 'success') {
                 message.success('已发送！');
@@ -72,9 +63,9 @@ class Home extends Component {
                     content: (
                         <div>
                             <p>本次成功导入 <b>{result.data.batchCount}</b> 条手机号码</p>
-                            {this.state.failMobile &&<a href={result.data.failMobile}>下载失败的手机号码</a>}
+                            {this.state.failMobile && <a href={result.data.failMobile}>下载失败的手机号码</a>}
                             <p>本次发送任务的批次号为:</p>
-                            <p> <b>{result.data.batchId}</b></p>
+                            <p><b>{result.data.batchId}</b></p>
                             <p>请以此批次号查询发送结果</p>
                         </div>
                     ),
@@ -93,7 +84,8 @@ class Home extends Component {
                             <p>{result.message}</p>
                         </div>
                     ),
-                    onOk() {},
+                    onOk() {
+                    },
                 });
             }
         } catch (err) {
@@ -198,15 +190,13 @@ class Home extends Component {
                 </FormItem>
 
                 <FormItem label='添加手机号' {...stationEditFormDrawer} key="mobile">
-                    {getFieldDecorator('mobile', {
-                    })(
+                    {getFieldDecorator('mobile', {})(
                         <TextArea rows={4} placeholder='每行一个,可同时输入100个'/>,
                     )}
                 </FormItem>
 
                 <FormItem label='导入手机号' {...stationEditFormDrawer} key="file">
-                    {getFieldDecorator('file', {
-                    })(
+                    {getFieldDecorator('file', {})(
                         <Upload
                             {...{
                                 beforeUpload: file => {

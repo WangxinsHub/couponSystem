@@ -10,6 +10,8 @@ import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
 import util from '../../utils/base'
 import {Link} from 'react-router-dom';
+import {getList as getDepartmentList} from '../department/action'
+
 
 import NewForm from "./send";
 
@@ -18,6 +20,7 @@ class Home extends Component {
         oneSupplierReducer: object,
         getList: func,
     };
+    canAddSearch=true
     state = {
         showDrawer: false, // 是否显示抽屉编辑
         showDetail: false, // 是否显示详情
@@ -44,10 +47,17 @@ class Home extends Component {
      * @return {[type]} [description]
      */
     componentDidMount() {
+
         this.props.getList({
             pageNo:this.state.currentNo,
-            pageSize:this.state.pageSize
+            pageSize:this.state.pageSize,
+            //state:['ONLINE','OVER'],
         });
+
+        this.props.getDepartmentList({
+            pageNo:0,
+            pageSize:1000
+        })
     }
 
     /**
@@ -126,9 +136,55 @@ class Home extends Component {
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, showTwo} = this.state;
         const {loading, list} = this.props.activeListReducer;
+        const  departmentList  = this.props.departmentReducer.list;
         let {breadMenu, searchMenu} = Define;
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
+
+        if (list && list.data && this.canAddSearch) {
+            Define.searchMenu.open = [{
+                id: 'activityName',
+                label: '活动名称',
+                type: 'input', // input输入框
+                placeholder: '请输入手机号',
+            }, {
+                id: 'state',
+                label: '请选择活动状态',
+                type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
+                option: [{
+                    label: '全部',
+                    value: null,
+                }, {
+                    label: '已上线',
+                    value: 'ONLINE',
+                }, {
+                    label: '已结束',
+                    value: 'OVER',
+                }],
+            },];
+            let option = departmentList && departmentList.data.map((item) => ({
+                value: item.departmentKey,
+                label: item.departmentValue
+            }));
+
+            if(option){
+                Define.searchMenu.open.push({
+                    id: 'departmentKey',
+                    label: '请选择渠道商',
+                    type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
+                    option:[
+                        {
+                            label: '全部',
+                            value: null,
+                        },
+                        ...option
+                    ]
+                })
+                this.canAddSearch = false
+            }
+
+        }
+
         // 列表表头
         const columns = [
             {
@@ -302,7 +358,9 @@ class Home extends Component {
 }
 
 export default connect((state) => ({
-    activeListReducer: state.activeListReducer
+    activeListReducer: state.activeListReducer,
+    departmentReducer:state.departmentReducer
 }), {
     getList,
+    getDepartmentList
 })(Home);

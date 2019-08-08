@@ -154,10 +154,7 @@ class Home extends Component {
                                 record: record
                             })
                         }}>编辑</a>
-                        <Divider type="vertical" />
-                        <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
-                            <Link to='user'>用户</Link>
-                        </Popconfirm>
+
                     </Fragment>
                 ),
             },
@@ -203,7 +200,7 @@ class Home extends Component {
                         </div>
                     </Card>
                     <Drawer
-                        title={showDrawerId ? '编辑闪屏' : '新增闪屏'}
+                        title={showDrawerId ? '编辑渠道' : '新增渠道'}
                         width='560'
                         visible={showDrawer}
                         maskClosable={false}

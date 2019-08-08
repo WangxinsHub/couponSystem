@@ -55,15 +55,13 @@ class Home extends Component {
             pageNo: 1,
             pageSize: 1000
         })
-        console.warn(this.props.record);
 
-        if(this.props.record){
+        if (this.props.record) {
             this.setState({
-                departmentValue:this.props.record.departmentValue
+                departmentValue: this.props.record.departmentValue
             })
         }
     }
-
 
 
     /*
@@ -105,14 +103,15 @@ class Home extends Component {
             if (!err && !this.state.errorMsg) {
                 const {activityCouponMessage} = this.state;
                 if (that.props.id) values.id = that.props.id;
-                values.activityCouponMessage = that.state.activityCouponMessage.map((item => (
-                    {
-                        couponId: item.couponId,
-                        couponName: item.couponName,
-                        totalCount: item.totalCount,
-                        // endTime: item.endTime,
-                    }
-                )));
+                values.activityCouponMessage = JSON.stringify(
+                    activityCouponMessage.map((item => (
+                        {
+                            couponId: item.couponId,
+                            couponName: item.couponName,
+                            totalCount: item.totalCount,
+                        }
+                    )))
+                )
                 values.validStart = values.rangeTime[0].format("YYYY/MM/DD HH:mm:ss");
                 values.validEnd = values.rangeTime[1].format("YYYY/MM/DD HH:mm:ss");
                 delete values.rangeTime;
@@ -175,9 +174,9 @@ class Home extends Component {
         console.log(list.data[couponIndex]);
     }
 
-    handleSelect = (val,opt) => {
+    handleSelect = (val, opt) => {
         this.setState({
-            departmentValue:opt.props.children
+            departmentValue: opt.props.children
         })
     }
 

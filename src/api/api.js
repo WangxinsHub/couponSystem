@@ -191,6 +191,49 @@ class API extends Server{
     }
   }
 
+  async connectRole(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.connectRole, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async createRole(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.createRole, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async updateRole(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.updateRole, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async deleteActive(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.deleteActive, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
 
   /**
    *  用途：登陆

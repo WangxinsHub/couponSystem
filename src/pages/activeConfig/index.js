@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import {is, fromJS} from 'immutable';
 import {object, func} from 'prop-types';
-import {Card, Button, Divider, message, Drawer, Spin, Badge, Popconfirm} from 'antd';
+import {Card, Button, Divider, message, Drawer, Spin, Modal, DatePicker, Popconfirm,} from 'antd';
 import {PageHeaderLayout, TableSearch, StandardTable, TableCommon, Utils} from 'dt-antd';
 import Define from './define';
 import {getList} from './action';
@@ -10,6 +10,8 @@ import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
 import api from '../../api/api'
 import NewForm from "./edit";
+import moment from 'moment';
+
 
 class Home extends Component {
     static propTypes = {
@@ -43,8 +45,8 @@ class Home extends Component {
      */
     componentDidMount() {
         this.props.getList({
-            pageNo:this.state.currentNo,
-            pageSize:this.state.pageSize
+            pageNo: this.state.currentNo,
+            pageSize: this.state.pageSize
         });
     }
 
@@ -58,9 +60,9 @@ class Home extends Component {
             state: this.state,
             values,
             callBack: (json) => {
-                if( json.searchList.rangeTime){
+                if (json.searchList.rangeTime) {
                     json.searchList.startTime = json.searchList.rangeTime[0]
-                    json.searchList.endTime =json.searchList.rangeTime[1]
+                    json.searchList.endTime = json.searchList.rangeTime[1]
                     delete json.searchList.rangeTime;
                 }
 
@@ -76,8 +78,8 @@ class Home extends Component {
      */
     handleFormReset = () => {
         this.props.getList({
-            startPage:this.state.currentNo,
-            pageSize:this.state.pageSize
+            startPage: this.state.currentNo,
+            pageSize: this.state.pageSize
         });
         this.setState({
             searchList: null,
@@ -92,14 +94,13 @@ class Home extends Component {
      * @return {[type]}            [description]
      */
     handleStandardTableChange = (pagination, filtersArg, sorter) => {
-
         tableCommon.tableChange({
             state: this.state,
             pagination,
             callBack: (json) => {
-                if( json.searchList.rangeTime){
+                if (json.searchList.rangeTime) {
                     json.searchList.startTime = json.searchList.rangeTime[0]
-                    json.searchList.endTime =json.searchList.rangeTime[1]
+                    json.searchList.endTime = json.searchList.rangeTime[1]
                     delete json.searchList.rangeTime;
                 }
 
@@ -112,17 +113,31 @@ class Home extends Component {
         });
     }
 
+    handleDelete = (activityId) => async (activityId) => {
+        let result = await api.deleteActive({activityId})
+        if (result.message === 'success') {
+            message.success('删除成功！');
+        } else {
+            message.error(result.message);
+        }
+        let searchList = this.state.searchList || {};
+        this.props.getList({
+            pageNo: this.state.currentNo,
+            pageSize: this.state.pageSize,
+            ...searchList
+        });
+    }
 
     /**
      * [render description]
      * @return {[type]} [description]
      */
     render() {
-        const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, record, } = this.state;
+        const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, record,} = this.state;
         const {loading, list} = this.props.activeConfigReducer;
         console.error(list)
 
-        let {breadMenu, } = Define;
+        let {breadMenu,} = Define;
 
         // 列表表头
         const columns = [
@@ -156,14 +171,14 @@ class Home extends Component {
                 //ONLINE 已上线
                 //READY 待上线
                 //OVER 已结束
-                render:(text,record)=>{
-                    if(text === 'ONLINE'){
+                render: (text, record) => {
+                    if (text === 'ONLINE') {
                         return '已上线'
-                    } else if(text ==='READY'){
+                    } else if (text === 'READY') {
                         return '待上线'
-                    }else if(text === 'DRAFT'){
+                    } else if (text === 'DRAFT') {
                         return '草案'
-                    }else {
+                    } else {
                         return '已结束'
                     }
                 }
@@ -172,11 +187,11 @@ class Home extends Component {
                 title: '活动有效期',
                 key: 'validStart',
                 dataIndex: 'validStart',
-                render:(text,record)=>{
-                    if(record.validStart){
+                render: (text, record) => {
+                    if (record.validStart) {
                         return record.validStart + '至' + record.validEnd
-                    }else {
-                        return  null
+                    } else {
+                        return null
                     }
                 }
             },
@@ -196,13 +211,162 @@ class Home extends Component {
                 key: 'deal',
                 render: (record) => (
                     <Fragment>
-                        <a onClick={() =>{
-                            this.setState({
-                                showDrawer: true,
-                                showDrawerId: record.id,
-                                record: record
-                            })
-                        }}>编辑</a>
+                        {
+                            record.state === 'DRAFT' ?
+                                <Fragment>
+                                    <a onClick={() => {
+                                        this.setState({
+                                            showDrawer: true,
+                                            showDrawerId: record.id,
+                                            record: record
+                                        })
+                                    }}>编辑</a>
+                                    <Divider type="vertical"/>
+                                    <a onClick={() => {
+                                        let validStart = new Date(record.validStart).valueOf();
+                                        let now = new Date().valueOf();
+                                        if (now > validStart) {
+                                            api.updateActive({
+                                                id: record.id,
+                                                state: 'ONLINE'
+                                            }).then(res => {
+                                                if (res.message === 'success') {
+                                                    message.success('保存成功！');
+                                                } else {
+                                                    message.error(res.message);
+                                                }
+                                            })
+                                        } else {
+                                            api.updateActive({
+                                                id: record.id,
+                                                state: 'OVER'
+                                            }).then(res => {
+                                                if (res.message === 'success') {
+                                                    message.success('保存成功！');
+                                                } else {
+                                                    message.error(res.message);
+                                                }
+                                            })
+                                        }
+
+                                        let searchList = this.state.searchList || {};
+                                        this.props.getList({
+                                            pageNo: this.state.currentNo,
+                                            pageSize: this.state.pageSize,
+                                            ...searchList
+                                        });
+                                    }}>发布</a>
+                                    <Divider type="vertical"/>
+                                    <Popconfirm
+                                        title='是否确认删除活动？'
+                                        onConfirm={this.handleDelete(record.id)}
+                                        okText='是'
+                                        placement="topRight"
+                                        cancelText='否'
+                                    >
+                                        <a>删除</a>
+                                    </Popconfirm>
+
+                                </Fragment>
+                                : record.state === 'READY' ?
+                                <Fragment>
+                                    <a onClick={() => {
+                                        this.setState({
+                                            showDrawer: true,
+                                            showDrawerId: record.id,
+                                            record: record
+                                        })
+                                    }}>编辑</a>
+                                    <Divider type="vertical"/>
+                                    <Popconfirm
+                                        title='是否确认删除活动？'
+                                        onConfirm={this.handleDelete(record.id)}
+                                        okText='是'
+                                        placement="topRight"
+                                        cancelText='否'
+                                    >
+                                        <a>删除</a>
+                                    </Popconfirm>
+                                </Fragment>
+                                : record.state === 'ONLINE' ?
+                                    <Fragment>
+                                        <a onClick={() => {
+                                            api.updateActive({
+                                                id: record.id,
+                                                state: 'OVER'
+                                            }).then(result => {
+                                                if (result.message === 'success') {
+                                                    message.success('保存成功！');
+                                                } else {
+                                                    message.error(result.message);
+                                                }
+                                                let searchList = this.state.searchList || {};
+                                                this.props.getList({
+                                                    pageNo: this.state.currentNo,
+                                                    pageSize: this.state.pageSize,
+                                                    ...searchList
+                                                });
+                                            })
+
+                                        }}>提前结束</a>
+                                        <Divider type="vertical"/>
+
+                                        <a>增加库存</a>
+
+                                        <Divider type="vertical"/>
+
+                                        <a onClick={() => {
+                                            const that = this;
+                                            Modal.confirm({
+                                                title: '延长时间',
+                                                okText: '确定',
+                                                cancelText: '取消',
+                                                content: (
+                                                    <div>
+                                                        <DatePicker
+                                                            showTime
+                                                            value={moment(record && record.validEnd)}
+                                                            placeholder="请选择延长时间"
+                                                            onChange={(val) => {
+                                                                this.setState({
+                                                                    delayTime: val.format("YYYY/MM/DD HH:mm:ss")
+                                                                })
+                                                            }}/>
+                                                    </div>
+                                                ),
+                                                onOk() {
+                                                    const {delayTime} = that.state;
+                                                    api.updateActive({
+                                                        id: record.id,
+                                                        validEnd: delayTime
+                                                    }).then(res => {
+                                                        if (res.message === 'success') {
+                                                            message.success('保存成功！');
+                                                        } else {
+                                                            message.error(res.message);
+                                                        }
+                                                        let searchList = that.state.searchList || {};
+                                                        that.props.getList({
+                                                            pageNo: that.state.currentNo,
+                                                            pageSize: that.state.pageSize,
+                                                            ...searchList
+                                                        });
+                                                    })
+                                                },
+                                                onCancel() {
+                                                }
+                                            });
+                                        }}>延长时间</a>
+
+                                        <Divider type="vertical"/>
+
+                                        <a>活动明细</a>
+                                    </Fragment> :
+                                    record.state === 'OVER' ?
+                                        <Fragment>
+                                            <a>活动明细</a>
+                                        </Fragment> : null
+                        }
                     </Fragment>
                 ),
             },];
@@ -223,11 +387,11 @@ class Home extends Component {
                     <Card bordered={false}>
                         <div className='tableList'>
                             <div className='tableListOperator'>
-                                <Button type="primary" icon="plus" onClick={() =>{
+                                <Button type="primary" icon="plus" onClick={() => {
                                     this.setState({
                                         showDrawer: true,
                                         showDrawerId: null,
-                                        record:null
+                                        record: null
                                     })
                                 }}>
                                     新增
@@ -247,7 +411,7 @@ class Home extends Component {
                             width='560'
                             visible={showDrawer}
                             maskClosable={false}
-                            onClose={()=>{
+                            onClose={() => {
                                 this.setState({
                                     showDrawer: false,
                                     showDrawerId: null,
@@ -255,10 +419,10 @@ class Home extends Component {
                                 });
                             }}
                         >
-                            { showDrawer && <NewForm
+                            {showDrawer && <NewForm
                                 id={showDrawerId}
                                 record={record}
-                                onClose={(bool)=>{
+                                onClose={(bool) => {
                                     this.setState({
                                         showDrawer: false,
                                         showDrawerId: null,
@@ -267,10 +431,10 @@ class Home extends Component {
                                     // 如果点击的确定，则刷新列表
                                     let searchList = this.state.searchList || {};
 
-                                    if(bool){
+                                    if (bool) {
                                         this.props.getList({
-                                            pageNo:this.state.currentNo,
-                                            pageSize:this.state.pageSize,
+                                            pageNo: this.state.currentNo,
+                                            pageSize: this.state.pageSize,
                                             ...searchList
                                         });
                                     }

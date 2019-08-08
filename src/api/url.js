@@ -9,14 +9,14 @@ export default {
     exportTable: `${API_HOSTNAME}/service/export`,
     couponList: `${API_HOSTNAME}/service/coupon/list`,
     platformList: `${API_HOSTNAME}/service/platform/list`,
+
     updateCoupon: `${API_HOSTNAME}/service/coupon/update`,
     createCoupon: `${API_HOSTNAME}/service/coupon/create`,
     uploadFile:`${API_HOSTNAME}/service/code/import`,
-
     sendList:`${API_HOSTNAME}/service/sendDetail/list`,
     createPlantForm:`${API_HOSTNAME}/service/platform/create`,
-    updatePlantForm:`${API_HOSTNAME}/service/platform/update`,
 
+    updatePlantForm:`${API_HOSTNAME}/service/platform/update`,
     activeList:`${API_HOSTNAME}/service/activity/list`,
     departmentList:`${API_HOSTNAME}/service/department/list`,
     updateDepartment:`${API_HOSTNAME}/service/department/update`,
@@ -24,10 +24,14 @@ export default {
 
     batchList:`${API_HOSTNAME}/service/batch/list`,
     sendCode:`${API_HOSTNAME}/service/activity/send`,
-
     createActive:`${API_HOSTNAME}/service/activity/create`,
     updateActive:`${API_HOSTNAME}/service/activity/update`,
-
     roleList:`${API_HOSTNAME}/service/permission/role/list`,
+
+    connectRole:`${API_HOSTNAME}/service/permission/connectRole`,
     userList:`${API_HOSTNAME}/service/user/list`,
+    createRole:`${API_HOSTNAME}/service/user/create`,
+    updateRole:`${API_HOSTNAME}/service/user/update`,
+    deleteActive:`${API_HOSTNAME}/service/activity/delete`,
+
 }

@@ -193,9 +193,6 @@ class Home extends Component {
                 title: '失败原因',
                 key: 'failMessage',
                 dataIndex: 'failMessage',
-                render:(text)=>{
-                    return text ? text :'无'
-                }
             },
             {
                 title: '发放批次号',

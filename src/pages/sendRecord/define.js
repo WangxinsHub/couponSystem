@@ -17,11 +17,6 @@ export default {
     // 搜索数据，默认一行显示3条
     searchMenu: {
         // 常在的选项
-        open: [{
-            id: 'batchId',
-            label: '批次号',
-            type: 'input', // input输入框
-            placeholder: '请输入批次号',
-        }],
+        open: [{}],
     },
 }

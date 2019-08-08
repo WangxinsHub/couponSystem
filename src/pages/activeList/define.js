@@ -18,54 +18,7 @@ export default {
     searchMenu: {
         // 常在的选项
         open: [{
-            id: 'mobile',
-            label: '手机号',
-            type: 'input', // input输入框
-            placeholder: '请输入手机号',
-        },{
-            id: 'sendBatchId',
-            label: '发送批次号',
-            type: 'input', // input输入框
-            placeholder: '请输入发送批次号',
-        },, {
-            id: 'messageState',
-            label: '请选择发送信息状态',
-            type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
-            option: [{
-                label: '全部',
-                value: null,
-            }, {
-                label: '发送中',
-                value: 'SENDING',
-            }, {
-                label: '成功',
-                value: 'SUCCESS',
-            }, {
-                label: '失败',
-                value: 'FAIL',
-            }],
-        },
-            // {
-            //     id: 'payStatus',
-            //     label: '付款状态',
-            //     type: 'select', // 支付状态 0-待支付
-            //     opti on: [{
-            //         label: '全部',
-            //         value: null,
-            //     }, {
-            //         label: '待支付',
-            //         value: 0,
-            //     }, {
-                   //         label: '已支付',
-            //         value: 1,
-            //     }],
-            // },
-            {
-                id: 'rangeTime',
-                label: '时间',
-                type: 'rangePicker',
-                placeholder: '请选择开始至结束时间'
-            },
-        ],
+
+        }],
     },
 }

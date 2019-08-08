@@ -138,12 +138,18 @@ class Home extends Component {
         let {breadMenu, searchMenu} = Define;
 
         if (list && list.data && this.canAddSearch) {
-
+            Define.searchMenu.open = [];
             let option = list.data.map((item) => ({
                 value: item.id,
                 label: item.activityName
             }));
 
+            Define.searchMenu.open.push({
+                id: 'batchId',
+                label: '批次号',
+                type: 'input', // input输入框
+                placeholder: '请输入批次号',
+            })
             Define.searchMenu.open.push({
                 id: 'activityId',
                 label: '请选择活动',
@@ -174,8 +180,8 @@ class Home extends Component {
 
             {
                 title: '发放账号',
-                key: 'sendRealCount',
-                dataIndex: 'sendRealCount',
+                key: 'modifyUser',
+                dataIndex: 'modifyUser',
             },
             {
                 title: '发放时间',
