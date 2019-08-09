@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import Qs from 'qs'
 /**
  * 主要params参数
  * @params method {string} 方法名
@@ -21,18 +21,23 @@ export default class Server {
         return new Promise((resolve, reject) => {
             if (typeof params !== 'object') params = {};
             let _option = params;
+            console.error(params)
             _option = {
                 method,
                 url,
                 //baseURL: API_HOSTNAME,
                 timeout: 30000,
-                params,
                 //params:{A:1},
                 withCredentials: true, //是否携带cookies发起请求
-
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
                 crossDomain: true,
-
-                data: params || null,
+                paramsSerializer: function(params) {
+                    return Qs.stringify(params)
+                },
+                data:params,
+                params
             }
             axios.request(_option).then(res => {
                 resolve(typeof res.data === 'object' || typeof res.data === 'string' ? res.data : JSON.parse(res.data))

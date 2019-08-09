@@ -23,6 +23,7 @@ import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
 import Url from '@/api/url'
 import Verify from '../../utils/verify'
 import {getList as getCouponList} from '../couponList/action'
+import Qs from 'qs'
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -102,20 +103,24 @@ class Home extends Component {
         this.props.form.validateFieldsAndScroll({force: true}, (err, values) => {
             if (!err && !this.state.errorMsg) {
                 const {activityCouponMessage} = this.state;
-                if (that.props.id) values.id = that.props.id;
-                values.activityCouponMessage = JSON.stringify(
-                    activityCouponMessage.map((item => (
-                        {
-                            couponId: item.couponId,
-                            couponName: item.couponName,
-                            totalCount: item.totalCount,
-                        }
-                    )))
-                )
-                values.validStart = values.rangeTime[0].format("YYYY/MM/DD HH:mm:ss");
-                values.validEnd = values.rangeTime[1].format("YYYY/MM/DD HH:mm:ss");
+                if(!that.props.id){
+                    values.activityCouponMessage = JSON.stringify(
+                        activityCouponMessage.map((item => (
+                            {
+                                couponId: item.couponId,
+                                couponName: item.couponName,
+                                totalCount: item.totalCount,
+                            }
+                        )))
+                    )
+                    values.validStart = values.rangeTime[0].format("YYYY/MM/DD HH:mm:ss");
+                    values.validEnd = values.rangeTime[1].format("YYYY/MM/DD HH:mm:ss");
+                }else{
+                    values.departmentValue = this.state.departmentValue;
+                    values.validEnd = values.validEnd.format("YYYY/MM/DD HH:mm:ss");
+                    values.id = that.props.id;
+                }
                 delete values.rangeTime;
-                values.departmentValue = this.state.departmentValue;
 
                 // 提交表单
                 console.log(values);
@@ -232,7 +237,7 @@ class Home extends Component {
                     </FormItem>
 
                     {
-                        activityCouponMessage && activityCouponMessage.map((active, activeIndex) => {
+                        !this.props.id && activityCouponMessage && activityCouponMessage.map((active, activeIndex) => {
                             return [
                                 <FormItem
                                     label='券' {...stationEditFormDrawer}
@@ -298,26 +303,71 @@ class Home extends Component {
                             ]
                         })
                     }
-                    <Fragment>
-                        <a onClick={() => {
-                            const {activityCouponMessage} = this.state;
-                            console.log(activityCouponMessage);
-                            activityCouponMessage.push([])
+                    {
+                        !this.props.id && <Fragment>
+                            <a onClick={() => {
+                                const {activityCouponMessage} = this.state;
+                                console.log(activityCouponMessage);
+                                activityCouponMessage.push([])
 
-                            this.setState({
-                                activityCouponMessage
-                            })
-                        }}>新增券</a>
-                    </Fragment>
+                                this.setState({
+                                    activityCouponMessage
+                                })
+                            }}>新增券</a>
+                        </Fragment>
+                    }
+                    {
+                        !this.props.id && <FormItem label='活动有效期' {...stationEditFormDrawer} key="rangeTime">
+                            {getFieldDecorator('rangeTime', {
+                                initialValue: validStart && validEnd ? [validStart, validEnd] : '',
+                                rules: [{required: true, message: '必填项'}],
+                            })(
+                                <RangePicker/>
+                            )}
+                        </FormItem>
+                    }
 
-                    <FormItem label='活动有效期' {...stationEditFormDrawer} key="rangeTime">
-                        {getFieldDecorator('rangeTime', {
-                            initialValue: validStart && validEnd ? [validStart, validEnd] : '',
-                            rules: [{required: true, message: '必填项'}],
-                        })(
-                            <RangePicker/>
-                        )}
-                    </FormItem>
+                    {
+                        this.props.id && <FormItem
+                            label='状态'
+                            {...stationEditFormDrawer}>
+                            {getFieldDecorator('state', {
+                                initialValue: record && record.state,
+                                rules: [{required: true, message: '必填项'}],
+                            })(
+                                <Select style={{width: '50%'}}
+                                        optionFilterProp="children"
+                                        placeholder="请选择状态">
+                                    <Option key={'READY'}
+                                            value={'READY'}>待上线</Option>
+                                    <Option key={'ONLINE'}
+                                            value={'ONLINE'}>已上线</Option>
+                                    <Option key={'OVER'}
+                                            value={'OVER'}>已结束</Option>
+                                    <Option key={'DRAFT'}
+                                            value={'DRAFT'}>草稿</Option>
+                                </Select>
+                            )}
+                        </FormItem>
+                    }
+
+                    {
+                        this.props.id && <FormItem
+                            label='结束时间'
+                            {...stationEditFormDrawer}>
+                            {getFieldDecorator('validEnd', {
+                                initialValue: record && moment(new Date(record.validEnd)),
+                                rules: [{required: true, message: '必填项'}],
+                            })(
+                                <DatePicker
+                                    showTime
+                                    placeholder="请选择结束时间"
+                                    format="YYYY/MM/DD HH:mm:ss"
+                                />
+                            )}
+                        </FormItem>
+                    }
+
 
                     <FormItem label='活动说明' {...stationEditFormDrawer} key="description">
                         {getFieldDecorator('description', {

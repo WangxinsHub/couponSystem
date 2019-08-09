@@ -225,7 +225,7 @@ class Home extends Component {
                                     <a onClick={() => {
                                         let validStart = new Date(record.validStart).valueOf();
                                         let now = new Date().valueOf();
-                                        if (now > validStart) {
+                                        if (now < validStart) {
                                             api.updateActive({
                                                 id: record.id,
                                                 state: 'ONLINE'
@@ -235,6 +235,12 @@ class Home extends Component {
                                                 } else {
                                                     message.error(res.message);
                                                 }
+                                                let searchList = this.state.searchList || {};
+                                                this.props.getList({
+                                                    pageNo: this.state.currentNo,
+                                                    pageSize: this.state.pageSize,
+                                                    ...searchList
+                                                });
                                             })
                                         } else {
                                             api.updateActive({
@@ -242,19 +248,19 @@ class Home extends Component {
                                                 state: 'OVER'
                                             }).then(res => {
                                                 if (res.message === 'success') {
-                                                    message.success('保存成功！');
+                                                    message.success('发布成功！');
                                                 } else {
                                                     message.error(res.message);
                                                 }
+                                                let searchList = this.state.searchList || {};
+                                                this.props.getList({
+                                                    pageNo: this.state.currentNo,
+                                                    pageSize: this.state.pageSize,
+                                                    ...searchList
+                                                });
                                             })
                                         }
 
-                                        let searchList = this.state.searchList || {};
-                                        this.props.getList({
-                                            pageNo: this.state.currentNo,
-                                            pageSize: this.state.pageSize,
-                                            ...searchList
-                                        });
                                     }}>发布</a>
                                     <Divider type="vertical"/>
                                     <Popconfirm

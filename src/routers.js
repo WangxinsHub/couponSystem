@@ -112,6 +112,14 @@ export default class Router extends React.Component {
                 return null
             },
         });
+        this.activeCoupon = lodable({
+            loader: () => {
+                return import('@/pages/activeCoupon/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
     };
 
     /**
@@ -137,6 +145,7 @@ export default class Router extends React.Component {
                         <Route exact path="/departmentList" component={this.department}/>
                         <Route exact path="/userList" component={this.user}/>
                         <Route exact path="/roleList" component={this.roleList}/>
+                        <Route exact path="/activeCoupon" component={this.activeCoupon}/>
                     </Nav>
                 </Switch>
             </HashRouter>

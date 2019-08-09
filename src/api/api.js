@@ -127,7 +127,7 @@ class API extends Server{
 
   async createActive(params = {}){
     try{
-      let result = await this.axiosCommon('post', Url.createActive, params);
+      let result = await this.axios('post', Url.createActive, params);
       if(result) {
         return result;
       }
