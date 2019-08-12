@@ -204,7 +204,20 @@ class Home extends Component {
                 key: 'deal',
                 render: (record) => (
                     <Fragment>
-                        <Popconfirm placement="top" title="确认要删除吗？" onConfirm={()=>this.deleteInListpage(record.id)} okText='确认' cancelText='取消'>
+                        <Popconfirm placement="top" title="确认要重新发送吗？" onConfirm={()=>{
+                            api.sendCode({
+                                activityId:record.activityId,
+                                couponId:record.couponId,
+                                mobile:record.mobile
+                            }).then(result=>{
+                                if(result.message==='success') {
+                                    message.success('发送成功！');
+                                    this.props.onClose(true);
+                                } else {
+                                    message.error(result.message);
+                                }
+                            })
+                        }} okText='确认' cancelText='取消'>
                             <a>重新发送</a>
                         </Popconfirm>
                     </Fragment>

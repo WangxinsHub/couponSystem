@@ -249,7 +249,7 @@ class Home extends Component {
                                         })
                                     }}>发放券码</a>
                                     <Divider type="vertical" />
-                                    <Link to='/sendRecord'>发放记录</Link>
+                                    <Link to={`/sendRecord/${record.id}`}>发放记录</Link>
                                     <Divider type="vertical" />
                                     <Link to='sendDetail'>发放明细</Link>
                                 </div>:

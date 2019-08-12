@@ -73,6 +73,7 @@ class Home extends Component {
                     message.error(roleReust.message);
                 }
             }
+            this.props.onClose(true);
         } catch (err) {
             this.setState({
                 btnDisabled: false

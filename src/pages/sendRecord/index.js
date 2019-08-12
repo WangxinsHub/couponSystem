@@ -49,9 +49,12 @@ class Home extends Component {
      */
     componentDidMount() {
         this.props.getList({
+            activityId:this.props.match.params.id?this.props.match.params.id:null,
             pageNo: this.state.currentNo,
             pageSize: this.state.pageSize
         });
+
+        console.log(this.props.match.params.id);
         this.props.getActiveList({
             pageNo: 1,
             pageSize: 1000
@@ -154,7 +157,13 @@ class Home extends Component {
                 id: 'activityId',
                 label: '请选择活动',
                 type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
-                option
+                option:[
+                    {
+                        value: null,
+                        label:'全部'
+                    },
+                    ...option
+                ]
             })
             this.canAddSearch = false
         }
@@ -204,7 +213,7 @@ class Home extends Component {
                 key: 'deal',
                 render: (record) => (
                     <Fragment>
-                        <Link to='sendDetail'>发放明细</Link>
+                        <Link to={`sendDetail/${record.batchId}`}>发放明细</Link>
                     </Fragment>
                 ),
             },

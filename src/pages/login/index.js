@@ -65,7 +65,7 @@ class loginPage extends React.Component {
         // sessionStorage.Authorization = result.data.accessToken;
         // sessionStorage.accountId = result.data.accountId;
         // sessionStorage.enterpriseName = result.data.enterpriseName;
-        this.props.history.push('/supplier/oneSupplier');
+        this.props.history.push('/couponList');
       } else {
         this.setState({
           btnDisabled: false

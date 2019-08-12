@@ -11,6 +11,7 @@ import '@/style/list.less';
 import api from '../../api/api'
 import NewForm from "./edit";
 import moment from 'moment';
+import Detail from '../../components/tableDrawer/detail';
 
 
 class Home extends Component {
@@ -135,7 +136,7 @@ class Home extends Component {
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, record,} = this.state;
         const {loading, list} = this.props.activeConfigReducer;
-        console.error(list)
+        console.error(showDetail)
 
         let {breadMenu,} = Define;
 
@@ -366,12 +367,15 @@ class Home extends Component {
 
                                         <Divider type="vertical"/>
 
-                                        <a>活动明细</a>
-                                    </Fragment> :
-                                    record.state === 'OVER' ?
-                                        <Fragment>
-                                            <a>活动明细</a>
-                                        </Fragment> : null
+                                        <a onClick={() => {
+                                            this.setState({showDetail: true, record})
+                                        }}>活动明细</a>
+                                    </Fragment>
+                                    : record.state === 'OVER' ? <Fragment>
+                                        <a onClick={() => {
+                                            this.setState({showDetail: true, record})
+                                        }}>活动明细</a>
+                                    </Fragment> : null
                         }
                     </Fragment>
                 ),
@@ -412,6 +416,68 @@ class Home extends Component {
                                 noCheck={true}
                             />
                         </div>
+                        <Drawer
+                            title={'活动详情'}
+                            width='560'
+                            visible={showDetail}
+                            maskClosable={false}
+                            onClose={() => {
+                                this.setState({
+                                    showDetail: false
+                                })
+                            }}
+                        >
+                            <Detail
+                                visible={showDetail}
+                                title='广告详情'
+                                width='540'
+                                data={
+                                    [{
+                                        title:  record && record.activityName,
+                                        children: [{
+                                            title: '部门',
+                                            content: record && record.departmentValue, // 图片展示地址，和content不能共存
+                                            col: 24, // 占宽度,12表示50%
+                                        }, {
+                                            title: '状态',
+                                            content: record ? record.state === 'ONLINE' ? '已上线' : record.state === 'READY' ? '待上线' : record.state === 'DRAFT' ? '草案' : '已结束' : '',
+                                            col: 24, // 占宽度,12表示50%
+                                        },{
+                                            title: '开始时间',
+                                            content: record && record.validStart,
+                                            col: 24, // 占宽度,12表示50%
+                                        },{
+                                            title: '结束时间',
+                                            content: record && record.validEnd,
+                                            col: 24, // 占宽度,12表示50%
+                                        },{
+                                            title: '活动描述',
+                                            content: record && record.description,
+                                            col: 24, // 占宽度,12表示50%
+                                        },{
+                                            title: '券',
+                                            content: record && record.activityCoupons,
+                                            col: 24, // 占宽度,12表示50%
+                                        },{
+                                            title: '券信息',
+                                            content: record && record.activityCouponMessage,
+                                            col: 24, // 占宽度,12表示50%
+                                        },{
+                                            title: '创建时间',
+                                            content: record && record.createTime,
+                                            col: 24, // 占宽度,12表示50%
+                                        },{
+                                            title: '更新时间',
+                                            content: record && record.updateTime,
+                                            col: 24, // 占宽度,12表示50%
+                                        }]
+                                    }]
+                                }
+
+                            />
+                        </Drawer>
+
+
                         <Drawer
                             title={showDrawerId ? '编辑活动' : '新增活动'}
                             width='560'

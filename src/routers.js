@@ -139,8 +139,10 @@ export default class Router extends React.Component {
 
                         <Route exact path="/activeConfig" component={this.activeConfig}/>
                         <Route exact path="/activeList" component={this.activeList}/>
+                        <Route exact path="/sendRecord/:id" component={this.sendRecord}/>
                         <Route exact path="/sendRecord" component={this.sendRecord}/>
                         <Route exact path="/sendDetail" component={this.sendDetail}/>
+                        <Route exact path="/sendDetail/:id" component={this.sendDetail}/>
 
                         <Route exact path="/departmentList" component={this.department}/>
                         <Route exact path="/userList" component={this.user}/>

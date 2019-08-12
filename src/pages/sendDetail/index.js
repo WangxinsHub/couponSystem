@@ -43,6 +43,7 @@ class Home extends Component {
      */
     componentDidMount() {
         this.props.getList({
+            sendBatchId:this.props.match.params.id?this.props.match.params.id:null,
             pageNo:this.state.currentNo,
             pageSize:this.state.pageSize
         });

@@ -249,7 +249,7 @@ class Home extends Component {
                             <a>暂停</a>
                         </Popconfirm>
                         <Divider type="vertical"/>
-                        <a>发放明细</a>
+                        <a onClick={()=>this.props.history.push('/couponSend')}>发放明细</a>
                         <Divider type="vertical"/>
                         <a>码库</a>
                     </Fragment>
