@@ -5,6 +5,17 @@ class API extends Server{
   /**
    *  用途：获取验证码
    */
+  async codeList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.codeList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
   async couponList(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.couponList, params);
@@ -259,6 +270,7 @@ class API extends Server{
       throw err;
     }
   }
+
 }
 
 export default new API();

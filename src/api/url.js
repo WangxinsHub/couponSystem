@@ -34,4 +34,5 @@ export default {
     updateRole:`${API_HOSTNAME}/service/user/update`,
     deleteActive:`${API_HOSTNAME}/service/activity/delete`,
 
+    codeList:`${API_HOSTNAME}/service/code/list`,
 }
