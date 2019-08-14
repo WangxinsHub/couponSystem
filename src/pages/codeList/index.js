@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import {is, fromJS} from 'immutable';
 import {object, func} from 'prop-types';
-import {Card, Button, Divider, message, Drawer, Spin, Badge, Popconfirm} from 'antd';
+import {Card, Button, Divider, message, Drawer, Spin, Statistic, Row, Col, Popconfirm} from 'antd';
 import {PageHeaderLayout, TableSearch, StandardTable, TableCommon, Utils} from 'dt-antd';
 import Define from './define';
 import {getList} from './action';
@@ -10,17 +10,17 @@ import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
 import util from '../../utils/base'
 import {Link} from 'react-router-dom';
-import {getList as getDepartmentList} from '../department/action'
 
 
 import NewForm from "./send";
+import api from "../../api/api";
 
 class Home extends Component {
     static propTypes = {
         oneSupplierReducer: object,
         getList: func,
     };
-    canAddSearch=true
+    canAddSearch = true
     state = {
         showDrawer: false, // 是否显示抽屉编辑
         showDetail: false, // 是否显示详情
@@ -49,15 +49,11 @@ class Home extends Component {
     componentDidMount() {
 
         this.props.getList({
-            pageNo:this.state.currentNo,
-            pageSize:this.state.pageSize,
+            pageNo: this.state.currentNo,
+            pageSize: this.state.pageSize,
             //state:['ONLINE','OVER'],
         });
 
-        this.props.getDepartmentList({
-            pageNo:0,
-            pageSize:1000
-        })
     }
 
     /**
@@ -70,17 +66,17 @@ class Home extends Component {
             state: this.state,
             values,
             callBack: (json) => {
-                if( json.searchList.rangeTime){
-                    json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0],'YYYY/MM/dd hh:mm:ss')
-                    json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1],'YYYY/MM/dd hh:mm:ss')
+                if (json.searchList.rangeTime) {
+                    json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd hh:mm:ss')
+                    json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd hh:mm:ss')
                     delete json.searchList.rangeTime;
                 }
 
                 this.setState(json);
                 this.props.getList({
                     ...json.searchList,
-                    pageNo:json.pageNo,
-                    pageSize:json.pageSize
+                    pageNo: json.pageNo,
+                    pageSize: json.pageSize
                 });
             }
         });
@@ -92,8 +88,8 @@ class Home extends Component {
      */
     handleFormReset = () => {
         this.props.getList({
-            pageNo:this.state.currentNo,
-            pageSize:this.state.pageSize
+            pageNo: this.state.currentNo,
+            pageSize: this.state.pageSize
         });
         this.setState({
             searchList: null,
@@ -113,17 +109,17 @@ class Home extends Component {
             state: this.state,
             pagination,
             callBack: (json) => {
-                if( json.searchList.rangeTime){
+                if (json.searchList.rangeTime) {
                     json.searchList.startTime = json.searchList.rangeTime[0].format('YYYY/MM/DD HH:mm:ss')
-                    json.searchList.endTime =json.searchList.rangeTime[1].format('YYYY/MM/DD HH:mm:ss')
+                    json.searchList.endTime = json.searchList.rangeTime[1].format('YYYY/MM/DD HH:mm:ss')
                     delete json.searchList.rangeTime;
                 }
 
                 this.setState(json);
                 this.props.getList({
                     ...json.searchList,
-                    pageNo:json.pageNo,
-                    pageSize:json.pageSize
+                    pageNo: json.pageNo,
+                    pageSize: json.pageSize
                 });
             }
         });
@@ -135,127 +131,87 @@ class Home extends Component {
      */
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, showTwo} = this.state;
-        const {loading, list} = this.props.activeListReducer;
-        const  departmentList  = this.props.departmentReducer.list;
+        const {loading, list} = this.props.codeReducer;
         let {breadMenu, searchMenu} = Define;
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
-
-        if (list && list.data && this.canAddSearch) {
-            Define.searchMenu.open = [{
-                id: 'activityName',
-                label: '活动名称',
-                type: 'input', // input输入框
-                placeholder: '请输入手机号',
-            }, {
-                id: 'state',
-                label: '请选择活动状态',
-                type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
-                option: [{
-                    label: '全部',
-                    value: null,
-                }, {
-                    label: '已上线',
-                    value: 'ONLINE',
-                }, {
-                    label: '已结束',
-                    value: 'OVER',
-                }],
-            },];
-            let option = departmentList && departmentList.data.map((item) => ({
-                value: item.departmentKey,
-                label: item.departmentValue
-            }));
-
-            if(option){
-                Define.searchMenu.open.push({
-                    id: 'departmentKey',
-                    label: '请选择渠道商',
-                    type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
-                    option:[
-                        {
-                            label: '全部',
-                            value: null,
-                        },
-                        ...option
-                    ]
-                })
-                this.canAddSearch = false
-            }
-
-        }
+        // code: "2220"
+        // couponId: 6
+        // createTime: "2019-08-01 03:40:58"
+        // id: "185"
+        // logicDel: false
+        // sendTime: "2019-08-07 10:54:17"
+        // serializeId: null
+        // shortUrl: "https://dwz.cn/hwZxtw0m"
+        // state: "SEND"
+        // updateTime: "2019-08-01 03:40:58"
 
         // 列表表头
         const columns = [
             {
-                title: 'ID',
-                key: 'id',
-                dataIndex: 'id',
-            },
-            {
-                title: '活动名称',
-                dataIndex: 'activityName',
-                key: 'activityName',
-            },
-            {
-                title: '渠道商',
-                key: 'departmentValue',
-                dataIndex: 'departmentValue',
+                title: '码值',
+                key: 'code',
+                dataIndex: 'code',
             },
             {
                 title: '状态',
-                key: 'state',
                 dataIndex: 'state',
-                //DRAFT 草案
-                //ONLINE 已上线
-                //READY 待上线
-                //OVER 已结束
-                render:(text,record)=>{
-                    if(text === 'ONLINE'){
-                        return '已上线'
-                    } else if(text ==='READY'){
-                        return '待上线'
-                    }else if(text === 'DRAFT'){
-                        return '草案'
-                    }else {
-                        return '已结束'
+                key: 'state',
+                render: (text) => {
+                    if (text === 'READY') {
+                        return '待发送'
+                    } else {
+                        return '已发送'
                     }
                 }
             },
             {
-                title: '活动有效期',
-                key: 'validStart',
-                dataIndex: 'validStart',
-                render:(text,record)=>{
-                    if(record.validStart){
-                        return record.validStart + '至' + record.validEnd
-                    }else {
-                        return  null
-                    }
-                }
+                title: '创建时间',
+                key: 'createTime',
+                dataIndex: 'createTime',
+            },
+            {
+                title: '发放时间',
+                key: 'sendTime',
+                dataIndex: 'sendTime',
+            },
+            {
+                title: '发放流水号',
+                key: 'serializeId',
+                dataIndex: 'serializeId',
             },
             {
                 title: '操作',
                 key: 'deal',
-                render: (text,record) => (
+                render: (text, record) => (
                     <Fragment>
                         {
-                            record.state === 'ONLINE'?
-                                <div>
-                                    <a onClick={()=>{
-                                        this.setState({
-                                            showDrawer: true,
-                                            showDrawerId: record.id,
-                                        })
-                                    }}>发放券码</a>
-                                    <Divider type="vertical" />
-                                    <Link to={`/sendRecord/${record.id}`}>发放记录</Link>
-                                    <Divider type="vertical" />
-                                    <Link to='sendDetail'>发放明细</Link>
-                                </div>:
-                                <div>
-                                    <Link to='sendDetail'>发放明细</Link>
-                                </div>
+                            record.state === 'SEND' &&
+                            <Popconfirm
+                                title='是否确认删除活动？'
+                                onConfirm={()=>{
+                                    api.deleteCode({
+                                        id:record.id
+                                    }).then((res)=>{
+                                        if (res.message === 'success') {
+                                            message.success('发布成功！');
+                                        } else {
+                                            message.error(res.message);
+                                        }
+                                        let searchList = this.state.searchList || {};
+                                        this.props.getList({
+                                            pageNo: this.state.currentNo,
+                                            pageSize: this.state.pageSize,
+                                            ...searchList
+                                        });
+                                    })
+                                }}
+                                okText='是'
+                                placement="topRight"
+                                cancelText='否'
+                            >
+                                <a>删除</a>
+                            </Popconfirm>
                         }
                     </Fragment>
                 ),
@@ -275,8 +231,25 @@ class Home extends Component {
             <PageHeaderLayout
                 nav={breadMenu}
             >
+                <Row>
+                    <Col span={6}>
+                        <Statistic title="券名称:" value="Pending"/>
+                    </Col>
+                    <Col span={6}>
+                        <Statistic title="总数量:" value={568.08}/>
+                    </Col>
+                    <Col span={6}>
+                        <Statistic title="锁定量:" value={568.08}/>
+                    </Col>
+                    <Col span={6}>
+                        <Statistic title="库存量:" value={568.08}/>
+                    </Col>
+                </Row>
+
                 <Spin tip={tips} spinning={tips ? true : false}>
                     <Card bordered={false}>
+
+
                         <div className='tableList'>
                             <div className='tableListForm'>
                                 <TableSearch {...searchMenu} />
@@ -285,12 +258,12 @@ class Home extends Component {
                                 <Button type="primary" icon="plus" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
-                                    var urlEncode = function(param, key, encode) {
-                                        if (param==null) return '';
+                                    var urlEncode = function (param, key, encode) {
+                                        if (param == null) return '';
                                         var paramStr = '';
                                         var t = typeof (param);
                                         if (t == 'string' || t == 'number' || t == 'boolean') {
-                                            paramStr += '&' + key + '='  + ((encode==null||encode) ? encodeURIComponent(param) : param);
+                                            paramStr += '&' + key + '=' + ((encode == null || encode) ? encodeURIComponent(param) : param);
                                         } else {
                                             for (var i in param) {
                                                 var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
@@ -302,7 +275,7 @@ class Home extends Component {
                                     }
                                     var s = urlEncode({...this.state.searchList});
                                     console.log(s.slice(1));
-                                    window.location.href = "http://shande.xajhzx.cn/service/export?"+s.slice(1);
+                                    window.location.href = "http://shande.xajhzx.cn/service/export?" + s.slice(1);
                                 }}>
                                     导出
                                 </Button>
@@ -322,7 +295,7 @@ class Home extends Component {
                             width='560'
                             visible={showDrawer}
                             maskClosable={false}
-                            onClose={()=>{
+                            onClose={() => {
                                 this.setState({
                                     showDrawer: false,
                                     showDrawerId: null,
@@ -330,9 +303,9 @@ class Home extends Component {
                                 });
                             }}
                         >
-                            { showDrawer && <NewForm
+                            {showDrawer && <NewForm
                                 id={showDrawerId}
-                                onClose={(bool)=>{
+                                onClose={(bool) => {
                                     this.setState({
                                         showDrawer: false,
                                         showDrawerId: null,
@@ -341,10 +314,10 @@ class Home extends Component {
                                     // 如果点击的确定，则刷新列表
                                     let searchList = this.state.searchList || {};
 
-                                    if(bool){
+                                    if (bool) {
                                         this.props.getList({
-                                            pageNo:this.state.currentNo,
-                                            pageSize:this.state.pageSize,
+                                            pageNo: this.state.currentNo,
+                                            pageSize: this.state.pageSize,
                                             ...searchList
                                         });
                                     }
@@ -358,9 +331,7 @@ class Home extends Component {
 }
 
 export default connect((state) => ({
-    activeListReducer: state.activeListReducer,
-    departmentReducer:state.departmentReducer
+    codeReducer: state.codeReducer,
 }), {
     getList,
-    getDepartmentList
 })(Home);

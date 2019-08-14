@@ -6,9 +6,9 @@ let defaultState = {
   detail: null, 
 }
 
-export const activeListReducer = (state = defaultState, action) => {
+export const codeReducer = (state = defaultState, action) => {
   switch(action.type){
-    case types.GET_ACTIVE_LIST:
+    case types.GET_CODE_LIST:
       return {
         ...state,
         list: action.data,

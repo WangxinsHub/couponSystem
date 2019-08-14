@@ -8,11 +8,11 @@ export const getList = (params) => {
   return async dispatch => {
     try{
       dispatch({
-        type: types.GET_ACTIVE_LIST,
+        type: types.GET_CODE_LIST,
       })
-      let result = await API.activeList(params);
+      let result = await API.codeList(params);
       dispatch({
-        type: types.GET_ACTIVE_LIST,
+        type: types.GET_CODE_LIST,
         data: result,
       })
     }catch(err){

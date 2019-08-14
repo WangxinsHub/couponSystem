@@ -35,4 +35,5 @@ export default {
     deleteActive:`${API_HOSTNAME}/service/activity/delete`,
 
     codeList:`${API_HOSTNAME}/service/code/list`,
+    deleteCode:`${API_HOSTNAME}/service/code/delete`,
 }
