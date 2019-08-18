@@ -43,6 +43,7 @@ class Home extends Component {
      */
     componentDidMount() {
         this.props.getList({
+            activityId:this.props.match.params.id,
             pageNo: this.state.currentNo,
             pageSize: this.state.pageSize,
         });
@@ -133,7 +134,7 @@ class Home extends Component {
      */
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, record} = this.state;
-        const {loading, list} = this.props.couponReducer;
+        const {loading, list} = this.props.couponStore;
 
 
         let {breadMenu, searchMenu} = Define;
@@ -167,49 +168,18 @@ class Home extends Component {
                 key: 'couponName',
             },
             {
-                title: '券平台',
-                key: 'platformName',
-                dataIndex: 'platformName',
-            },
-            {
-                title: '入库方式',
-                key: 'createType',
-                dataIndex: 'createType',
+                title: '总数量',
+                key: 'totalCount',
+                dataIndex: 'totalCount',
             },
 
+
             {
-                title: '入库数量',
+                title: '库存',
                 key: 'stockCount',
                 dataIndex: 'stockCount',
             },
-            {
-                title: '已发送数量',
-                key: 'sendCount',
-                dataIndex: 'sendCount',
-                render:(t,record)=>{
-                    return record.totalCount - record.stockCount
-                }
-            },
 
-            {
-                title: '锁定数量',
-                key: 'lockedCount',
-                dataIndex: 'lockedCount',
-            },
-            {
-                title: '状态',
-                key: 'state',
-                dataIndex: 'state',
-                render: (text, record) => {
-                    if (text === 'SENDING') {
-                        return '发送中'
-                    } else if (text === 'CLOSE') {
-                        return '已结束'
-                    } else {
-                        return '暂停中'
-                    }
-                }
-            },
             {
                 title: '截止时间',
                 key: 'validEnd',
@@ -217,19 +187,6 @@ class Home extends Component {
                 render: (text, record) => {
                     return text && text.slice(0, 19)
                 }
-            },
-            {
-                title: '更新时间',
-                key: 'updateTime',
-                dataIndex: 'updateTime',
-                render: (text, record) => {
-                    return text && text.slice(0, 19)
-                }
-            },
-            {
-                title: '更新人',
-                key: 'lastModifyUser',
-                dataIndex: 'lastModifyUser',
             },
             {
                 title: '操作',
@@ -242,19 +199,15 @@ class Home extends Component {
                                 showDrawerId: record.id,
                                 record: record
                             })
-                        }}>编辑</a>
+                        }}>增加库存</a>
                         <Divider type="vertical"/>
                         <Popconfirm placement="top" title="确认要暂停吗？"
                                     onConfirm={this.stop(record.id)}
                                     okText='确认'
                                     cancelText='取消'
                         >
-                            <a>暂停</a>
+                            <a>删除</a>
                         </Popconfirm>
-                        <Divider type="vertical"/>
-                        <a onClick={() => this.props.history.push('/couponSend')}>发放明细</a>
-                        <Divider type="vertical"/>
-                        <a onClick={() => this.props.history.push(`/codeList/${record.id}/${JSON.stringify(record)}`)}>码库</a>
                     </Fragment>
                 ),
             },
@@ -324,7 +277,7 @@ class Home extends Component {
                         </div>
                     </Card>
                     <Drawer
-                        title={showDrawerId ? '编辑券' : '新增券'}
+                        title={record ? '增加库存' : '新增券'}
                         width='560'
                         visible={showDrawer}
                         maskClosable={false}
@@ -338,7 +291,10 @@ class Home extends Component {
                     >
                         {showDrawer && <NewForm
                             id={showDrawerId}
+                            couponId={record&&record.couponId}
+                            activityId={record && record.activityId}
                             record={record}
+                            match={this.props.match}
                             onClose={(bool) => {
                                 this.setState({
                                     showDrawer: false,
@@ -365,7 +321,7 @@ class Home extends Component {
 }
 
 export default connect((state) => ({
-    couponReducer: state.couponReducer
+    couponStore: state.couponStore
 }), {
     getList,
 })(Home);

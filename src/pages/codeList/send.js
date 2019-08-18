@@ -103,9 +103,10 @@ class Home extends Component {
         this.props.form.validateFieldsAndScroll({force: true}, (err, values) => {
             if (!err && !this.state.errorMsg) {
                 var formData = new FormData();
-                formData.append("couponId",this.props.id);
-                formData.append("file",this.state.file);
+                formData.append("couponId", this.props.id);
+                if (this.state.file) formData.append("file", this.state.file);
 
+                formData.append("code", values.code);
 
                 values.couponId = this.props.id;
                 values.file = this.state.file;
@@ -137,7 +138,7 @@ class Home extends Component {
                                     console.log(file);
                                     this.setState(state => ({
                                         fileList: [file],
-                                        file:file
+                                        file: file
                                     }));
                                     return false;
                                 },
@@ -150,6 +151,13 @@ class Home extends Component {
                             </Button>
                             <span className='extra'> 支持扩展名：.xlsx，.xls,最多可支持1000条</span>
                         </Upload>
+                    )}
+                </FormItem>
+
+
+                <FormItem label='码值' {...stationEditFormDrawer} key="code">
+                    {getFieldDecorator('code', {})(
+                        <TextArea rows={4} placeholder='每行一个'/>,
                     )}
                 </FormItem>
 

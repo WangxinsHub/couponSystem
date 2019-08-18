@@ -27,10 +27,43 @@ class API extends Server{
     }
   }
 
+  async menuList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.menuList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
 
   async getCode(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.getCode, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async couponStore(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.couponStore, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async stock(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.stock, params);
       if(result) {
         return result;
       }

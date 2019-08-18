@@ -38,4 +38,8 @@ export default {
     deleteCode:`${API_HOSTNAME}/service/code/delete`,
     codeImport:`${API_HOSTNAME}/service/code/import`,
     getCode:`${API_HOSTNAME}/service/code/get`,
+
+    menuList:`${API_HOSTNAME}/service/menu/list`,
+    couponStore:`${API_HOSTNAME}/service/activity/coupon`,
+    stock:`${API_HOSTNAME}/service/activity/stock`,
 }

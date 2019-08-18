@@ -9,7 +9,7 @@ import {getList} from './action';
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
 import NewForm from './edit';
-import {Link} from "react-router-dom";
+import api from '../../api/api'
 
 class Home extends Component {
     static propTypes = {
@@ -46,6 +46,12 @@ class Home extends Component {
             pageNo:this.state.currentNo,
             pageSize:this.state.pageSize
         });
+        api.menuList({
+            pageNo:1,
+            pageSize:100,
+        }).then(data=>{
+            console.log(data);
+        })
     }
 
     /**

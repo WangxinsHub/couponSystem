@@ -319,7 +319,9 @@ class Home extends Component {
                                         }}>提前结束</a>
                                         <Divider type="vertical"/>
 
-                                        <a>增加库存</a>
+                                        <a onClick={()=>{
+                                            this.props.history.push(`/couponStore/${record.id}`)
+                                        }}>增加库存</a>
 
                                         <Divider type="vertical"/>
 

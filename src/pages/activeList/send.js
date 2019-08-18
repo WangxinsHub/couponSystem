@@ -15,7 +15,7 @@ import {
 import {getList, getDepartmentList,} from '../activeConfig/action';
 import API from '@/api/api';
 import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
-import {getList as getCouponList} from '../couponList/action'
+import {getList as getCouponList} from '../couponStore/action'
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -40,7 +40,8 @@ class Home extends Component {
     componentDidMount() {
         this.props.getCouponList({
             pageNo: 1,
-            pageSize: 1000
+            pageSize: 1000,
+            activityId:this.props.id
         })
         this.props.getDepartmentList({
             pageNo: 1,
@@ -162,7 +163,7 @@ class Home extends Component {
         let {record} = this.props;
         const {submitting, form, onClose} = this.props;
         const {getFieldDecorator} = form;
-        const {list,} = this.props.couponReducer;
+        const {list,} = this.props.couponStore;
 
         return (<Form style={{paddingBottom: 30}}>
 
@@ -181,8 +182,8 @@ class Home extends Component {
                                 placeholder="请选择券">
                             {
                                 list && list.data.map((item, index) => {
-                                    return (<Option key={item.id}
-                                                    value={index}>{item.couponName}</Option>)
+                                    return (<Option key={item.couponId}
+                                                    value={item.couponId}>{item.couponName}</Option>)
                                 })
                             }
                         </Select>
@@ -234,12 +235,7 @@ class Home extends Component {
                     </Popconfirm>
                     <Button loading={submitting} onClick={(e) => {
                         this.validate(e,)
-                    }} disabled={this.state.btnDisabled} type="primary">发布上线</Button>
-                    <Button loading={submitting}
-                            style={{marginLeft: 10}}
-                            onClick={(e) => {
-                                this.validate(e)
-                            }} disabled={this.state.btnDisabled} type="primary">草稿</Button>
+                    }} disabled={this.state.btnDisabled} type="primary">发送</Button>
                 </div>
             </Form>
         );
@@ -249,6 +245,7 @@ class Home extends Component {
 const WrappedRegistrationForm = Form.create()(Home);
 export default connect((state) => ({
     couponReducer: state.couponReducer,
+    couponStore: state.couponStore,
     activeConfigReducer: state.activeConfigReducer,
 }), {
     getList,

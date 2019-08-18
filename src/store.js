@@ -16,6 +16,7 @@ import * as departmentReducer from '@/pages/department/reducer'
 import * as userReducer from '@/pages/user/reducer'
 import * as roleReducer from '@/pages/role/reducer'
 import * as codeReducer from '@/pages/codeList/reducer'
+import * as couponStore from '@/pages/couponStore/reducer'
 
 
 import thunk from 'redux-thunk';
@@ -38,7 +39,8 @@ export default function configureStore(initialState) {
             ...departmentReducer,
             ...userReducer,
             ...roleReducer,
-            ...codeReducer
+            ...codeReducer,
+            ...couponStore
         }),
         initialState,
         applyMiddleware(thunk)

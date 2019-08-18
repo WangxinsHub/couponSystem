@@ -16,14 +16,10 @@ import {
     InputNumber,
     Checkbox
 } from 'antd';
-import apiUrl from '@/api/url';
 import {getList, getDepartmentList,} from './action';
 import API from '@/api/api';
 import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
-import Url from '@/api/url'
-import Verify from '../../utils/verify'
 import {getList as getCouponList} from '../couponList/action'
-import Qs from 'qs'
 
 const FormItem = Form.Item;
 const {Option} = Select;
