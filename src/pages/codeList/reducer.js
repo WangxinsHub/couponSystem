@@ -14,6 +14,12 @@ export const codeReducer = (state = defaultState, action) => {
         list: action.data,
         loading: false
       }
+    case types.GET_CODE_DETAIL:
+      return {
+        ...state,
+        list: action.data,
+        loading: false
+      }
     default: 
       return state;
   }

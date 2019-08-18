@@ -225,8 +225,9 @@ class Home extends Component {
                                     <Divider type="vertical"/>
                                     <a onClick={() => {
                                         let validStart = new Date(record.validStart).valueOf();
+                                        let validEnd = new Date(record.validEnd).valueOf();
                                         let now = new Date().valueOf();
-                                        if (now < validStart) {
+                                        if (now < validEnd) {
                                             api.updateActive({
                                                 id: record.id,
                                                 state: 'ONLINE'

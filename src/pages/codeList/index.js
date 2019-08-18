@@ -5,13 +5,12 @@ import {object, func} from 'prop-types';
 import {Card, Button, Divider, message, Drawer, Spin, Statistic, Row, Col, Popconfirm} from 'antd';
 import {PageHeaderLayout, TableSearch, StandardTable, TableCommon, Utils} from 'dt-antd';
 import Define from './define';
-import {getList} from './action';
+import {getList,} from './action';
+import {getList as getCouponList} from '../couponList/action'
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
 import util from '../../utils/base'
 import {Link} from 'react-router-dom';
-
-
 import NewForm from "./send";
 import api from "../../api/api";
 
@@ -30,6 +29,7 @@ class Home extends Component {
         tips: false,
         currentNo: 1, // 当前页码
         pageSize: 10, // 每页显示条数,
+        couponInfo: {}
     }
 
     /**
@@ -48,12 +48,21 @@ class Home extends Component {
      */
     componentDidMount() {
 
+        this.props.getCouponList({
+            pageNo: this.state.currentNo,
+            pageSize: this.state.pageSize,
+            id: this.props.match.params.id
+        })
         this.props.getList({
             pageNo: this.state.currentNo,
             pageSize: this.state.pageSize,
+            couponId: this.props.match.params.id
             //state:['ONLINE','OVER'],
         });
 
+        this.setState({
+            couponInfo: JSON.parse(this.props.match.params.couponInfo)
+        })
     }
 
     /**
@@ -132,19 +141,11 @@ class Home extends Component {
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, showTwo} = this.state;
         const {loading, list} = this.props.codeReducer;
+        const couponDetail = this.props.couponReducer.list && this.props.couponReducer.list.data[0];
+        console.log(couponDetail);
         let {breadMenu, searchMenu} = Define;
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
-        // code: "2220"
-        // couponId: 6
-        // createTime: "2019-08-01 03:40:58"
-        // id: "185"
-        // logicDel: false
-        // sendTime: "2019-08-07 10:54:17"
-        // serializeId: null
-        // shortUrl: "https://dwz.cn/hwZxtw0m"
-        // state: "SEND"
-        // updateTime: "2019-08-01 03:40:58"
 
         // 列表表头
         const columns = [
@@ -189,10 +190,10 @@ class Home extends Component {
                             record.state === 'SEND' &&
                             <Popconfirm
                                 title='是否确认删除活动？'
-                                onConfirm={()=>{
+                                onConfirm={() => {
                                     api.deleteCode({
-                                        id:record.id
-                                    }).then((res)=>{
+                                        id: record.id
+                                    }).then((res) => {
                                         if (res.message === 'success') {
                                             message.success('发布成功！');
                                         } else {
@@ -233,16 +234,16 @@ class Home extends Component {
             >
                 <Row>
                     <Col span={6}>
-                        <Statistic title="券名称:" value="Pending"/>
+                        <Statistic title="券名称:" value={couponDetail && couponDetail.couponName}/>
                     </Col>
                     <Col span={6}>
-                        <Statistic title="总数量:" value={568.08}/>
+                        <Statistic title="总数量:" value={couponDetail && couponDetail.totalCount}/>
                     </Col>
                     <Col span={6}>
-                        <Statistic title="锁定量:" value={568.08}/>
+                        <Statistic title="锁定量:" value={couponDetail && couponDetail.lockedCount}/>
                     </Col>
                     <Col span={6}>
-                        <Statistic title="库存量:" value={568.08}/>
+                        <Statistic title="库存量:" value={couponDetail && couponDetail.stockCount}/>
                     </Col>
                 </Row>
 
@@ -279,6 +280,15 @@ class Home extends Component {
                                 }}>
                                     导出
                                 </Button>
+                                <Button type="primary" icon="plus" onClick={() => {
+                                    this.setState({
+                                        showDrawer: true,
+                                        showDrawerId: null,
+                                        record: null
+                                    })
+                                }}>
+                                    新增
+                                </Button>
                             </div>
                             <StandardTable
                                 loading={loading} // 显示加载框
@@ -286,7 +296,7 @@ class Home extends Component {
                                 columns={columns}
                                 rowKey={columns => columns.id}
                                 onChange={this.handleStandardTableChange}
-                                noCheck={true}
+                                noCheck={false}
                             />
                         </div>
 
@@ -304,7 +314,7 @@ class Home extends Component {
                             }}
                         >
                             {showDrawer && <NewForm
-                                id={showDrawerId}
+                                id={this.props.match.params.id}
                                 onClose={(bool) => {
                                     this.setState({
                                         showDrawer: false,
@@ -318,6 +328,7 @@ class Home extends Component {
                                         this.props.getList({
                                             pageNo: this.state.currentNo,
                                             pageSize: this.state.pageSize,
+                                            couponId: this.props.match.params.id,
                                             ...searchList
                                         });
                                     }
@@ -332,6 +343,8 @@ class Home extends Component {
 
 export default connect((state) => ({
     codeReducer: state.codeReducer,
+    couponReducer: state.couponReducer,
 }), {
     getList,
+    getCouponList
 })(Home);

@@ -36,4 +36,6 @@ export default {
 
     codeList:`${API_HOSTNAME}/service/code/list`,
     deleteCode:`${API_HOSTNAME}/service/code/delete`,
+    codeImport:`${API_HOSTNAME}/service/code/import`,
+    getCode:`${API_HOSTNAME}/service/code/get`,
 }

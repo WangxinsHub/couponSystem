@@ -20,3 +20,23 @@ export const getList = (params) => {
     }
   } 
 }
+
+// 获取一级供应商列表
+export const getCodeDetail = (params) => {
+  // 返回函数，异步dispatch
+  return async dispatch => {
+    try{
+      dispatch({
+        type: types.GET_CODE_LIST,
+      })
+      let result = await API.getCode(params);
+      dispatch({
+        type: types.GET_CODE_DETAIL,
+        data: result,
+      })
+    }catch(err){
+      console.error(err);
+    }
+  }
+}
+

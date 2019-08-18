@@ -44,7 +44,7 @@ class Home extends Component {
     componentDidMount() {
         this.props.getList({
             pageNo: this.state.currentNo,
-            pageSize: this.state.pageSize
+            pageSize: this.state.pageSize,
         });
     }
 
@@ -110,12 +110,12 @@ class Home extends Component {
         });
     }
 
-    stop =  (id) => async () => {
+    stop = (id) => async () => {
         let result = await api.updateCoupon({
-            state:'CLOSE',
+            state: 'CLOSE',
             id
         });
-        if(result.message==='success') {
+        if (result.message === 'success') {
             message.success('保存成功！');
             this.props.onClose(true);
         } else {
@@ -179,13 +179,13 @@ class Home extends Component {
 
             {
                 title: '入库数量',
-                key: 'totalCount',
-                dataIndex: 'totalCount',
+                key: 'stockCount',
+                dataIndex: 'stockCount',
             },
             {
                 title: '已发送数量',
-                key: 'stockCount',
-                dataIndex: 'stockCount',
+                key: 'sendCount',
+                dataIndex: 'sendCount',
             },
 
             {
@@ -249,9 +249,9 @@ class Home extends Component {
                             <a>暂停</a>
                         </Popconfirm>
                         <Divider type="vertical"/>
-                        <a onClick={()=>this.props.history.push('/couponSend')}>发放明细</a>
+                        <a onClick={() => this.props.history.push('/couponSend')}>发放明细</a>
                         <Divider type="vertical"/>
-                        <a>码库</a>
+                        <a onClick={() => this.props.history.push(`/codeList/${record.id}/${JSON.stringify(record)}`)}>码库</a>
                     </Fragment>
                 ),
             },
@@ -316,12 +316,12 @@ class Home extends Component {
                                 columns={columns}
                                 rowKey={columns => columns.id}
                                 onChange={this.handleStandardTableChange}
-                                noCheck={true}
+                                noCheck={false}
                             />
                         </div>
                     </Card>
                     <Drawer
-                        title={showDrawerId ? '编辑闪屏' : '新增闪屏'}
+                        title={showDrawerId ? '编辑券' : '新增券'}
                         width='560'
                         visible={showDrawer}
                         maskClosable={false}

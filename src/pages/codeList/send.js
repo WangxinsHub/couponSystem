@@ -41,7 +41,8 @@ class Home extends Component {
         this.props.getCouponList({
             pageNo: 1,
             pageSize: 1000
-        })
+        });
+
         this.props.getDepartmentList({
             pageNo: 1,
             pageSize: 1000
@@ -55,18 +56,14 @@ class Home extends Component {
     postData = async (values) => {
         try {
             let result, that = this;
-            result = await API.sendCode(values);
+            result = await API.codeImport(values);
             if (result.message === 'success') {
                 message.success('已发送！');
                 Modal.info({
                     title: '提示',
                     content: (
                         <div>
-                            <p>本次成功导入 <b>{result.data.batchCount}</b> 条手机号码</p>
-                            {this.state.failMobile && <a href={result.data.failMobile}>下载失败的手机号码</a>}
-                            <p>本次发送任务的批次号为:</p>
-                            <p><b>{result.data.batchId}</b></p>
-                            <p>请以此批次号查询发送结果</p>
+                            <p>导入成功</p>
                         </div>
                     ),
                     onOk() {
@@ -105,13 +102,16 @@ class Home extends Component {
         let that = this;
         this.props.form.validateFieldsAndScroll({force: true}, (err, values) => {
             if (!err && !this.state.errorMsg) {
-                const {activityCouponMessage} = this.state;
-                if (that.props.id) values.id = that.props.id;
-                values.activityId = this.props.id;
-                values.file = this.state.formData;
+                var formData = new FormData();
+                formData.append("couponId",this.props.id);
+                formData.append("file",this.state.file);
+
+
+                values.couponId = this.props.id;
+                values.file = this.state.file;
+                console.log(formData);
                 // 提交表单
-                console.log(values);
-                that.postData(values);
+                that.postData(formData);
             } else {
                 this.setState({
                     btnDisabled: false
@@ -119,43 +119,6 @@ class Home extends Component {
                 console.log(err)
             }
         });
-    }
-
-    //  // 与下线时间校验 应早于下线时间
-    //  validateStartTime = (rule, value, callback) => {
-    //   const form = this.props.form;
-    //   if ((value && value.isBefore(form.getFieldValue('endTime'))) || !form.getFieldValue('endTime')) {
-    //     callback();
-    //   } else {
-    //     callback('上线时间应早于下线时间');
-    //   }
-    // }
-    /**
-     * 上传文件
-     * @param info
-     */
-    handleFileChange = (info,) => {
-        console.log(info);
-        this.props.form.validateFieldsAndScroll({force: true});
-
-        let fileList = info.fileList;
-        fileList = fileList.slice(-1);
-        this.setState({fileList, canInput: fileList.length === 0})
-
-        if (fileList && fileList[0]) {
-            if (info.file && info.file.response) this.setState({fileUrl: fileList[0].response.data})
-        }
-    }
-
-    selectCoupon = (activeIndex) => (couponIndex) => {
-        console.log(couponIndex);
-        const {list} = this.props.couponReducer;
-        let coupon = list.data[couponIndex];
-
-        const {activityCouponMessage} = this.state;
-        this.setState({
-            coupon
-        })
     }
 
     render() {
@@ -166,45 +129,15 @@ class Home extends Component {
 
         return (<Form style={{paddingBottom: 30}}>
 
-                <FormItem
-                    label='券' {...stationEditFormDrawer}
-                    required={true}>
-                    {getFieldDecorator('couponId', {
-                        rules: [{required: true, message: '必填项'}],
-                    })(
-                        <Select style={{width: '50%'}}
-                                allowClear={true}
-                                optionFilterProp="children"
-                                onChange={(value) => {
-                                    this.selectCoupon(value)
-                                }}
-                                placeholder="请选择券">
-                            {
-                                list && list.data.map((item, index) => {
-                                    return (<Option key={item.id}
-                                                    value={index}>{item.couponName}</Option>)
-                                })
-                            }
-                        </Select>
-                    )}
-                </FormItem>
-
-                <FormItem label='添加手机号' {...stationEditFormDrawer} key="mobile">
-                    {getFieldDecorator('mobile', {})(
-                        <TextArea rows={4} placeholder='每行一个,可同时输入100个'/>,
-                    )}
-                </FormItem>
-
-                <FormItem label='导入手机号' {...stationEditFormDrawer} key="file">
+                <FormItem label='导入码值' {...stationEditFormDrawer} key="file">
                     {getFieldDecorator('file', {})(
                         <Upload
                             {...{
                                 beforeUpload: file => {
-                                    const formData = new FormData();
-                                    formData.append('files[]', file);
+                                    console.log(file);
                                     this.setState(state => ({
                                         fileList: [file],
-                                        formData
+                                        file:file
                                     }));
                                     return false;
                                 },
@@ -215,7 +148,7 @@ class Home extends Component {
                             <Button>
                                 <Icon type="upload"/>
                             </Button>
-                            <span className='extra'> 支持扩展名：.xlsx，.xls</span>
+                            <span className='extra'> 支持扩展名：.xlsx，.xls,最多可支持1000条</span>
                         </Upload>
                     )}
                 </FormItem>
@@ -234,12 +167,7 @@ class Home extends Component {
                     </Popconfirm>
                     <Button loading={submitting} onClick={(e) => {
                         this.validate(e,)
-                    }} disabled={this.state.btnDisabled} type="primary">发布上线</Button>
-                    <Button loading={submitting}
-                            style={{marginLeft: 10}}
-                            onClick={(e) => {
-                                this.validate(e)
-                            }} disabled={this.state.btnDisabled} type="primary">草稿</Button>
+                    }} disabled={this.state.btnDisabled} type="primary">确定</Button>
                 </div>
             </Form>
         );
@@ -253,5 +181,5 @@ export default connect((state) => ({
 }), {
     getList,
     getCouponList,
-    getDepartmentList
+    getDepartmentList,
 })(WrappedRegistrationForm);
