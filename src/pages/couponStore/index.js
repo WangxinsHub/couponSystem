@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {is, fromJS} from 'immutable';
 import {object, func} from 'prop-types';
 import {Card, Button, Divider, message, Drawer, Spin, Badge, Popconfirm} from 'antd';
-import {PageHeaderLayout, TableSearch, StandardTable, TableCommon, Utils} from 'dt-antd';
+import {PageHeaderLayout, TableSearch, StandardTable, } from 'dt-antd';
 import Define from './define';
 import {getList} from './action';
 import tableCommon from '../../utils/tableCommon.js';
@@ -62,6 +62,7 @@ class Home extends Component {
                 this.setState(json);
                 this.props.getList({
                     ...json.searchList,
+                    activityId:this.props.match.params.id,
                     pageNo: json.pageNo,
                     pageSize: json.pageSize
                 });
@@ -75,6 +76,7 @@ class Home extends Component {
      */
     handleFormReset = () => {
         this.props.getList({
+            activityId:this.props.match.params.id,
             pageNo: this.state.currentNo,
             pageSize: this.state.pageSize
         });
@@ -91,20 +93,14 @@ class Home extends Component {
      * @return {[type]}            [description]
      */
     handleStandardTableChange = (pagination, filtersArg, sorter) => {
-
         tableCommon.tableChange({
             state: this.state,
             pagination,
             callBack: (json) => {
-                if (json.searchList.rangeTime) {
-                    json.searchList.startTime = json.searchList.rangeTime[0]
-                    json.searchList.endTime = json.searchList.rangeTime[1]
-                    delete json.searchList.rangeTime;
-                }
-
                 this.setState(json);
                 this.props.getList({
                     ...json.searchList,
+                    activityId:this.props.match.params.id,
 
                 });
             }
@@ -140,22 +136,7 @@ class Home extends Component {
         let {breadMenu, searchMenu} = Define;
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
-        // 列表表头
-        // couponCode: "drehgwe25dsda"
-        // couponName: "50加油卡1"
-        // createTime: "2019-07-24 05:35:08"
-        // createType: false
-        // id: 3
-        // lastModifyUser: "caimx"
-        // lockedCount: 0
-        // platformId: 1
-        // platformName: "测试平台"
-        // state: "SENDING"
-        // stockCount: 0
-        // totalCount: 0
-        // updateTime: "2019-07-31 06:39:17"
-        // validEnd: "2019-09-08 01:12:00"
-        // validStart: "2019-07-08 00:11:00"
+
         const columns = [
             {
                 title: 'ID',
@@ -232,7 +213,7 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                                <Button type="primary" icon="plus" onClick={() => {
+                              {/*  <Button type="primary" icon="plus" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
                                     var urlEncode = function (param, key, encode) {
@@ -255,7 +236,7 @@ class Home extends Component {
                                     window.location.href = "http://shande.xajhzx.cn/service/export?" + s.slice(1);
                                 }}>
                                     导出
-                                </Button>
+                                </Button>*/}
                                 <Button type="primary" icon="plus" onClick={() => {
                                     this.setState({
                                         showDrawer: true,
@@ -266,6 +247,7 @@ class Home extends Component {
                                     新增
                                 </Button>
                             </div>
+
                             <StandardTable
                                 loading={loading} // 显示加载框
                                 data={data}
@@ -306,6 +288,7 @@ class Home extends Component {
 
                                 if (bool) {
                                     this.props.getList({
+                                        activityId:this.props.match.params.id,
                                         pageNo: this.state.currentNo,
                                         pageSize: this.state.pageSize,
                                         ...searchList

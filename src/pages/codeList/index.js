@@ -83,6 +83,7 @@ class Home extends Component {
 
                 this.setState(json);
                 this.props.getList({
+                    couponId: this.props.match.params.id,
                     ...json.searchList,
                     pageNo: json.pageNo,
                     pageSize: json.pageSize
@@ -97,6 +98,7 @@ class Home extends Component {
      */
     handleFormReset = () => {
         this.props.getList({
+            couponId: this.props.match.params.id,
             pageNo: this.state.currentNo,
             pageSize: this.state.pageSize
         });
@@ -126,6 +128,7 @@ class Home extends Component {
 
                 this.setState(json);
                 this.props.getList({
+                    couponId: this.props.match.params.id,
                     ...json.searchList,
                     pageNo: json.pageNo,
                     pageSize: json.pageSize
@@ -201,6 +204,7 @@ class Home extends Component {
                                         }
                                         let searchList = this.state.searchList || {};
                                         this.props.getList({
+                                            couponId: this.props.match.params.id,
                                             pageNo: this.state.currentNo,
                                             pageSize: this.state.pageSize,
                                             ...searchList
@@ -256,7 +260,7 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                                <Button type="primary" icon="plus" onClick={() => {
+                               {/* <Button type="primary" icon="plus" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
                                     var urlEncode = function (param, key, encode) {
@@ -279,7 +283,7 @@ class Home extends Component {
                                     window.location.href = "http://shande.xajhzx.cn/service/export?" + s.slice(1);
                                 }}>
                                     导出
-                                </Button>
+                                </Button>*/}
                                 <Button type="primary" icon="plus" onClick={() => {
                                     this.setState({
                                         showDrawer: true,

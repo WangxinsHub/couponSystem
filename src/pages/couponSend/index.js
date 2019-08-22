@@ -43,8 +43,9 @@ class Home extends Component {
      */
     componentDidMount() {
         this.props.getList({
-            pageNo:this.state.currentNo,
-            pageSize:this.state.pageSize
+            couponId: this.props.match.params.id ? this.props.match.params.id : null,
+            pageNo: this.state.currentNo,
+            pageSize: this.state.pageSize
         });
     }
 
@@ -58,17 +59,18 @@ class Home extends Component {
             state: this.state,
             values,
             callBack: (json) => {
-                if( json.searchList.rangeTime){
-                    json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0],'YYYY/MM/dd hh:mm:ss')
-                    json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1],'YYYY/MM/dd hh:mm:ss')
+                if (json.searchList.rangeTime) {
+                    json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd hh:mm:ss')
+                    json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd hh:mm:ss')
                     delete json.searchList.rangeTime;
                 }
 
                 this.setState(json);
                 this.props.getList({
+                    couponId: this.props.match.params.id ? this.props.match.params.id : null,
                     ...json.searchList,
-                    pageNo:json.pageNo,
-                    pageSize:json.pageSize
+                    pageNo: json.pageNo,
+                    pageSize: json.pageSize
                 });
             }
         });
@@ -80,8 +82,9 @@ class Home extends Component {
      */
     handleFormReset = () => {
         this.props.getList({
-            pageNo:this.state.currentNo,
-            pageSize:this.state.pageSize
+            couponId: this.props.match.params.id ? this.props.match.params.id : null,
+            pageNo: this.state.currentNo,
+            pageSize: this.state.pageSize
         });
         this.setState({
             searchList: null,
@@ -101,17 +104,18 @@ class Home extends Component {
             state: this.state,
             pagination,
             callBack: (json) => {
-                if( json.searchList.rangeTime){
+                if (json.searchList.rangeTime) {
                     json.searchList.startTime = json.searchList.rangeTime[0].format('YYYY/MM/DD HH:mm:ss')
-                    json.searchList.endTime =json.searchList.rangeTime[1].format('YYYY/MM/DD HH:mm:ss')
+                    json.searchList.endTime = json.searchList.rangeTime[1].format('YYYY/MM/DD HH:mm:ss')
                     delete json.searchList.rangeTime;
                 }
 
                 this.setState(json);
                 this.props.getList({
+                    couponId: this.props.match.params.id ? this.props.match.params.id : null,
                     ...json.searchList,
-                    pageNo:json.pageNo,
-                    pageSize:json.pageSize
+                    pageNo: json.pageNo,
+                    pageSize: json.pageSize
                 });
             }
         });
@@ -178,12 +182,12 @@ class Home extends Component {
                 title: '短信状态',
                 key: 'messageState',
                 dataIndex: 'messageState',
-                render:(text)=>{
-                    if(text==='SUCCESS'){
+                render: (text) => {
+                    if (text === 'SUCCESS') {
                         return '成功'
-                    }else if(text==='SENDING'){
+                    } else if (text === 'SENDING') {
                         return '发送中'
-                    }else{
+                    } else {
                         return '失败'
                     }
                 }
@@ -204,13 +208,13 @@ class Home extends Component {
                 key: 'deal',
                 render: (record) => (
                     <Fragment>
-                        <Popconfirm placement="top" title="确认要重新发送吗？" onConfirm={()=>{
+                        <Popconfirm placement="top" title="确认要重新发送吗？" onConfirm={() => {
                             api.sendCode({
-                                activityId:record.activityId,
-                                couponId:record.couponId,
-                                mobile:record.mobile
-                            }).then(result=>{
-                                if(result.message==='success') {
+                                activityId: record.activityId,
+                                couponId: record.couponId,
+                                mobile: record.mobile
+                            }).then(result => {
+                                if (result.message === 'success') {
                                     message.success('发送成功！');
                                     this.props.onClose(true);
                                 } else {
@@ -245,7 +249,7 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                                <Button type="primary" icon="plus" onClick={() => {
+                                {/*<Button type="primary" icon="plus" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
                                     var urlEncode = function(param, key, encode) {
@@ -268,7 +272,7 @@ class Home extends Component {
                                     window.location.href = "http://shande.xajhzx.cn/service/export?"+s.slice(1);
                                 }}>
                                     导出
-                                </Button>
+                                </Button>*/}
                             </div>
                             <StandardTable
                                 loading={loading} // 显示加载框

@@ -95,16 +95,18 @@ export default class SiderMenuWrapper extends React.PureComponent {
       customtravel: 'car',
       coupon: 'gift',
     }
-    menu['user.Manage'] = 'user';
-    menu['order.Manage'] = 'dollar';
-    menu['chartered.Manage'] = 'radar-chart';
-    menu['config.manage'] = 'laptop';
+    menu['qk'] = 'switcher';
+    menu['hd'] = 'gold';
+    menu['qd'] = 'deployment-unit';
+    menu['yh'] = 'user';
+
     //menu['order.Manage'] = 'order.Manage';
     // 定义code对应的icon
     return [
       {
         menuCode:'qk',
         menuName:'券库',
+        icon:'euro',
         childMenus:[
           {
             menuCode:'couponList',

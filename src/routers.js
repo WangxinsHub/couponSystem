@@ -152,6 +152,8 @@ export default class Router extends React.Component {
                         <Route exact path="/" component={this.login}/>
                         <Route exact path="/couponList" component={this.couponList}/>
                         <Route exact path="/couponSend" component={this.couponSend}/>
+                        <Route exact path="/couponSend/:id" component={this.couponSend}/>
+
                         <Route exact path="/couponPlant" component={this.couponPlant}/>
 
                         <Route exact path="/activeConfig" component={this.activeConfig}/>
@@ -159,7 +161,7 @@ export default class Router extends React.Component {
                         <Route exact path="/sendRecord/:id" component={this.sendRecord}/>
                         <Route exact path="/sendRecord" component={this.sendRecord}/>
                         <Route exact path="/sendDetail" component={this.sendDetail}/>
-                        <Route exact path="/sendDetail/:id" component={this.sendDetail}/>
+                        <Route exact path="/sendDetail/:aid/:bid" component={this.sendDetail}/>
 
                         <Route exact path="/departmentList" component={this.department}/>
                         <Route exact path="/userList" component={this.user}/>

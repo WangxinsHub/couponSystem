@@ -252,7 +252,7 @@ class Home extends Component {
                             <a>暂停</a>
                         </Popconfirm>
                         <Divider type="vertical"/>
-                        <a onClick={() => this.props.history.push('/couponSend')}>发放明细</a>
+                        <a onClick={() => this.props.history.push(`/couponSend/${record.id}`)}>发放明细</a>
                         <Divider type="vertical"/>
                         <a onClick={() => this.props.history.push(`/codeList/${record.id}/${JSON.stringify(record)}`)}>码库</a>
                     </Fragment>
@@ -279,7 +279,7 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                                <Button type="primary" icon="plus" onClick={() => {
+                                {/*<Button type="primary" icon="plus" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
                                     var urlEncode = function (param, key, encode) {
@@ -302,7 +302,7 @@ class Home extends Component {
                                     window.location.href = "http://shande.xajhzx.cn/service/export?" + s.slice(1);
                                 }}>
                                     导出
-                                </Button>
+                                </Button>*/}
                                 <Button type="primary" icon="plus" onClick={() => {
                                     this.setState({
                                         showDrawer: true,

@@ -43,7 +43,8 @@ class Home extends Component {
      */
     componentDidMount() {
         this.props.getList({
-            sendBatchId:this.props.match.params.id?this.props.match.params.id:null,
+            activityId:this.props.match.params.aid!=='null'?this.props.match.params.aid:null,
+            sendBatchId:this.props.match.params.bid!=='null'?this.props.match.params.bid:null,
             pageNo:this.state.currentNo,
             pageSize:this.state.pageSize
         });
@@ -69,6 +70,8 @@ class Home extends Component {
                 this.props.getList({
                     ...json.searchList,
                     pageNo:json.pageNo,
+                    activityId:this.props.match.params.aid!=='null'?this.props.match.params.aid:null,
+                    sendBatchId:this.props.match.params.bid!=='null'?this.props.match.params.bid:null,
                     pageSize:json.pageSize
                 });
             }
@@ -82,6 +85,8 @@ class Home extends Component {
     handleFormReset = () => {
         this.props.getList({
             pageNo:this.state.currentNo,
+            activityId:this.props.match.params.aid!=='null'?this.props.match.params.aid:null,
+            sendBatchId:this.props.match.params.bid!=='null'?this.props.match.params.bid:null,
             pageSize:this.state.pageSize
         });
         this.setState({
@@ -109,8 +114,12 @@ class Home extends Component {
                 }
 
                 this.setState(json);
+
+
                 this.props.getList({
                     ...json.searchList,
+                    activityId:this.props.match.params.aid!=='null'?this.props.match.params.aid:null,
+                    sendBatchId:this.props.match.params.bid!=='null'?this.props.match.params.bid:null,
                     pageNo:json.pageNo,
                     pageSize:json.pageSize
                 });
@@ -137,8 +146,8 @@ class Home extends Component {
             },
             {
                 title: '活动名称',
-                dataIndex: 'couponId',
-                key: 'couponId',
+                dataIndex: 'activityName',
+                key: 'activityName',
             },
             {
                 title: '券名称',

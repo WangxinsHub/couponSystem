@@ -56,6 +56,7 @@ class Home extends Component {
 
         console.log(this.props.match.params.id);
         this.props.getActiveList({
+            activityId:this.props.match.params.id?this.props.match.params.id:null,
             pageNo: 1,
             pageSize: 1000
         })
@@ -79,6 +80,7 @@ class Home extends Component {
 
                 this.setState(json);
                 this.props.getList({
+                    activityId:this.props.match.params.id?this.props.match.params.id:null,
                     ...json.searchList,
                     pageNo: json.pageNo,
                     pageSize: json.pageSize
@@ -93,6 +95,8 @@ class Home extends Component {
      */
     handleFormReset = () => {
         this.props.getList({
+            activityId:this.props.match.params.id?this.props.match.params.id:null,
+
             pageNo: this.state.currentNo,
             pageSize: this.state.pageSize
         });
@@ -122,6 +126,7 @@ class Home extends Component {
 
                 this.setState(json);
                 this.props.getList({
+                    activityId:this.props.match.params.id?this.props.match.params.id:null,
                     ...json.searchList,
                     pageNo: json.pageNo,
                     pageSize: json.pageSize
@@ -213,7 +218,7 @@ class Home extends Component {
                 key: 'deal',
                 render: (record) => (
                     <Fragment>
-                        <Link to={`sendDetail/${record.batchId}`}>发放明细</Link>
+                        <Link to={`sendDetail/null/${record.batchId}`}>发放明细</Link>
                     </Fragment>
                 ),
             },
@@ -239,7 +244,7 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                                <Button type="primary" icon="plus" onClick={() => {
+                               {/* <Button type="primary" icon="plus" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
                                     var urlEncode = function (param, key, encode) {
@@ -262,7 +267,7 @@ class Home extends Component {
                                     window.location.href = "http://shande.xajhzx.cn/service/export?" + s.slice(1);
                                 }}>
                                     导出
-                                </Button>
+                                </Button>*/}
                             </div>
                             <StandardTable
                                 loading={loading} // 显示加载框

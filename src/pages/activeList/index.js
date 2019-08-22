@@ -251,10 +251,10 @@ class Home extends Component {
                                     <Divider type="vertical" />
                                     <Link to={`/sendRecord/${record.id}`}>发放记录</Link>
                                     <Divider type="vertical" />
-                                    <Link to='sendDetail'>发放明细</Link>
+                                    <Link to={`/sendDetail/${record.id}/null`}  >发放明细</Link>
                                 </div>:
                                 <div>
-                                    <Link to='sendDetail'>发放明细</Link>
+                                    <Link to={`/sendDetail/${record.id}/null`}  >发放明细</Link>
                                 </div>
                         }
                     </Fragment>
@@ -281,7 +281,7 @@ class Home extends Component {
                             <div className='tableListForm'>
                                 <TableSearch {...searchMenu} />
                             </div>
-                            <div className='tableListOperator'>
+                           {/* <div className='tableListOperator'>
                                 <Button type="primary" icon="plus" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
@@ -306,7 +306,7 @@ class Home extends Component {
                                 }}>
                                     导出
                                 </Button>
-                            </div>
+                            </div>*/}
                             <StandardTable
                                 loading={loading} // 显示加载框
                                 data={data}

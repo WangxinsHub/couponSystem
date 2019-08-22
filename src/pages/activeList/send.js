@@ -110,9 +110,17 @@ class Home extends Component {
                 if (that.props.id) values.id = that.props.id;
                 values.activityId = this.props.id;
                 values.file = this.state.formData;
+
+                values.mobile = values.mobile.replace(/\n/g,',');
+                var formData = new FormData();
+
+                for(let key in values){
+                    formData.append(key, values[key]);
+
+                }
                 // 提交表单
                 console.log(values);
-                that.postData(values);
+                that.postData(formData);
             } else {
                 this.setState({
                     btnDisabled: false
