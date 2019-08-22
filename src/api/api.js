@@ -216,7 +216,7 @@ class API extends Server{
 
   async updateActive(params = {}){
     try{
-      let result = await this.axiosCommon('post', Url.updateActive, params);
+      let result = await this.axios('post', Url.updateActive, params);
       if(result) {
         return result;
       }
