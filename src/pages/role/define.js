@@ -14,11 +14,6 @@ export default {
     // 搜索数据，默认一行显示3条
     searchMenu: {
         // 常在的选项
-        open: [{
-            id: 'departmentValue',
-            label: '渠道名称',
-            type: 'input', // input输入框
-            placeholder: '请输入渠道名称',
-        }],
+        open: [{}],
     },
 }

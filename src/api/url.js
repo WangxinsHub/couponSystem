@@ -26,9 +26,13 @@ export default {
     sendCode:`${API_HOSTNAME}/service/activity/send`,
     createActive:`${API_HOSTNAME}/service/activity/create`,
     updateActive:`${API_HOSTNAME}/service/activity/update`,
-    roleList:`${API_HOSTNAME}/service/permission/role/list`,
 
+    roleList:`${API_HOSTNAME}/service/permission/role/list`,
     connectRole:`${API_HOSTNAME}/service/permission/connectRole`,
+    createPermission:`${API_HOSTNAME}/service/permission/role/create`,
+    roleMenu:`${API_HOSTNAME}/service/menu/roleMenu`,
+
+
     userList:`${API_HOSTNAME}/service/user/list`,
     createRole:`${API_HOSTNAME}/service/user/create`,
     updateRole:`${API_HOSTNAME}/service/user/update`,

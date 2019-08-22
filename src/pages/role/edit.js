@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import moment from 'moment';
 import {object, func} from 'prop-types';
 import {Form, Input, Select, Button, Upload, Icon, message, Spin, Popconfirm, Radio, DatePicker, Checkbox} from 'antd';
 import {getList} from './action';
 import API from '@/api/api';
 import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
+import {Tree} from 'antd';
+import api from "../../api/api";
 
 const FormItem = Form.Item;
-const {Option} = Select;
+const {TextArea} = Input;
+const {TreeNode} = Tree;
 
 class Home extends Component {
     static propTypes = {
@@ -17,6 +19,8 @@ class Home extends Component {
     };
     state = {
         btnDisabled: false,
+        menuList: [],
+        menu: []
     }
 
     /**
@@ -27,6 +31,27 @@ class Home extends Component {
         this.props.getList({
             pageNo: 1,
             pageSize: 100
+        });
+
+
+        api.roleMenu({
+            roleId: this.props.id
+        }).then(data => {
+            this.setState({
+                menu: data.data.map(data => data.menuCode)
+            }, () => {
+                console.log(this.state.menu);
+                api.menuList({
+                    pageNo: 1,
+                    pageSize: 100
+                }).then(data => {
+                    this.setState({
+                        menuList: data.data.map(data => {
+                            if(data) return data
+                        })
+                    })
+                })
+            })
         })
     }
 
@@ -38,9 +63,15 @@ class Home extends Component {
         try {
             let result;
             if (this.props.id) {
+                values.menuCode = this.state.menuCode;
+                values.menuType = 1;
+                values.roleId = this.props.id;
+                delete values.id;
+
                 result = await API.updateDepartment(values);
             } else {
-                result = await API.createDepartment(values);
+                values.roleValue = 1;
+                result = await API.createPermission(values);
             }
             if (result.message === 'success') {
                 message.success('保存成功！');
@@ -80,6 +111,18 @@ class Home extends Component {
         });
     }
 
+    onSelect = (selectedKeys, info) => {
+        console.log('selected', selectedKeys, info);
+    };
+
+    onCheck = (checkedKeys, info) => {
+        this.setState({
+            menuCode: checkedKeys.join()
+        });
+        console.log('onCheck', checkedKeys, info);
+    };
+
+
     render() {
         let {record} = this.props;
         const {submitting, form, onClose} = this.props;
@@ -89,23 +132,59 @@ class Home extends Component {
                 <Spin spinning={this.props.id && !record ? true : false}>
 
 
-                    <FormItem {...stationEditFormDrawer} label="用户名" key='contact'>
-                        {getFieldDecorator('contact', {
-                            initialValue: record && record.departmentValue,
-                            rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位联系人名称'}],
-                        })(
-                            <Input style={{width: '80%'}} maxLength={30} placeholder="请输入联系人名称"/>
-                        )}
-                    </FormItem>
+                    {
+                        !this.props.id && [
+                            <FormItem {...stationEditFormDrawer} label="角色名" key='roleKey'>
+                                {getFieldDecorator('roleKey', {
+                                    initialValue: record && record.departmentValue,
+                                    rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位角色名'}],
+                                })(
+                                    <Input style={{width: '80%'}} maxLength={30} placeholder="请输入角色名称"/>
+                                )}
+                            </FormItem>
+                            ,
 
-                    <FormItem {...stationEditFormDrawer} label="联系电话" key='mobile'>
-                        {getFieldDecorator('mobile', {
-                            initialValue: record && record.mobile,
-                            rules: [{required: true, max: 11, whitespace: true, message: '请输入11位电话号'}],
-                        })(
-                            <Input style={{width: '80%'}} maxLength={11} placeholder="请输入联系电话"/>
-                        )}
-                    </FormItem>
+                            <FormItem {...stationEditFormDrawer} label="备注" key='description'>
+                                {getFieldDecorator('description')(
+                                    <TextArea rows={4} placeholder='请输入备注'/>,
+                                )}
+                            </FormItem>
+                        ]
+                    }
+
+
+                    {
+                        this.props.id && [
+                            <div>权限：</div>,
+
+                            this.state.menuList && <Tree
+                                checkable
+                                defaultExpandedKeys={['qk', 'hd', 'xt']}
+                                checkedKeys={this.state.menu}
+                                onSelect={this.onSelect}
+                                onCheck={this.onCheck}
+                            >
+
+                                {
+                                    [1, 2, 3].map(index => (
+                                        <TreeNode title={index === 1 ? '券库' : index === 2 ? '活动' : '系统'}
+                                                  key={index === 1 ? 'qk' : index === 2 ? 'hd' : 'xt'}>
+                                            {
+                                                this.state.menuList.map(item => {
+                                                    if (item.menuType === index) {
+                                                        return <TreeNode title={item.menuName} key={item.menuCode}/>
+                                                    }
+                                                })
+                                            }
+                                        </TreeNode>
+                                    ))
+                                }
+
+                            </Tree>
+
+
+                        ]
+                    }
                 </Spin>
                 <div className="drawerBtns">
                     <Popconfirm

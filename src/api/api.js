@@ -302,6 +302,28 @@ class API extends Server{
     }
   }
 
+  async createPermission(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.createPermission, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async roleMenu(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.roleMenu, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
   async deleteActive(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.deleteActive, params);

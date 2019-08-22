@@ -11,6 +11,7 @@ import '@/style/list.less';
 import NewForm from './edit';
 import api from '../../api/api'
 
+
 class Home extends Component {
     static propTypes = {
         oneSupplierReducer: object,
@@ -52,6 +53,7 @@ class Home extends Component {
         }).then(data=>{
             console.log(data);
         })
+
     }
 
     /**
@@ -135,8 +137,8 @@ class Home extends Component {
             },
             {
                 title: '角色名',
-                dataIndex: 'roleValue',
-                key: 'roleValue',
+                dataIndex: 'roleKey',
+                key: 'roleKey',
             },
             {
                 title: '备注',
@@ -185,9 +187,6 @@ class Home extends Component {
                 <Spin tip={tips} spinning={tips ? true : false}>
                     <Card bordered={false}>
                         <div className='tableList'>
-                            <div className='tableListForm'>
-                                <TableSearch {...searchMenu} />
-                            </div>
                             <div className='tableListOperator'>
                                 <Button type="primary" icon="plus" onClick={() =>{
                                     this.setState({
@@ -203,14 +202,14 @@ class Home extends Component {
                                 loading={loading} // 显示加载框
                                 data={data}
                                 columns={columns}
-                                rowKey={columns => columns.id}
+                                rowKey={columns => columns.roleId}
                                 onChange={this.handleStandardTableChange}
                                 noCheck={true}
                             />
                         </div>
                     </Card>
                     <Drawer
-                        title={showDrawerId ? '编辑闪屏' : '新增闪屏'}
+                        title={record && record.roleId ? '编辑角色' : '新增角色'}
                         width='560'
                         visible={showDrawer}
                         maskClosable={false}
@@ -223,7 +222,7 @@ class Home extends Component {
                         }}
                     >
                         { showDrawer && <NewForm
-                            id={showDrawerId}
+                            id={record && record.roleId}
                             record={record}
                             onClose={(bool)=>{
                                 this.setState({
