@@ -19,7 +19,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
     {
       menu && menu.map((item) => {
         return (
-          <SubMenu
+          sessionStorage.loginFlag ? <SubMenu
             key={item.code}
             title={<span><Icon type={item.icon}/><span>{item.name}</span></span>}                  
           >
@@ -35,7 +35,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
               </Menu.Item>)
             })
           }                               
-          </SubMenu>
+          </SubMenu>:null
         )
       })
     }         

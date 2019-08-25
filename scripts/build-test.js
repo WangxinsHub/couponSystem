@@ -13,7 +13,7 @@ process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
 process.env.STATIC_ENV = 'production';
 process.env.API_HOSTNAME = 'http://ability.custombus-test.dtwb.ibuscloud.com'; // 测试环境
-process.env.LOGIN_PAGE_ADDRESS = 'http://back.custombus-test.dtwb.ibuscloud.com/#/login';
+process.env.LOGIN_PAGE_ADDRESS = '/#/';
 
 if(process.env.STATIC_ENV === 'production'){
   process.env.PUBLIC_URL = '/dist';

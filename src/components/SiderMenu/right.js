@@ -14,16 +14,16 @@ export default class SiderMenuWrapper extends React.PureComponent {
         </Menu.Item>
       </Menu>
     );
-    return (<div className='right'>
+    return ( sessionStorage.loginFlag ? <div className='right'>
       {other }
       <Dropdown overlay={_menu}>
         {
           userChange || (<span className='action'>
             <Avatar size="small" className='avatar' src={userPhoto || 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'} />
-            <span className={`${theme.isTop && theme.navTheme !== 'light' ? 'colorWhite' : ''}`}>{userName ? userName : '用户名'}</span>
+            <span className={`${theme.isTop && theme.navTheme !== 'light' ? 'colorWhite' : ''}`}>{userName ? userName : sessionStorage.userNmae }</span>
           </span>)
         }                
       </Dropdown>
-    </div>)
+    </div>:null)
   }
 }

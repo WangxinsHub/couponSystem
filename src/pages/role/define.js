@@ -6,7 +6,7 @@ export default {
     /*面包屑导航*/
     breadMenu: [{
         path: '',
-        title: '系统'
+        title: '用户'
     }, {
         path: '',
         title: '渠道列表'

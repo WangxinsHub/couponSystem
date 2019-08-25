@@ -11,11 +11,11 @@ import { message} from 'antd';
 const {
   LOGIN_PAGE_ADDRESS,
 } = process.env;
-export default class SiderMenuWrapper extends React.PureComponent { 
+export default class SiderMenuWrapper extends React.PureComponent {
   state={
     menu: [],
     userName: sessionStorage.enterpriseName,
-  } 
+  }
   /**
    * [componentDidMount description]
    */
@@ -37,7 +37,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
         let data = this.leftMenu(res);
         this.setState({
           menu: data
-        });       
+        });
       } else {
         message.error(res.errorMsg)
       }
@@ -52,7 +52,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
   getUser = async type => {
     try{
       let res = await API.getUserInfo();
-      // console.log(res) 
+      // console.log(res)
       if(res) {
         this.setState({
           userName: res.displayName
@@ -63,7 +63,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
     }catch(err){
       console.error(err);
     }
-  } 
+  }
   /**
    * [getAdvertData 获取广告菜单数据]
    * @return {[type]} [description]
@@ -77,7 +77,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
         this.setState({menu})
       } else {
         message.error(res.errorMsg)
-      }   
+      }
     }catch(err){
       console.error(err);
     }
@@ -186,7 +186,8 @@ export default class SiderMenuWrapper extends React.PureComponent {
   logOut = (type) => {
     sessionStorage.removeItem('accountId');
     sessionStorage.removeItem('Authorization');
-    window.location.href = LOGIN_PAGE_ADDRESS;
+    sessionStorage.loginFlag = '';
+    window.location.href = '/#/';
   }
   /**
    * [render description]

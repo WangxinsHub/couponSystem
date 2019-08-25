@@ -34,25 +34,28 @@ class Home extends Component {
         });
 
 
-        api.roleMenu({
-            roleId: this.props.id
-        }).then(data => {
-            this.setState({
-                menu: data.data.map(data => data.menuCode)
-            }, () => {
-                console.log(this.state.menu);
-                api.menuList({
-                    pageNo: 1,
-                    pageSize: 100
-                }).then(data => {
-                    this.setState({
-                        menuList: data.data.map(data => {
-                            if(data) return data
+        if(this.props.id){
+            api.roleMenu({
+                roleId: this.props.id
+            }).then(data => {
+                this.setState({
+                    menu: data.data.map(data => data.menuCode)
+                }, () => {
+                    console.log(this.state.menu);
+                    api.menuList({
+                        pageNo: 1,
+                        pageSize: 100
+                    }).then(data => {
+                        this.setState({
+                            menuList: data.data.map(data => {
+                                if(data) return data
+                            })
                         })
                     })
                 })
             })
-        })
+        }
+
     }
 
 

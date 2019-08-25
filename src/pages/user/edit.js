@@ -139,7 +139,7 @@ class Home extends Component {
                         !this.props.id && <FormItem {...stationEditFormDrawer} label="用户名" key='userName'>
                             {getFieldDecorator('userName', {
                                 initialValue: record && record.userName,
-                                rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位用户名称'}],
+                                rules: [{required: true, whitespace: true, message: '请输入用户名'}],
                             })(
                                 <Input style={{width: '80%'}} maxLength={30} placeholder="请输入用户名"/>
                             )}
@@ -182,7 +182,7 @@ class Home extends Component {
                     {
                         !this.props.id && <FormItem {...stationEditFormDrawer} label="密码" key='loginPass'>
                             {getFieldDecorator('loginPass', {
-                                rules: [{required: true}],
+                                rules: [{required: true,message:'请输入密码'}],
                             })(
                                 <Input style={{width: '80%'}} placeholder="请填写密码"/>
                             )}

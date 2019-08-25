@@ -57,6 +57,8 @@ class loginPage extends React.Component {
         username: params.userName,
         password: params.password,
       });
+
+      sessionStorage.userNmae =  params.userName;
       if(result.success) {
         this.setState({
           msg: '登录成功',
@@ -65,6 +67,7 @@ class loginPage extends React.Component {
         // sessionStorage.Authorization = result.data.accessToken;
         // sessionStorage.accountId = result.data.accountId;
         // sessionStorage.enterpriseName = result.data.enterpriseName;
+        sessionStorage.loginFlag = true;
         this.props.history.push('/couponList');
       } else {
         this.setState({
@@ -123,7 +126,7 @@ class loginPage extends React.Component {
             <div className='mask'>
               <div className="loginHead">
                 <div className="icon-logo"></div>
-                <div className="title loginTitle">充 值 后 台 管 理 系 统</div>
+                <div className="title loginTitle">汇信卡券分发系统</div>
                 <div className='subTitle'> 欢迎回来，请登录到您的账户</div>
               </div>
               <div className='loginMain animated fadeIn'>
