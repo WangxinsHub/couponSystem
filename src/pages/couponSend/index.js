@@ -59,11 +59,19 @@ class Home extends Component {
             state: this.state,
             values,
             callBack: (json) => {
-                if (json.searchList.rangeTime) {
-                    json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd hh:mm:ss')
-                    json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd hh:mm:ss')
-                    delete json.searchList.rangeTime;
+                if (json.searchList.rangeTime.length>0) {
+                    if (json.searchList.startTime === json.searchList.endTime) {
+                        json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd') + '  00:00:00'
+                        json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd') + ' 23:59:59'
+                    } else {
+                        json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd hh:mm:ss')
+                        json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd hh:mm:ss')
+                    }
+                } else {
+                    json.searchList.startTime = null
+                    json.searchList.endTime = null
                 }
+                delete json.searchList.rangeTime;
 
                 this.setState(json);
                 this.props.getList({
@@ -147,6 +155,11 @@ class Home extends Component {
                 title: '券名称',
                 key: 'couponName',
                 dataIndex: 'couponName',
+            },
+            {
+                title: '活动名称',
+                key: 'activityName',
+                dataIndex: 'activityName',
             },
             {
                 title: '码值',

@@ -190,7 +190,7 @@ class Home extends Component {
                 render: (text, record) => (
                     <Fragment>
                         {
-                            record.state === 'SEND' &&
+                            record.state === 'READY' &&
                             <Popconfirm
                                 title='是否确认删除活动？'
                                 onConfirm={() => {
@@ -198,7 +198,7 @@ class Home extends Component {
                                         id: record.id
                                     }).then((res) => {
                                         if (res.message === 'success') {
-                                            message.success('发布成功！');
+                                            message.success('成功删除！');
                                         } else {
                                             message.error(res.message);
                                         }
@@ -260,7 +260,7 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                               {/* <Button type="primary" icon="plus" onClick={() => {
+                                {/* <Button type="primary" icon="plus" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
                                     var urlEncode = function (param, key, encode) {
@@ -293,6 +293,33 @@ class Home extends Component {
                                 }}>
                                     新增
                                 </Button>
+                                <Button type="danger" onClick={() => {
+                                    const {selectedRow} = this.state;
+                                    let id = selectedRow.map((data) => {
+                                        if (data.state === 'READY') {
+                                            return data.id
+                                        }
+                                    }).filter(item=>item);
+
+                                    api.deleteCode({
+                                        id:id.join()
+                                    }).then((res) => {
+                                        if (res.message === 'success') {
+                                            message.success('已批量删除！');
+                                        } else {
+                                            message.error(res.message);
+                                        }
+                                        let searchList = this.state.searchList || {};
+                                        this.props.getList({
+                                            couponId: this.props.match.params.id,
+                                            pageNo: this.state.currentNo,
+                                            pageSize: this.state.pageSize,
+                                            ...searchList
+                                        });
+                                    })
+                                }}>
+                                    删除所选
+                                </Button>
                             </div>
                             <StandardTable
                                 loading={loading} // 显示加载框
@@ -301,6 +328,11 @@ class Home extends Component {
                                 rowKey={columns => columns.id}
                                 onChange={this.handleStandardTableChange}
                                 noCheck={false}
+                                onSelectRow={data => {
+                                    this.setState({
+                                        selectedRow: data
+                                    })
+                                }}
                             />
                         </div>
 

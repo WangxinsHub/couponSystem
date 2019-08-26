@@ -47,6 +47,14 @@ class Home extends Component {
             pageNo:this.state.currentNo,
             pageSize:this.state.pageSize
         });
+
+        if(this.props.match.params.id){
+            this.props.getList({
+                pageNo:this.state.currentNo,
+                pageSize:this.state.pageSize,
+                departmentKey:this.state.departmentKey,
+            });
+        }
     }
 
     /**
@@ -62,9 +70,11 @@ class Home extends Component {
                 this.setState(json);
                 this.props.getList({
                     ...json.searchList,
+                    departmentKey:this.state.departmentKey,
                     pageNo:json.pageNo,
                     pageSize:json.pageSize
-                });            }
+                });
+            }
         });
     }
 
@@ -75,7 +85,9 @@ class Home extends Component {
     handleFormReset = () => {
         this.props.getList({
             pageNo:this.state.currentNo,
-            pageSize:this.state.pageSize
+            pageSize:this.state.pageSize,
+            departmentKey:this.state.departmentKey,
+
         });
         this.setState({
             searchList: null,
@@ -103,6 +115,7 @@ class Home extends Component {
                 this.setState(json);
                 this.props.getList({
                     ...json.searchList,
+                    departmentKey:this.state.departmentKey,
 
                 });
             }
@@ -140,8 +153,8 @@ class Home extends Component {
             },
             {
                 title: '渠道',
-                key: 'departmentKey',
-                dataIndex: 'departmentKey',
+                key: 'departmentValue',
+                dataIndex: 'departmentValue',
             },
             {
                 title: '职务',
@@ -255,6 +268,7 @@ class Home extends Component {
                                     this.props.getList({
                                         pageNo:this.state.currentNo,
                                         pageSize:this.state.pageSize,
+                                        departmentKey:this.state.departmentKey,
                                         ...searchList
                                     });
                                 }

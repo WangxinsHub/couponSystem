@@ -38,15 +38,15 @@ class Home extends Component {
      * @return {[type]} [description]
      */
     componentDidMount() {
-        this.props.getCouponList({
-            pageNo: 1,
-            pageSize: 1000
-        });
-
-        this.props.getDepartmentList({
-            pageNo: 1,
-            pageSize: 1000
-        })
+        // this.props.getCouponList({
+        //     pageNo: 1,
+        //     pageSize: 1000
+        // });
+        //
+        // this.props.getDepartmentList({
+        //     pageNo: 1,
+        //     pageSize: 1000
+        // })
     }
 
 
@@ -58,7 +58,6 @@ class Home extends Component {
             let result, that = this;
             result = await API.codeImport(values);
             if (result.message === 'success') {
-                message.success('已发送！');
                 Modal.info({
                     title: '提示',
                     content: (
@@ -105,8 +104,8 @@ class Home extends Component {
                 var formData = new FormData();
                 formData.append("couponId", this.props.id);
                 if (this.state.file) formData.append("file", this.state.file);
+                if (values.code) values.code = values.code.replace(/\n/g, ',');
 
-                values.code = values.code.replace(/\n/g,',');
                 formData.append("code", values.code);
 
                 values.couponId = this.props.id;
@@ -114,6 +113,9 @@ class Home extends Component {
                 console.log(formData);
                 // 提交表单
                 that.postData(formData);
+                this.setState({
+                    btnDisabled: true
+                })
             } else {
                 this.setState({
                     btnDisabled: false

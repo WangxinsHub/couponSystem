@@ -154,7 +154,10 @@ class Home extends Component {
                                 record: record
                             })
                         }}>编辑</a>
-
+                        <Divider type="vertical"/>
+                        <a onClick={() =>{
+                            this.props.history.push(`/userList/${record.departmentKey}`)}
+                        }>用户</a>
                     </Fragment>
                 ),
             },

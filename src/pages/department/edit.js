@@ -6,6 +6,7 @@ import {Form, Input, Select, Button, Upload, Icon, message, Spin, Popconfirm, Ra
 import {getList} from './action';
 import API from '@/api/api';
 import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
+import Verify from "../../utils/verify";
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -90,16 +91,16 @@ class Home extends Component {
                     <FormItem {...stationEditFormDrawer} label="名称" key='departmentValue'>
                         {getFieldDecorator('departmentValue', {
                             initialValue: record && record.departmentValue,
-                            rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位的券名称'}],
+                            rules: [{required: true, max: 30, whitespace: true, message: '请输入渠道名称'}],
                         })(
-                            <Input style={{width: '80%'}} maxLength={30} placeholder="请输入部门名称"/>
+                            <Input style={{width: '80%'}} maxLength={30} placeholder="请输入渠道名称"/>
                         )}
                     </FormItem>
 
                     <FormItem {...stationEditFormDrawer} label="联系人" key='contact'>
                         {getFieldDecorator('contact', {
                             initialValue: record && record.departmentValue,
-                            rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位联系人名称'}],
+                            rules: [{required: true, max: 30, whitespace: true, message: '请输入联系人'}],
                         })(
                             <Input style={{width: '80%'}} maxLength={30} placeholder="请输入联系人名称"/>
                         )}
@@ -108,9 +109,20 @@ class Home extends Component {
                     <FormItem {...stationEditFormDrawer} label="联系电话" key='mobile'>
                         {getFieldDecorator('mobile', {
                             initialValue: record && record.mobile,
-                            rules: [{required: true, max: 11, whitespace: true, message: '请输入11位电话号'}],
+                            rules: [{
+                                validator: (rule, value, callback) =>{
+                                    if(!value) {
+                                        callback('请输入固话或手机号');
+                                    }
+                                    if(!new RegExp(Verify.mobile).test(value)
+                                        && !new RegExp(Verify.phone).test(value)){
+                                        callback('请输入固话或手机号');
+                                    }
+                                    callback();
+                                },
+                            }],
                         })(
-                            <Input style={{width: '80%'}} maxLength={11} placeholder="请输入联系电话"/>
+                            <Input style={{width: '80%'}} placeholder="请输入固话或手机号"/>
                         )}
                     </FormItem>
                 </Spin>

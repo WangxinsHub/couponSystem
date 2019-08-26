@@ -121,16 +121,16 @@ class Home extends Component {
                     <FormItem {...stationEditFormDrawer} label="平台名称" key='platformName'>
                         {getFieldDecorator('platformName', {
                             initialValue: record && record.platformName,
-                            rules: [{ required: true, max:30, whitespace: true, message: '请输入最多30位的平台名称' }],
+                            rules: [{ required: true, max:30, whitespace: true, message: '请输入券平台名称' }],
                         })(
-                            <Input style={{ width: '80%' }} maxLength={30} placeholder="请输入平台名称" />
+                            <Input style={{ width: '80%' }} maxLength={30} placeholder="请输入券平台名称" />
                         )}
                     </FormItem>
 
                     <FormItem {...stationEditFormDrawer} label="联系人" key='contact'>
                         {getFieldDecorator('contact', {
                             initialValue: record && record.contact,
-                            rules: [{ required: true, max:30, whitespace: true, message: '请输入最多30位的联系人名称' }],
+                            rules: [{ required: true, max:30, whitespace: true, message: '请输入联系人名称' }],
                         })(
                             <Input style={{ width: '80%' }} maxLength={30} placeholder="请输入联系人" />
                         )}
@@ -139,9 +139,20 @@ class Home extends Component {
                     <FormItem {...stationEditFormDrawer} label="联系电话" key='mobile'>
                         {getFieldDecorator('mobile', {
                             initialValue: record && record.mobile,
-                            rules: [{ required: true, max:30, whitespace: true,pattern:Verify.mobile, message: '请输入正确的手机号' }],
+                            rules: [{
+                                validator: (rule, value, callback) =>{
+                                    if(!value) {
+                                        callback('请输入固话或手机号');
+                                    }
+                                    if(!new RegExp(Verify.mobile).test(value)
+                                        && !new RegExp(Verify.phone).test(value)){
+                                        callback('请输入固话或手机号');
+                                    }
+                                    callback();
+                                },
+                            }],
                         })(
-                            <Input style={{ width: '80%' }} maxLength={30} placeholder="请输入标题" />
+                            <Input style={{ width: '80%' }} maxLength={30} placeholder="请输入联系电话" />
                         )}
                     </FormItem>
 

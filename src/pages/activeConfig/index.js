@@ -68,7 +68,12 @@ class Home extends Component {
                 }
 
                 this.setState(json);
-                this.props.getList(json.searchList);
+
+                this.props.getList({
+                    ...json.searchList,
+                    pageNo: json.pageNo,
+                    pageSize: json.pageSize
+                });
             }
         });
     }
@@ -80,6 +85,7 @@ class Home extends Component {
     handleFormReset = () => {
         this.props.getList({
             startPage: this.state.currentNo,
+            pageNo: this.state.currentNo,
             pageSize: this.state.pageSize
         });
         this.setState({
@@ -108,6 +114,8 @@ class Home extends Component {
                 this.setState(json);
                 this.props.getList({
                     ...json.searchList,
+                    pageNo: this.state.currentNo,
+                    pageSize: this.state.pageSize
 
                 });
             }
@@ -129,6 +137,26 @@ class Home extends Component {
         });
     }
 
+    stop = (record) => {
+        api.updateActive({
+            id: record.id,
+            state: 'OVER'
+        }).then(result => {
+            if (result.message === 'success') {
+                message.success('保存成功！');
+            } else {
+                message.error(result.message);
+            }
+            let searchList = this.state.searchList || {};
+            this.props.getList({
+                pageNo: this.state.currentNo,
+                pageSize: this.state.pageSize,
+                ...searchList
+            });
+        })
+
+    }
+
     /**
      * [render description]
      * @return {[type]} [description]
@@ -138,7 +166,10 @@ class Home extends Component {
         const {loading, list} = this.props.activeConfigReducer;
         console.error(showDetail)
 
-        let {breadMenu,} = Define;
+        let {breadMenu, searchMenu} = Define;
+        searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
+        searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
+
 
         // 列表表头
         const columns = [
@@ -162,6 +193,9 @@ class Home extends Component {
                 title: '券',
                 key: 'activityCoupons',
                 dataIndex: 'activityCoupons',
+                render: (coupon) => {
+                    return coupon.map(c => c.couponName).join()
+                }
             },
 
             {
@@ -298,28 +332,17 @@ class Home extends Component {
                                 </Fragment>
                                 : record.state === 'ONLINE' ?
                                     <Fragment>
-                                        <a onClick={() => {
-                                            api.updateActive({
-                                                id: record.id,
-                                                state: 'OVER'
-                                            }).then(result => {
-                                                if (result.message === 'success') {
-                                                    message.success('保存成功！');
-                                                } else {
-                                                    message.error(result.message);
-                                                }
-                                                let searchList = this.state.searchList || {};
-                                                this.props.getList({
-                                                    pageNo: this.state.currentNo,
-                                                    pageSize: this.state.pageSize,
-                                                    ...searchList
-                                                });
-                                            })
+                                        <Popconfirm placement="top" title="确认要提前结束吗？"
+                                                    onConfirm={this.stop(record)}
+                                                    okText='确认'
+                                                    cancelText='取消'
+                                        >
+                                            <a>提前结束</a>
+                                        </Popconfirm>
 
-                                        }}>提前结束</a>
                                         <Divider type="vertical"/>
 
-                                        <a onClick={()=>{
+                                        <a onClick={() => {
                                             this.props.history.push(`/couponStore/${record.id}`)
                                         }}>增加库存</a>
 
@@ -399,6 +422,9 @@ class Home extends Component {
                 <Spin tip={tips} spinning={tips ? true : false}>
                     <Card bordered={false}>
                         <div className='tableList'>
+                            <div className='tableListForm'>
+                                <TableSearch {...searchMenu} />
+                            </div>
                             <div className='tableListOperator'>
                                 <Button type="primary" icon="plus" onClick={() => {
                                     this.setState({
@@ -436,7 +462,7 @@ class Home extends Component {
                                 width='540'
                                 data={
                                     [{
-                                        title:  record && record.activityName,
+                                        title: record && record.activityName,
                                         children: [{
                                             title: '部门',
                                             content: record && record.departmentValue, // 图片展示地址，和content不能共存
@@ -445,31 +471,31 @@ class Home extends Component {
                                             title: '状态',
                                             content: record ? record.state === 'ONLINE' ? '已上线' : record.state === 'READY' ? '待上线' : record.state === 'DRAFT' ? '草案' : '已结束' : '',
                                             col: 24, // 占宽度,12表示50%
-                                        },{
+                                        }, {
                                             title: '开始时间',
                                             content: record && record.validStart,
                                             col: 24, // 占宽度,12表示50%
-                                        },{
+                                        }, {
                                             title: '结束时间',
                                             content: record && record.validEnd,
                                             col: 24, // 占宽度,12表示50%
-                                        },{
+                                        }, {
                                             title: '活动描述',
                                             content: record && record.description,
                                             col: 24, // 占宽度,12表示50%
-                                        },{
+                                        }, {
                                             title: '券',
                                             content: record && record.activityCoupons,
                                             col: 24, // 占宽度,12表示50%
-                                        },{
+                                        }, {
                                             title: '券信息',
                                             content: record && record.activityCouponMessage,
                                             col: 24, // 占宽度,12表示50%
-                                        },{
+                                        }, {
                                             title: '创建时间',
                                             content: record && record.createTime,
                                             col: 24, // 占宽度,12表示50%
-                                        },{
+                                        }, {
                                             title: '更新时间',
                                             content: record && record.updateTime,
                                             col: 24, // 占宽度,12表示50%

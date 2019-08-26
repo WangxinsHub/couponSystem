@@ -7,6 +7,7 @@ import API from '@/api/api';
 import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
 import {getDepartmentList} from "../activeConfig/action";
 import {getList as getRoleList} from '../role/action'
+import Verify from "../../utils/verify";
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -48,10 +49,10 @@ class Home extends Component {
             let result, roleReust;
             if (this.props.id) {
                 result = await API.updateRole({
-                    position:values.position,
-                    userPhone:values.userPhone,
-                    departmentKey:values.departmentKey,
-                    id:values.id
+                    position: values.position,
+                    userPhone: values.userPhone,
+                    departmentKey: values.departmentKey,
+                    id: values.id
                 });
                 roleReust = await API.connectRole({
                     userId: values.id,
@@ -60,16 +61,20 @@ class Home extends Component {
             } else {
                 result = await API.createRole(values);
             }
-            if (result.message === 'success' && roleReust.message === 'success') {
+
+            if (this.props.id && result.message === 'success' && roleReust.message === 'success') {
                 message.success('保存成功！');
                 this.props.onClose(true);
+            } else if (!this.props.id && result.message === 'success') {
+                message.success('保存成功！');
+
             } else {
                 this.setState({
                     btnDisabled: false
                 })
-                if(result.message !== 'success' ){
+                if (result.message !== 'success') {
                     message.error(result.message);
-                }else{
+                } else {
                     message.error(roleReust.message);
                 }
             }
@@ -105,6 +110,7 @@ class Home extends Component {
 
     render() {
         let {record} = this.props;
+
         const {submitting, form, onClose} = this.props;
         const {getFieldDecorator} = form;
         const {departmentList} = this.props.activeConfigReducer
@@ -149,7 +155,7 @@ class Home extends Component {
 
                     <FormItem label='职务' {...stationEditFormDrawer} key="position">
                         {getFieldDecorator('position', {
-                            initialValue: record && record.position ? record.position : undefined,
+                            initialValue: record && record.position ,
                             rules: [{required: true, message: '必填项'}],
                         })(
                             <Select style={{width: '50%'}}
@@ -157,10 +163,12 @@ class Home extends Component {
                                     optionFilterProp="children"
                                     placeholder="请选择">
                                 <Option
+                                    key={0}
                                     value={0}>
                                     员工
                                 </Option>
                                 <Option
+                                    key={1}
                                     value={1}>
                                     主管
                                 </Option>
@@ -182,7 +190,7 @@ class Home extends Component {
                     {
                         !this.props.id && <FormItem {...stationEditFormDrawer} label="密码" key='loginPass'>
                             {getFieldDecorator('loginPass', {
-                                rules: [{required: true,message:'请输入密码'}],
+                                rules: [{required: true, message: '请输入密码'}],
                             })(
                                 <Input style={{width: '80%'}} placeholder="请填写密码"/>
                             )}
@@ -216,7 +224,13 @@ class Home extends Component {
                     <FormItem {...stationEditFormDrawer} label="联系电话" key='userPhone'>
                         {getFieldDecorator('userPhone', {
                             initialValue: record && record.userPhone,
-                            rules: [{required: true, max: 11, whitespace: true, message: '请输入11位电话号'}],
+                            rules: [{
+                                required: true,
+                                max: 11,
+                                whitespace: true,
+                                pattern: Verify.mobile,
+                                message: '请输入正确的手机号'
+                            }],
                         })(
                             <Input style={{width: '80%'}} maxLength={11} placeholder="请输入联系电话"/>
                         )}

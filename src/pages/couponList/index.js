@@ -175,10 +175,16 @@ class Home extends Component {
                 title: '入库方式',
                 key: 'createType',
                 dataIndex: 'createType',
+                render: () => "批量导入"
             },
 
             {
                 title: '入库数量',
+                key: 'totalCount',
+                dataIndex: 'totalCount',
+            },
+            {
+                title: '库存数量',
                 key: 'stockCount',
                 dataIndex: 'stockCount',
             },
@@ -186,7 +192,7 @@ class Home extends Component {
                 title: '已发送数量',
                 key: 'sendCount',
                 dataIndex: 'sendCount',
-                render:(t,record)=>{
+                render: (t, record) => {
                     return record.totalCount - record.stockCount
                 }
             },
@@ -202,7 +208,7 @@ class Home extends Component {
                 dataIndex: 'state',
                 render: (text, record) => {
                     if (text === 'SENDING') {
-                        return '发送中'
+                        return '发放中'
                     } else if (text === 'CLOSE') {
                         return '已结束'
                     } else {
@@ -240,7 +246,9 @@ class Home extends Component {
                             this.setState({
                                 showDrawer: true,
                                 showDrawerId: record.id,
-                                record: record
+                                record: record,
+                                id: record.id,
+                                type:null
                             })
                         }}>编辑</a>
                         <Divider type="vertical"/>
@@ -255,6 +263,16 @@ class Home extends Component {
                         <a onClick={() => this.props.history.push(`/couponSend/${record.id}`)}>发放明细</a>
                         <Divider type="vertical"/>
                         <a onClick={() => this.props.history.push(`/codeList/${record.id}/${JSON.stringify(record)}`)}>码库</a>
+                        <Divider type="vertical"/>
+                        <a onClick={() => {
+                            this.setState({
+                                showDrawer: true,
+                                showDrawerId: null,
+                                record: record,
+                                id: record.id,
+                                type:'import'
+                            })
+                        }}>导入券码</a>
                     </Fragment>
                 ),
             },
@@ -307,7 +325,8 @@ class Home extends Component {
                                     this.setState({
                                         showDrawer: true,
                                         showDrawerId: null,
-                                        record: null
+                                        record: null,
+                                        type:null
                                     })
                                 }}>
                                     新增
@@ -324,7 +343,7 @@ class Home extends Component {
                         </div>
                     </Card>
                     <Drawer
-                        title={showDrawerId ? '编辑券' : '新增券'}
+                        title={!this.state.type ? (showDrawerId ? '编辑券' : '新增券') : '导入券码'}
                         width='560'
                         visible={showDrawer}
                         maskClosable={false}
@@ -337,8 +356,9 @@ class Home extends Component {
                         }}
                     >
                         {showDrawer && <NewForm
-                            id={showDrawerId}
+                            id={this.state.id}
                             record={record}
+                            type={this.state.type}
                             onClose={(bool) => {
                                 this.setState({
                                     showDrawer: false,

@@ -36,27 +36,6 @@ export default {
                 label: '暂停中',
                 value: 'PAUSE',
             }],
-        },
-            // {
-            //     id: 'payStatus',
-            //     label: '付款状态',
-            //     type: 'select', // 支付状态 0-待支付
-            //     opti on: [{
-            //         label: '全部',
-            //         value: null,
-            //     }, {
-            //         label: '待支付',
-            //         value: 0,
-            //     }, {
-            //         label: '已支付',
-            //         value: 1,
-            //     }],
-            // }, {
-            //     id: 'rangeTime',
-            //     label: '开始时间',
-            //     type: 'rangePicker',
-            //     placeholder: '请选择开始时间'
-            // },
-        ],
+        }],
     },
 }

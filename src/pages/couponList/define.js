@@ -22,12 +22,12 @@ export default {
         }, {
             id: 'state',
             label: '请选择券状态',
-            type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
+            type: 'select',
             option: [{
                 label: '全部',
                 value: null,
             }, {
-                label: '发送中',
+                label: '发放中',
                 value: 'SENDING',
             }, {
                 label: '已结束',

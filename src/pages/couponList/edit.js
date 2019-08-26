@@ -44,7 +44,12 @@ class Home extends Component {
         try {
             let result;
             if (this.props.id) {
-                result = await API.updateCoupon(values);
+                if(!this.props.type){
+                    result = await API.updateCoupon(values);
+                }else{
+                    values.code = '';
+                    result = await API.codeImport(values)
+                }
             } else {
                 result = await API.createCoupon(values);
             }
@@ -74,9 +79,14 @@ class Home extends Component {
         let that = this;
         this.props.form.validateFieldsAndScroll({force: true}, (err, values) => {
             if (!err) {
-                values.validEnd = values.validEnd.format('YYYY/MM/DD HH:mm:ss');
-                if (that.props.id) values.id = that.props.id;
                 values.file = that.state.file;
+
+                if(!this.props.type){
+                    values.validEnd = values.validEnd.format('YYYY/MM/DD HH:mm:ss');
+                    if (that.props.id) values.id = that.props.id;
+                }else{
+                    values.couponId = that.props.id;
+                }
                 var formData = new FormData();
 
                 for (let k in values) {
@@ -92,7 +102,18 @@ class Home extends Component {
                 console.log(err)
             }
         });
-    }
+    };
+
+    disabledStartDate = startValue => {
+        let st = new Date(startValue).valueOf();
+        let now = new Date().valueOf();
+
+        if(this.props.record && this.props.record.validEnd){
+            return st < moment(this.props.record.validEnd);
+        }else{
+            return st < now
+        }
+    };
 
 
     render() {
@@ -104,66 +125,76 @@ class Home extends Component {
 
         return (<Form style={{paddingBottom: 30}}>
                 <Spin spinning={this.props.id && !record ? true : false}>
-                    <FormItem {...stationEditFormDrawer} label="券名称" key='couponName'>
-                        {getFieldDecorator('couponName', {
-                            initialValue: record && record.couponName,
-                            rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位的券名称'}],
-                        })(
-                            <Input style={{width: '80%'}} maxLength={30} placeholder="请输入标题"/>
-                        )}
-                    </FormItem>
 
-                    <FormItem label='截止日期'{...stationEditFormDrawer}>
-                        {getFieldDecorator('validEnd', {
-                            initialValue: record && moment(record.validEnd),
-                            rules: [{required: true, message: '必填项'},
-                                // { validator: this.validateStartTime}
-                            ],
-                        })(
-                            <DatePicker style={{width: '70%'}} showTime format="YYYY-MM-DD HH:mm:ss"
-                                        placeholder="请选择上线时间"/>
-                        )}
-                    </FormItem>
-
-                    <FormItem label='券平台' {...stationEditFormDrawer} key="platformId">
-                        {getFieldDecorator('platformId', {
-                            initialValue: record && record.platformName ? record.platformName : '',
-                            rules: [{required: true, message: '必填项'}],
-                        })(
-                            <Select style={{width: '50%'}}
-                                //onSelect={this.selectCity}
-                                    allowClear={true}
-                                    optionFilterProp="children"
-                                    placeholder="请选择">
-                                {
-                                    platformList && platformList.map((item, index) => {
-                                        return (<Option key={item.id} value={item.id}>{item.platformName}</Option>)
-                                    })
-                                }</Select>
-                        )}
-                    </FormItem>
+                    {
+                        !this.props.type && [
+                            <FormItem {...stationEditFormDrawer} label="券名称" key='couponName'>
+                                {getFieldDecorator('couponName', {
+                                    initialValue: record && record.couponName,
+                                    rules: [{required: true, max: 30, whitespace: true, message: '请输入券名称'}],
+                                })(
+                                    <Input style={{width: '80%'}} maxLength={30} placeholder="请输入券名称"/>
+                                )}
+                            </FormItem>,
+                            <FormItem label='截止日期'{...stationEditFormDrawer}>
+                                {getFieldDecorator('validEnd', {
+                                    initialValue: record && moment(record.validEnd),
+                                    rules: [{required: true, message: '必填项'},
+                                        // { validator: this.validateStartTime}
+                                    ],
+                                })(
+                                    <DatePicker style={{width: '70%'}}
+                                                showTime
+                                                format="YYYY-MM-DD HH:mm:ss"
+                                                placeholder="请选择截止时间"
+                                                disabledDate={this.disabledStartDate}
+                                    />
+                                )}
+                            </FormItem>,
+                            <FormItem label='券平台' {...stationEditFormDrawer} key="platformId">
+                                {getFieldDecorator('platformId', {
+                                    initialValue: record && record.platformName ? record.platformName : '',
+                                    rules: [{required: true, message: '必填项'}],
+                                })(
+                                    <Select style={{width: '50%'}}
+                                        //onSelect={this.selectCity}
+                                            allowClear={true}
+                                            optionFilterProp="children"
+                                            placeholder="请选择券平台">
+                                        {
+                                            platformList && platformList.map((item, index) => {
+                                                return (
+                                                    <Option key={item.id} value={item.id}>{item.platformName}</Option>)
+                                            })
+                                        }</Select>
+                                )}
+                            </FormItem>
+                        ]
+                    }
 
                     {
                         record && <FormItem {...stationEditFormDrawer}>
-                            <Upload
-                                {...{
-                                    beforeUpload: file => {
-                                        console.log(file);
-                                        this.setState(state => ({
-                                            fileList: [file],
-                                            file: file
-                                        }));
-                                        return false;
-                                    },
-                                    multiple: false,
-                                    accept: '.xlsx,.xls'
-                                }}
-                                fileList={this.state.fileList}>
-                                <Button>
-                                    <Icon type="upload"/> 导入券码
-                                </Button>
-                                <span className='extra'> 支持扩展名：.xlsx，.xls</span>
-                            </Upload>
+                            {getFieldDecorator('file', {})(
+                                <Upload
+                                    {...{
+                                        beforeUpload: file => {
+                                            console.log(file);
+                                            this.setState(state => ({
+                                                fileList: [file],
+                                                file: file
+                                            }));
+                                            return false;
+                                        },
+                                        multiple: false,
+                                        accept: '.xlsx,.xls'
+                                    }}
+                                    fileList={this.state.fileList}>
+                                    <Button>
+                                        <Icon type="upload"/> 导入券码
+                                    </Button>
+                                    <span className='extra'> 支持扩展名：.xlsx，.xls</span>
+                                </Upload>
+                            )}
                         </FormItem>
                     }
 
