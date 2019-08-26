@@ -6,10 +6,13 @@ export default {
     /*面包屑导航*/
     breadMenu: [{
         path: '',
-        title: '券库'
+        title: '活动'
     }, {
         path: '',
-        title: '券列表'
+        title: '活动配置'
+    },{
+        path: '',
+        title: '增加库存'
     }],
     // 搜索数据，默认一行显示3条
     searchMenu: {

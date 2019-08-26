@@ -209,9 +209,6 @@ class Home extends Component {
                 <Spin tip={tips} spinning={tips ? true : false}>
                     <Card bordered={false}>
                         <div className='tableList'>
-                            <div className='tableListForm'>
-                                <TableSearch {...searchMenu} />
-                            </div>
                             <div className='tableListOperator'>
                               {/*  <Button type="primary" icon="plus" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";

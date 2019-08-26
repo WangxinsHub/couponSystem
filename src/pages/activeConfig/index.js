@@ -137,7 +137,7 @@ class Home extends Component {
         });
     }
 
-    stop = (record) => {
+    stop(record) {
         api.updateActive({
             id: record.id,
             state: 'OVER'
@@ -156,6 +156,12 @@ class Home extends Component {
         })
 
     }
+
+
+    disabledStartDate = record =>(current) => {
+        return current && current < moment(record && record.validEnd);
+
+    };
 
     /**
      * [render description]
@@ -333,7 +339,7 @@ class Home extends Component {
                                 : record.state === 'ONLINE' ?
                                     <Fragment>
                                         <Popconfirm placement="top" title="确认要提前结束吗？"
-                                                    onConfirm={this.stop(record)}
+                                                    onConfirm={() => this.stop(record)}
                                                     okText='确认'
                                                     cancelText='取消'
                                         >
@@ -348,7 +354,8 @@ class Home extends Component {
 
                                         <Divider type="vertical"/>
 
-                                        <a onClick={() => {
+                                        <a onClick={(e) => {
+                                            e.stopPropagation()
                                             const that = this;
                                             Modal.confirm({
                                                 title: '延长时间',
@@ -358,11 +365,14 @@ class Home extends Component {
                                                     <div>
                                                         <DatePicker
                                                             showTime
-                                                            value={moment(record && record.validEnd)}
+                                                            defaultValue={moment(record && record.validEnd)}
                                                             placeholder="请选择延长时间"
+                                                            disabledDate={this.disabledStartDate(record)}
+
                                                             onChange={(val) => {
+                                                                console.log(val);
                                                                 this.setState({
-                                                                    delayTime: val.format("YYYY/MM/DD HH:mm:ss")
+                                                                    delayTime: (val).format("YYYY/MM/DD HH:mm:ss"),
                                                                 })
                                                             }}/>
                                                     </div>
@@ -485,7 +495,7 @@ class Home extends Component {
                                             col: 24, // 占宽度,12表示50%
                                         }, {
                                             title: '券',
-                                            content: record && record.activityCoupons,
+                                            content: record && record.activityCoupons.map((coupon) => coupon.couponName).join(),
                                             col: 24, // 占宽度,12表示50%
                                         }, {
                                             title: '券信息',
