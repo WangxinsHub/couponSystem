@@ -10,9 +10,6 @@ export default {
     }, {
         path: '',
         title: '活动管理'
-    }, {
-        path: '',
-        title: '活动管理'
     }],
     // 搜索数据，默认一行显示3条
     searchMenu: {

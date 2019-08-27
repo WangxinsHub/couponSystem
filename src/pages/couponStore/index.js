@@ -108,12 +108,11 @@ class Home extends Component {
     }
 
     stop = (id) => async () => {
-        let result = await api.updateCoupon({
-            state: 'CLOSE',
+        let result = await api.deleteCode({
             id
         });
         if (result.message === 'success') {
-            message.success('保存成功！');
+            message.success('删除成功！');
             this.props.onClose(true);
         } else {
             this.setState({
@@ -180,9 +179,9 @@ class Home extends Component {
                                 showDrawerId: record.id,
                                 record: record
                             })
-                        }}>增加库存</a>
+                        }}>调整库存</a>
                         <Divider type="vertical"/>
-                        <Popconfirm placement="top" title="确认要暂停吗？"
+                        <Popconfirm placement="top" title="确认要删除吗？"
                                     onConfirm={this.stop(record.id)}
                                     okText='确认'
                                     cancelText='取消'
@@ -256,7 +255,7 @@ class Home extends Component {
                         </div>
                     </Card>
                     <Drawer
-                        title={record ? '增加库存' : '新增券'}
+                        title={record ? '调整库存' : '新增券'}
                         width='560'
                         visible={showDrawer}
                         maskClosable={false}

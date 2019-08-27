@@ -6,7 +6,7 @@ export default {
     /*面包屑导航*/
     breadMenu: [{
         path: '',
-        title: '券库'
+        title: '活动'
     }, {
         path: '',
         title: '发放明细'

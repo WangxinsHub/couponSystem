@@ -14,6 +14,7 @@ import {getList as getDepartmentList} from '../department/action'
 
 
 import NewForm from "./send";
+import Detail from "../../components/tableDrawer/detail";
 
 class Home extends Component {
     static propTypes = {
@@ -51,6 +52,7 @@ class Home extends Component {
         this.props.getList({
             pageNo:this.state.currentNo,
             pageSize:this.state.pageSize,
+            state:'ONLINE'
             //state:['ONLINE','OVER'],
         });
 
@@ -134,7 +136,7 @@ class Home extends Component {
      * @return {[type]} [description]
      */
     render() {
-        const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, showTwo} = this.state;
+        const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, record, showTwo} = this.state;
         const {loading, list} = this.props.activeListReducer;
         const  departmentList  = this.props.departmentReducer.list;
         let {breadMenu, searchMenu} = Define;
@@ -146,18 +148,18 @@ class Home extends Component {
                 id: 'activityName',
                 label: '活动名称',
                 type: 'input', // input输入框
-                placeholder: '请输入手机号',
+                placeholder: '请输入活动名称',
             }, {
                 id: 'state',
                 label: '请选择活动状态',
                 type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
                 option: [{
-                    label: '全部',
-                    value: null,
-                }, {
                     label: '已上线',
                     value: 'ONLINE',
-                }, {
+                },{
+                    label: '全部',
+                    value: null,
+                },  {
                     label: '已结束',
                     value: 'OVER',
                 }],
@@ -252,9 +254,23 @@ class Home extends Component {
                                     <Link to={`/sendRecord/${record.id}`}>发放记录</Link>
                                     <Divider type="vertical" />
                                     <Link to={`/sendDetail/${record.id}/null`}  >发放明细</Link>
+                                    <Divider type="vertical" />
+                                    <a onClick={()=>{
+                                     this.setState({
+                                         record,
+                                         showDetail:true
+                                     })
+                                    }} >活动详情</a>
                                 </div>:
                                 <div>
                                     <Link to={`/sendDetail/${record.id}/null`}  >发放明细</Link>
+                                    <Divider type="vertical" />
+                                    <a onClick={()=>{
+                                        this.setState({
+                                            record,
+                                            showDetail:true
+                                        })
+                                    }} >活动详情</a>
                                 </div>
                         }
                     </Fragment>
@@ -281,32 +297,6 @@ class Home extends Component {
                             <div className='tableListForm'>
                                 <TableSearch {...searchMenu} />
                             </div>
-                           {/* <div className='tableListOperator'>
-                                <Button type="primary" icon="plus" onClick={() => {
-                                    //window.location.href = "http://shande.xajhzx.cn/service/export";
-                                    // urlEncode
-                                    var urlEncode = function(param, key, encode) {
-                                        if (param==null) return '';
-                                        var paramStr = '';
-                                        var t = typeof (param);
-                                        if (t == 'string' || t == 'number' || t == 'boolean') {
-                                            paramStr += '&' + key + '='  + ((encode==null||encode) ? encodeURIComponent(param) : param);
-                                        } else {
-                                            for (var i in param) {
-                                                var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
-                                                paramStr += urlEncode(param[i], k, encode)
-                                            }
-                                        }
-                                        return paramStr;
-
-                                    }
-                                    var s = urlEncode({...this.state.searchList});
-                                    console.log(s.slice(1));
-                                    window.location.href = "http://shande.xajhzx.cn/service/export?"+s.slice(1);
-                                }}>
-                                    导出
-                                </Button>
-                            </div>*/}
                             <StandardTable
                                 loading={loading} // 显示加载框
                                 data={data}
@@ -316,6 +306,68 @@ class Home extends Component {
                                 noCheck={true}
                             />
                         </div>
+
+                        <Drawer
+                            title={'活动详情'}
+                            width='560'
+                            visible={showDetail}
+                            maskClosable={false}
+                            onClose={() => {
+                                this.setState({
+                                    showDetail: false
+                                })
+                            }}
+                        >
+                            <Detail
+                                visible={showDetail}
+                                title='广告详情'
+                                width='540'
+                                data={
+                                    [{
+                                        title: record && record.activityName,
+                                        children: [{
+                                            title: '部门',
+                                            content: record && record.departmentValue, // 图片展示地址，和content不能共存
+                                            col: 24, // 占宽度,12表示50%
+                                        }, {
+                                            title: '状态',
+                                            content: record ? record.state === 'ONLINE' ? '已上线' : record.state === 'READY' ? '待上线' : record.state === 'DRAFT' ? '草案' : '已结束' : '',
+                                            col: 24, // 占宽度,12表示50%
+                                        }, {
+                                            title: '开始时间',
+                                            content: record && record.validStart,
+                                            col: 24, // 占宽度,12表示50%
+                                        }, {
+                                            title: '结束时间',
+                                            content: record && record.validEnd,
+                                            col: 24, // 占宽度,12表示50%
+                                        }, {
+                                            title: '活动描述',
+                                            content: record && record.description,
+                                            col: 24, // 占宽度,12表示50%
+                                        }, {
+                                            title: '券',
+                                            content: record && record.activityCoupons.map((coupon) => coupon.couponName).join(),
+                                            col: 24, // 占宽度,12表示50%
+                                        }, {
+                                            title: '券信息',
+                                            content: record && record.activityCouponMessage,
+                                            col: 24, // 占宽度,12表示50%
+                                        }, {
+                                            title: '创建时间',
+                                            content: record && record.createTime,
+                                            col: 24, // 占宽度,12表示50%
+                                        }, {
+                                            title: '更新时间',
+                                            content: record && record.updateTime,
+                                            col: 24, // 占宽度,12表示50%
+                                        }]
+                                    }]
+                                }
+
+                            />
+                        </Drawer>
+
 
                         <Drawer
                             title={'发送券码'}

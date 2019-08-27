@@ -205,7 +205,7 @@ class Home extends Component {
                     <FormItem {...stationEditFormDrawer} label="活动名称" key='activityName'>
                         {getFieldDecorator('activityName', {
                             initialValue: record && record.activityName,
-                            rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位的活动名称'}],
+                            rules: [{required: true, max: 30, whitespace: true, message: '请输入活动名称'}],
                         })(
                             <Input style={{width: '80%'}} maxLength={30} placeholder="请输入活动名称"/>
                         )}
@@ -213,14 +213,14 @@ class Home extends Component {
 
                     <FormItem label='渠道商' {...stationEditFormDrawer} key="departmentKey">
                         {getFieldDecorator('departmentKey', {
-                            initialValue: record && record.departmentKey ? record.departmentKey : '',
+                            initialValue: record && record.departmentKey ? record.departmentKey : undefined,
                             rules: [{required: true, message: '必填项'}],
                         })(
                             <Select style={{width: '50%'}}
                                     allowClear={true}
                                     optionFilterProp="children"
                                     onSelect={this.handleSelect}
-                                    placeholder="请选择">
+                                    placeholder="请选择渠道商">
                                 {
                                     departmentList && departmentList.data.map((item, index) => {
                                         return (<Option key={item.departmentKey}
@@ -263,16 +263,13 @@ class Home extends Component {
                                             precision={0}
                                             onChange={(number) => {
                                                 function check() {
-                                                    // if (number === 11) {
-                                                    //     return {
-                                                    //         validateStatus: 'success',
-                                                    //         errorMsg: null,
-                                                    //     };x
-                                                    // }
-                                                    // return {
-                                                    //     validateStatus: 'error',
-                                                    //     errorMsg: 'The prime between 8 and 12 is 11!',
-                                                    // };
+                                                    if (number < 0) {
+                                                        return {
+                                                            validateStatus: 'error',
+                                                            errorMsg: "请输入正整数",
+                                                        };
+                                                    }
+
                                                     return {
                                                         validateStatus: 'success',
                                                         errorMsg: null,
@@ -283,7 +280,8 @@ class Home extends Component {
                                                 let {
                                                     validateStatus,
                                                     errorMsg
-                                                } = check(number)
+                                                } = check(number);
+
                                                 activityCouponMessage[activeIndex].validateStatus = validateStatus
                                                 activityCouponMessage[activeIndex].errorMsg = errorMsg
                                                 activityCouponMessage[activeIndex].totalCount = number
@@ -323,29 +321,7 @@ class Home extends Component {
                         </FormItem>
                     }
 
-                    {
-                        this.props.id && <FormItem
-                            label='状态'
-                            {...stationEditFormDrawer}>
-                            {getFieldDecorator('state', {
-                                initialValue: record && record.state,
-                                rules: [{required: true, message: '必填项'}],
-                            })(
-                                <Select style={{width: '50%'}}
-                                        optionFilterProp="children"
-                                        placeholder="请选择状态">
-                                    <Option key={'READY'}
-                                            value={'READY'}>待上线</Option>
-                                    <Option key={'ONLINE'}
-                                            value={'ONLINE'}>已上线</Option>
-                                    <Option key={'OVER'}
-                                            value={'OVER'}>已结束</Option>
-                                    <Option key={'DRAFT'}
-                                            value={'DRAFT'}>草稿</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                    }
+
 
                     {
                         this.props.id && <FormItem
@@ -367,7 +343,7 @@ class Home extends Component {
 
                     <FormItem label='活动说明' {...stationEditFormDrawer} key="description">
                         {getFieldDecorator('description', {
-                            //initialValue: [moment(new Date()),moment(new Date())],
+                            initialValue: record&&record.description,
                             rules: [{required: true, message: '必填项'}],
                         })(
                             <TextArea rows={4}/>,

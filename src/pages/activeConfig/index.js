@@ -267,10 +267,12 @@ class Home extends Component {
                                         let validStart = new Date(record.validStart).valueOf();
                                         let validEnd = new Date(record.validEnd).valueOf();
                                         let now = new Date().valueOf();
-                                        if (now < validEnd) {
+
+
+                                        if(now<=validStart && record.activityCoupons.length>0){
                                             api.updateActive({
                                                 id: record.id,
-                                                state: 'ONLINE'
+                                                state: 'READY'
                                             }).then(res => {
                                                 if (res.message === 'success') {
                                                     message.success('保存成功！');
@@ -284,24 +286,44 @@ class Home extends Component {
                                                     ...searchList
                                                 });
                                             })
-                                        } else {
-                                            api.updateActive({
-                                                id: record.id,
-                                                state: 'OVER'
-                                            }).then(res => {
-                                                if (res.message === 'success') {
-                                                    message.success('发布成功！');
-                                                } else {
-                                                    message.error(res.message);
-                                                }
-                                                let searchList = this.state.searchList || {};
-                                                this.props.getList({
-                                                    pageNo: this.state.currentNo,
-                                                    pageSize: this.state.pageSize,
-                                                    ...searchList
-                                                });
-                                            })
+                                        }else{
+                                            if (now < validEnd) {
+                                                api.updateActive({
+                                                    id: record.id,
+                                                    state: 'ONLINE'
+                                                }).then(res => {
+                                                    if (res.message === 'success') {
+                                                        message.success('保存成功！');
+                                                    } else {
+                                                        message.error(res.message);
+                                                    }
+                                                    let searchList = this.state.searchList || {};
+                                                    this.props.getList({
+                                                        pageNo: this.state.currentNo,
+                                                        pageSize: this.state.pageSize,
+                                                        ...searchList
+                                                    });
+                                                })
+                                            } else {
+                                                api.updateActive({
+                                                    id: record.id,
+                                                    state: 'OVER'
+                                                }).then(res => {
+                                                    if (res.message === 'success') {
+                                                        message.success('发布成功！');
+                                                    } else {
+                                                        message.error(res.message);
+                                                    }
+                                                    let searchList = this.state.searchList || {};
+                                                    this.props.getList({
+                                                        pageNo: this.state.currentNo,
+                                                        pageSize: this.state.pageSize,
+                                                        ...searchList
+                                                    });
+                                                })
+                                            }
                                         }
+
 
                                     }}>发布</a>
                                     <Divider type="vertical"/>
@@ -350,7 +372,7 @@ class Home extends Component {
 
                                         <a onClick={() => {
                                             this.props.history.push(`/couponStore/${record.id}`)
-                                        }}>增加库存</a>
+                                        }}>调整库存</a>
 
                                         <Divider type="vertical"/>
 
@@ -404,12 +426,12 @@ class Home extends Component {
                                         <Divider type="vertical"/>
 
                                         <a onClick={() => {
-                                            this.setState({showDetail: true, record})
+                                            this.props.history.push(`/SendDetail/${record.id}/${null}`)
                                         }}>活动明细</a>
                                     </Fragment>
                                     : record.state === 'OVER' ? <Fragment>
                                         <a onClick={() => {
-                                            this.setState({showDetail: true, record})
+                                            this.props.history.push(`/SendDetail/${record.id}/${null}`)
                                         }}>活动明细</a>
                                     </Fragment> : null
                         }

@@ -215,7 +215,7 @@ class Home extends Component {
                                                     activityCouponMessage
                                                 })
                                             }}
-                                            placeholder="请输入数量">
+                                            placeholder="输入正整数为增加库存，输入负整数为减少库存">
                                         </InputNumber>
                                         (请于<b>{active.endTime}</b>前使用)
                                     </div>

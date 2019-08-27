@@ -9,9 +9,6 @@ export default {
         title: '活动'
     }, {
         path: '',
-        title: '活动管理'
-    },{
-        path: '',
         title: '发放记录'
     }],
     // 搜索数据，默认一行显示3条
