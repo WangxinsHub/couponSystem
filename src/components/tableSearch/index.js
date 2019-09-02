@@ -178,12 +178,13 @@ export default class TableSearch extends React.Component {
                         {getFieldDecorator(id, {
                           initialValue: defaultValue || option[0].value,
                         })(
-                          <Select placeholder={placeholder} key={id}>
+                          <Select placeholder={placeholder} key={id} showSearch>
+
                             {
                               option && option.map((item) => {
                                 return (<Option key={item.value} value={item.value}>{item.label}</Option>)
                               })
-                            }           
+                            }
                           </Select>
                         )}
                       </FormItem> 

@@ -145,6 +145,10 @@ class Home extends Component {
                 title: '用户名',
                 dataIndex: 'loginAccount',
                 key: 'loginAccount',
+            }, {
+                title: '姓名',
+                dataIndex: 'userName',
+                key: 'userName',
             },
             {
                 title: '手机号',

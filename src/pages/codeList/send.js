@@ -155,6 +155,9 @@ class Home extends Component {
                             <span className='extra'> 支持扩展名：.xlsx，.xls,最多可支持1000条</span>
                         </Upload>
                     )}
+
+
+                    <a href="http://shande.xajhzx.cn/service/code/template">下载券码模板</a>
                 </FormItem>
 
 

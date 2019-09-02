@@ -3,7 +3,8 @@ import {connect} from 'react-redux';
 import {is, fromJS} from 'immutable';
 import {object, func} from 'prop-types';
 import {Card, Button, Divider, message, Drawer, Spin, Modal, DatePicker, Popconfirm,} from 'antd';
-import {PageHeaderLayout, TableSearch, StandardTable, TableCommon, Utils} from 'dt-antd';
+import {PageHeaderLayout, StandardTable, TableCommon, Utils} from 'dt-antd';
+import TableSearch from '../../components/tableSearch'
 import Define from './define';
 import {getList} from './action';
 import tableCommon from '../../utils/tableCommon.js';
@@ -12,6 +13,7 @@ import api from '../../api/api'
 import NewForm from "./edit";
 import moment from 'moment';
 import Detail from '../../components/tableDrawer/detail';
+import {getList as getDepartmentList} from '../department/action'
 
 
 class Home extends Component {
@@ -19,6 +21,12 @@ class Home extends Component {
         oneSupplierReducer: object,
         getList: func,
     };
+
+    constructor(props) {
+        super(props);
+        this.canAddSearch = true
+    }
+
     state = {
         showDrawer: false, // 是否显示抽屉编辑
         showDetail: false, // 是否显示详情
@@ -49,6 +57,14 @@ class Home extends Component {
             pageNo: this.state.currentNo,
             pageSize: this.state.pageSize
         });
+        this.props.getDepartmentList({
+            pageNo: 0,
+            pageSize: 1000
+        })
+    }
+
+    componentWillUnmount() {
+        this.canAddSearch = false
     }
 
     /**
@@ -122,7 +138,7 @@ class Home extends Component {
         });
     }
 
-    handleDelete = (activityId) => async (activityId) => {
+    handleDelete = (activityId) => async () => {
         let result = await api.deleteActive({activityId})
         if (result.message === 'success') {
             message.success('删除成功！');
@@ -158,7 +174,7 @@ class Home extends Component {
     }
 
 
-    disabledStartDate = record =>(current) => {
+    disabledStartDate = record => (current) => {
         return current && current < moment(record && record.validEnd);
 
     };
@@ -170,9 +186,66 @@ class Home extends Component {
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, record,} = this.state;
         const {loading, list} = this.props.activeConfigReducer;
-        console.error(showDetail)
 
         let {breadMenu, searchMenu} = Define;
+        const departmentList = this.props.departmentReducer.list;
+
+
+        if (list && list.data && this.canAddSearch) {
+            let option = list.data.map((item) => ({
+                value: item.activityName,
+                label: item.activityName
+            }));
+
+            Define.searchMenu.open.push({
+                id: 'activityName',
+                label: '请选择活动',
+                type: 'select',
+                option: [
+                    {
+                        value: null,
+                        label: '全部'
+                    },
+                    ...option
+                ]
+            })
+
+            let option2 = departmentList && departmentList.data.map((item) => ({
+                value: item.departmentValue,
+                label: item.departmentValue
+            }));
+
+            if (option2) {
+                Define.searchMenu.open.push({
+                    id: 'departmentValue',
+                    label: '请选择渠道商',
+                    type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
+                    option: [
+                        {
+                            label: '全部',
+                            value: null,
+                        },
+                        ...option2
+                    ]
+                })
+            }
+
+            let hash = {};
+
+            Define.searchMenu.open = Define.searchMenu.open.reduce(((item, next) => {
+                console.log(hash);
+                if (!hash[next.id]) {
+                    hash[next.id ] = next.id
+                    item.push(next)
+                }
+                return item
+            }), [])
+
+            console.log(Define.searchMenu.open);
+
+        }
+
+
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
 
@@ -188,6 +261,16 @@ class Home extends Component {
                 title: '活动名称',
                 dataIndex: 'activityName',
                 key: 'activityName',
+                render:(text,record)=>{
+                    return <a onClick={()=>{
+                        this.setState({
+                            record,
+                            showDetail:true
+                        })
+                    }}>
+                        {text}
+                    </a>
+                }
             },
             {
                 title: '渠道商',
@@ -269,7 +352,7 @@ class Home extends Component {
                                         let now = new Date().valueOf();
 
 
-                                        if(now<=validStart && record.activityCoupons.length>0){
+                                        if (now <= validStart && record.activityCoupons.length > 0) {
                                             api.updateActive({
                                                 id: record.id,
                                                 state: 'READY'
@@ -286,7 +369,7 @@ class Home extends Component {
                                                     ...searchList
                                                 });
                                             })
-                                        }else{
+                                        } else {
                                             if (now < validEnd) {
                                                 api.updateActive({
                                                     id: record.id,
@@ -581,9 +664,9 @@ class Home extends Component {
 }
 
 export default connect((state) => ({
-    activeConfigReducer: state.activeConfigReducer
-
-
+    activeConfigReducer: state.activeConfigReducer,
+    departmentReducer: state.departmentReducer
 }), {
     getList,
+    getDepartmentList
 })(Home);

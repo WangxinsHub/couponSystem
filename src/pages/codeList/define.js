@@ -24,7 +24,7 @@ export default {
             placeholder: '请输入码值',
         },{
             id: 'state',
-            label: '请选择券状态',
+            label: '请选择状态',
             type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
             option: [{
                 label: '全部',

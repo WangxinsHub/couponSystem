@@ -2,14 +2,15 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import {is, fromJS} from 'immutable';
 import {object, func} from 'prop-types';
-import {Card, Button, Divider, message, Drawer, Spin, Badge, Popconfirm} from 'antd';
-import {PageHeaderLayout, TableSearch, StandardTable, TableCommon, Utils} from 'dt-antd';
+import {Card, Spin,} from 'antd';
+import {PageHeaderLayout, StandardTable} from 'dt-antd';
+import TableSearch from '@/components/tableSearch';
+
 import Define from './define';
 import {getList} from './action';
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
 import util from '../../utils/base'
-import api from '../../api/api'
 import {getList as getActiveList} from '../activeList/action'
 import {Link} from "react-router-dom";
 
@@ -54,11 +55,11 @@ class Home extends Component {
             pageSize: this.state.pageSize
         });
 
-        console.log(this.props.match.params.id);
         this.props.getActiveList({
             activityId:this.props.match.params.id?this.props.match.params.id:null,
             pageNo: 1,
-            pageSize: 1000
+            pageSize: 1000,
+            state:'ONLINE'
         })
     }
 
@@ -180,6 +181,7 @@ class Home extends Component {
                 title: '批次号',
                 key: 'batchId',
                 dataIndex: 'batchId',
+                render:(text)=>text+''
             },
             {
                 title: '活动名称',
@@ -244,30 +246,6 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                               {/* <Button type="primary" icon="plus" onClick={() => {
-                                    //window.location.href = "http://shande.xajhzx.cn/service/export";
-                                    // urlEncode
-                                    var urlEncode = function (param, key, encode) {
-                                        if (param == null) return '';
-                                        var paramStr = '';
-                                        var t = typeof (param);
-                                        if (t == 'string' || t == 'number' || t == 'boolean') {
-                                            paramStr += '&' + key + '=' + ((encode == null || encode) ? encodeURIComponent(param) : param);
-                                        } else {
-                                            for (var i in param) {
-                                                var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
-                                                paramStr += urlEncode(param[i], k, encode)
-                                            }
-                                        }
-                                        return paramStr;
-
-                                    }
-                                    var s = urlEncode({...this.state.searchList});
-                                    console.log(s.slice(1));
-                                    window.location.href = "http://shande.xajhzx.cn/service/export?" + s.slice(1);
-                                }}>
-                                    导出
-                                </Button>*/}
                             </div>
                             <StandardTable
                                 loading={loading} // 显示加载框

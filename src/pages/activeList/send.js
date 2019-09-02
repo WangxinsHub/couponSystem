@@ -16,6 +16,8 @@ import {getList, getDepartmentList,} from '../activeConfig/action';
 import API from '@/api/api';
 import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
 import {getList as getCouponList} from '../couponStore/action'
+import Verify from '../../utils/verify'
+
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -30,8 +32,10 @@ class Home extends Component {
     state = {
         btnDisabled: false,
         activityCouponMessage: [{}],
-        errorMsg: ''
-    }
+        errorMsg: '',
+        stockCount: 0,
+        coupon:null
+    };
 
     /**
      * [componentDidMount 加载render方法之前,获取所有用户列表]
@@ -41,7 +45,7 @@ class Home extends Component {
         this.props.getCouponList({
             pageNo: 1,
             pageSize: 1000,
-            activityId:this.props.id
+            activityId: this.props.id
         })
         this.props.getDepartmentList({
             pageNo: 1,
@@ -92,10 +96,11 @@ class Home extends Component {
         } catch (err) {
             this.setState({
                 btnDisabled: false
-            })
+            });
             console.error(err);
         }
-    }
+    };
+
     /**
      * [点击提交表单做验证]
      * @param  {[type]} e [description]
@@ -106,21 +111,47 @@ class Home extends Component {
         let that = this;
         this.props.form.validateFieldsAndScroll({force: true}, (err, values) => {
             if (!err && !this.state.errorMsg) {
-                const {activityCouponMessage} = this.state;
+
                 if (that.props.id) values.id = that.props.id;
                 values.activityId = this.props.id;
                 values.file = this.state.formData;
+                let testPhone = true;
 
-                values.mobile = values.mobile.replace(/\n/g,',');
-                var formData = new FormData();
+                if (values.mobile) {
+                    values.mobile = values.mobile.replace(/\n/g, ',');
+                    let mobileArr = values.mobile.split(',');
+                    if (mobileArr.length > 0) {
+                        mobileArr.map((mobile) => {
+                            let reg = new RegExp(Verify.mobile);
+                            if (!reg.test(mobile)) {
+                                testPhone = false;
+                            }
+                        });
 
-                for(let key in values){
-                    formData.append(key, values[key]);
-
+                    }
                 }
-                // 提交表单
-                console.log(values);
-                that.postData(formData);
+
+                if (testPhone) {
+                    var formData = new FormData();
+
+                    for (let key in values) {
+                        formData.append(key, values[key]);
+                    }
+                    // 提交表单
+                    console.log(values);
+                    that.postData(formData);
+                } else {
+                    Modal.error({
+                        title: '提示',
+                        content: (
+                            <div>
+                                <p>请检查手机号列表格式是否正确</p>
+                            </div>
+                        ),
+                        onOk() {
+                        },
+                    });
+                }
             } else {
                 this.setState({
                     btnDisabled: false
@@ -130,15 +161,6 @@ class Home extends Component {
         });
     }
 
-    //  // 与下线时间校验 应早于下线时间
-    //  validateStartTime = (rule, value, callback) => {
-    //   const form = this.props.form;
-    //   if ((value && value.isBefore(form.getFieldValue('endTime'))) || !form.getFieldValue('endTime')) {
-    //     callback();
-    //   } else {
-    //     callback('上线时间应早于下线时间');
-    //   }
-    // }
     /**
      * 上传文件
      * @param info
@@ -154,24 +176,23 @@ class Home extends Component {
         if (fileList && fileList[0]) {
             if (info.file && info.file.response) this.setState({fileUrl: fileList[0].response.data})
         }
-    }
+    };
 
-    selectCoupon = (activeIndex) => (couponIndex) => {
-        console.log(couponIndex);
-        const {list} = this.props.couponReducer;
-        let coupon = list.data[couponIndex];
+    selectCoupon = (coupon)  => {
 
-        const {activityCouponMessage} = this.state;
+
         this.setState({
             coupon
         })
-    }
+    };
 
     render() {
-        let {record} = this.props;
+        let {stockCount, coupon} = this.state;
         const {submitting, form, onClose} = this.props;
         const {getFieldDecorator} = form;
         const {list,} = this.props.couponStore;
+
+        console.error(coupon)
 
         return (<Form style={{paddingBottom: 30}}>
 
@@ -184,19 +205,33 @@ class Home extends Component {
                         <Select style={{width: '50%'}}
                                 allowClear={true}
                                 optionFilterProp="children"
-                                onChange={(value) => {
-                                    this.selectCoupon(value)
+                                onChange={(value, p) => {
+                                    console.log(value, p);
+                                    this.setState({
+                                        stockCount: p.props.data.stockCount
+                                    });
+                                    this.selectCoupon(p.props.data)
                                 }}
                                 placeholder="请选择券">
                             {
                                 list && list.data.map((item, index) => {
                                     return (<Option key={item.couponId}
+                                                    data={item}
                                                     value={item.couponId}>{item.couponName}</Option>)
                                 })
                             }
                         </Select>
                     )}
+                    {
+                        this.state.coupon && <div>
+                            <b>
+                                {stockCount === 0 ? '库存不足！' : `库存量:${stockCount}`}
+                            </b>
+                        </div>
+                    }
+
                 </FormItem>
+
 
                 <FormItem label='添加手机号' {...stationEditFormDrawer} key="mobile">
                     {getFieldDecorator('mobile', {})(
@@ -227,6 +262,7 @@ class Home extends Component {
                             <span className='extra'> 支持扩展名：.xlsx，.xls</span>
                         </Upload>
                     )}
+                    <a href="http://shande.xajhzx.cn/service/activity/template">下载手机文件模板</a>
                 </FormItem>
 
                 <div className="drawerBtns">

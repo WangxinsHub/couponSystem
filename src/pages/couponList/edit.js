@@ -2,7 +2,21 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import moment from 'moment';
 import {object, func} from 'prop-types';
-import {Form, Input, Select, Button, Upload, Icon, message, Spin, Popconfirm, Radio, DatePicker, Checkbox} from 'antd';
+import {
+    Form,
+    Input,
+    Select,
+    Button,
+    Upload,
+    Icon,
+    message,
+    Spin,
+    Popconfirm,
+    Radio,
+    DatePicker,
+    Checkbox,
+    Modal
+} from 'antd';
 import UploadImage from '@/components/uploadImage/index';
 import apiUrl from '@/api/url';
 import {getList, platformList, createCoupon, updateCoupon} from './action';
@@ -41,27 +55,57 @@ class Home extends Component {
     上传表单数据
      */
     postData = async (values) => {
+        const that = this;
         try {
             let result;
             if (this.props.id) {
-                if(!this.props.type){
+                if (!this.props.type) {
                     result = await API.updateCoupon(values);
-                }else{
+                    if (result.message === 'success') {
+                        message.success('保存成功！');
+                        this.props.onClose(true);
+                    } else {
+                        this.setState({
+                            btnDisabled: false
+                        })
+                        message.error(result.message);
+                    }
+                } else {
                     values.code = '';
-                    result = await API.codeImport(values)
+                    result = await API.codeImport(values);
+                    if (result.message === 'success') {
+                        Modal.success({
+                            title: '提示',
+                            content: (
+                                <div>
+                                    <p>批量导入成功</p>
+                                    <p>成功导入{result.total}条</p>
+                                </div>
+                            ),
+                            onOk() {
+                                that.props.onClose(true);
+                            },
+                        });
+                    } else {
+                        this.setState({
+                            btnDisabled: false
+                        })
+                        message.error(result.message);
+                    }
                 }
             } else {
                 result = await API.createCoupon(values);
+                if (result.message === 'success') {
+                    message.success('保存成功！');
+                    this.props.onClose(true);
+                } else {
+                    this.setState({
+                        btnDisabled: false
+                    })
+                    message.error(result.message);
+                }
             }
-            if (result.message === 'success') {
-                message.success('保存成功！');
-                this.props.onClose(true);
-            } else {
-                this.setState({
-                    btnDisabled: false
-                })
-                message.error(result.message);
-            }
+
         } catch (err) {
             this.setState({
                 btnDisabled: false
@@ -80,11 +124,12 @@ class Home extends Component {
         this.props.form.validateFieldsAndScroll({force: true}, (err, values) => {
             if (!err) {
                 values.file = that.state.file;
+                if (that.state) values.platformName = that.state.platformName;
 
-                if(!this.props.type){
+                if (!this.props.type) {
                     values.validEnd = values.validEnd.format('YYYY/MM/DD HH:mm:ss');
                     if (that.props.id) values.id = that.props.id;
-                }else{
+                } else {
                     values.couponId = that.props.id;
                 }
                 var formData = new FormData();
@@ -108,9 +153,9 @@ class Home extends Component {
         let st = new Date(startValue).valueOf();
         let now = new Date().valueOf();
 
-        if(this.props.record && this.props.record.validEnd){
+        if (this.props.record && this.props.record.validEnd) {
             return st < moment(this.props.record.validEnd);
-        }else{
+        } else {
             return st < now
         }
     };
@@ -157,9 +202,15 @@ class Home extends Component {
                                     rules: [{required: true, message: '必填项'}],
                                 })(
                                     <Select style={{width: '50%'}}
-                                        //onSelect={this.selectCity}
                                             allowClear={true}
                                             optionFilterProp="children"
+                                            onSelect={(v, p) => {
+                                                console.log(v, p);
+                                                console.log(p.props.children)
+                                                this.setState({
+                                                    platformName: p.props.children
+                                                })
+                                            }}
                                             placeholder="请选择券平台">
                                         {
                                             platformList && platformList.map((item, index) => {
@@ -173,7 +224,7 @@ class Home extends Component {
                     }
 
                     {
-                        record && <FormItem {...stationEditFormDrawer}>
+                        this.props.type && <FormItem {...stationEditFormDrawer}>
                             {getFieldDecorator('file', {})(
                                 <Upload
                                     {...{
@@ -195,6 +246,8 @@ class Home extends Component {
                                     <span className='extra'> 支持扩展名：.xlsx，.xls</span>
                                 </Upload>
                             )}
+                            <a href="http://shande.xajhzx.cn/service/code/template">下载券码模板</a>
+
                         </FormItem>
                     }
 

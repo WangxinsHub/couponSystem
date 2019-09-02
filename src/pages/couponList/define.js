@@ -31,7 +31,7 @@ export default {
                 value: 'SENDING',
             }, {
                 label: '已结束',
-                value: 'CLOSE',
+                value: 'CLOSED',
             }, {
                 label: '暂停中',
                 value: 'PAUSE',

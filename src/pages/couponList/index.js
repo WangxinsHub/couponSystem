@@ -112,12 +112,11 @@ class Home extends Component {
 
     stop = (id) => async () => {
         let result = await api.updateCoupon({
-            state: 'CLOSE',
+            state: 'PAUSE',
             id
         });
         if (result.message === 'success') {
-            message.success('保存成功！');
-            this.props.onClose(true);
+            message.success('已暂停！');
         } else {
             this.setState({
                 btnDisabled: false
@@ -248,7 +247,7 @@ class Home extends Component {
                                 showDrawerId: record.id,
                                 record: record,
                                 id: record.id,
-                                type:null
+                                type: null
                             })
                         }}>编辑</a>
                         <Divider type="vertical"/>
@@ -270,7 +269,7 @@ class Home extends Component {
                                 showDrawerId: null,
                                 record: record,
                                 id: record.id,
-                                type:'import'
+                                type: 'import'
                             })
                         }}>导入券码</a>
                     </Fragment>
@@ -297,36 +296,37 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                                {/*<Button type="primary" icon="plus" onClick={() => {
+                                <Button  icon="export" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
-                                    var urlEncode = function (param, key, encode) {
-                                        if (param == null) return '';
-                                        var paramStr = '';
-                                        var t = typeof (param);
-                                        if (t == 'string' || t == 'number' || t == 'boolean') {
-                                            paramStr += '&' + key + '=' + ((encode == null || encode) ? encodeURIComponent(param) : param);
-                                        } else {
-                                            for (var i in param) {
-                                                var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
-                                                paramStr += urlEncode(param[i], k, encode)
-                                            }
-                                        }
-                                        return paramStr;
 
+                                    function parseParams(data) {
+                                        try {
+                                            var tempArr = [];
+                                            for (var i in data) {
+                                                var key = encodeURIComponent(i);
+                                                var value = encodeURIComponent(data[i]);
+                                                tempArr.push(key + '=' + value);
+                                            }
+                                            var urlParamsStr = tempArr.join('&');
+                                            return urlParamsStr;
+                                        } catch (err) {
+                                            return '';
+                                        }
                                     }
-                                    var s = urlEncode({...this.state.searchList});
-                                    console.log(s.slice(1));
-                                    window.location.href = "http://shande.xajhzx.cn/service/export?" + s.slice(1);
+
+
+                                    var s =parseParams(this.state.searchList)
+                                    window.location.href = "http://shande.xajhzx.cn/service/coupon/export?" + s
                                 }}>
                                     导出
-                                </Button>*/}
+                                </Button>
                                 <Button type="primary" icon="plus" onClick={() => {
                                     this.setState({
                                         showDrawer: true,
                                         showDrawerId: null,
                                         record: null,
-                                        type:null
+                                        type: null
                                     })
                                 }}>
                                     新增

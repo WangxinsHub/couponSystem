@@ -192,7 +192,7 @@ class Home extends Component {
                         {
                             record.state === 'READY' &&
                             <Popconfirm
-                                title='是否确认删除活动？'
+                                title='是否确认删除券码？'
                                 onConfirm={() => {
                                     api.deleteCode({
                                         id: record.id
@@ -260,30 +260,32 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                                {/* <Button type="primary" icon="plus" onClick={() => {
+
+                                <Button  icon="export" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
-                                    var urlEncode = function (param, key, encode) {
-                                        if (param == null) return '';
-                                        var paramStr = '';
-                                        var t = typeof (param);
-                                        if (t == 'string' || t == 'number' || t == 'boolean') {
-                                            paramStr += '&' + key + '=' + ((encode == null || encode) ? encodeURIComponent(param) : param);
-                                        } else {
-                                            for (var i in param) {
-                                                var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
-                                                paramStr += urlEncode(param[i], k, encode)
-                                            }
-                                        }
-                                        return paramStr;
 
+                                    function parseParams(data) {
+                                        try {
+                                            var tempArr = [];
+                                            for (var i in data) {
+                                                var key = encodeURIComponent(i);
+                                                var value = encodeURIComponent(data[i]);
+                                                tempArr.push(key + '=' + value);
+                                            }
+                                            var urlParamsStr = tempArr.join('&');
+                                            return urlParamsStr;
+                                        } catch (err) {
+                                            return '';
+                                        }
                                     }
-                                    var s = urlEncode({...this.state.searchList});
-                                    console.log(s.slice(1));
-                                    window.location.href = "http://shande.xajhzx.cn/service/export?" + s.slice(1);
+
+
+                                    var s =parseParams(this.state.searchList)
+                                    window.location.href = "http://shande.xajhzx.cn/service/code/export?" + s
                                 }}>
                                     导出
-                                </Button>*/}
+                                </Button>
                                 <Button type="primary" icon="plus" onClick={() => {
                                     this.setState({
                                         showDrawer: true,
@@ -295,28 +297,31 @@ class Home extends Component {
                                 </Button>
                                 <Button type="danger" onClick={() => {
                                     const {selectedRow} = this.state;
-                                    let id = selectedRow.map((data) => {
-                                        if (data.state === 'READY') {
-                                            return data.id
-                                        }
-                                    }).filter(item=>item);
+                                    if(selectedRow){
+                                        let id = selectedRow.map((data) => {
+                                            if (data.state === 'READY') {
+                                                return data.id
+                                            }
+                                        }).filter(item=>item);
 
-                                    api.deleteCode({
-                                        id:id.join()
-                                    }).then((res) => {
-                                        if (res.message === 'success') {
-                                            message.success('已批量删除！');
-                                        } else {
-                                            message.error(res.message);
-                                        }
-                                        let searchList = this.state.searchList || {};
-                                        this.props.getList({
-                                            couponId: this.props.match.params.id,
-                                            pageNo: this.state.currentNo,
-                                            pageSize: this.state.pageSize,
-                                            ...searchList
-                                        });
-                                    })
+                                        api.deleteCode({
+                                            id:id.join()
+                                        }).then((res) => {
+                                            if (res.message === 'success') {
+                                                message.success('已批量删除！');
+                                            } else {
+                                                message.error(res.message);
+                                            }
+                                            let searchList = this.state.searchList || {};
+                                            this.props.getList({
+                                                couponId: this.props.match.params.id,
+                                                pageNo: this.state.currentNo,
+                                                pageSize: this.state.pageSize,
+                                                ...searchList
+                                            });
+                                        })
+                                    }
+
                                 }}>
                                     删除所选
                                 </Button>

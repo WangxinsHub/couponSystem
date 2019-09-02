@@ -142,12 +142,12 @@ class Home extends Component {
                     </FormItem>
 
                     {
-                        !this.props.id && <FormItem {...stationEditFormDrawer} label="用户名" key='userName'>
+                        !this.props.id && <FormItem {...stationEditFormDrawer} label="姓名" key='userName'>
                             {getFieldDecorator('userName', {
                                 initialValue: record && record.userName,
-                                rules: [{required: true, whitespace: true, message: '请输入用户名'}],
+                                rules: [{required: true, whitespace: true, message: '请输入姓名'}],
                             })(
-                                <Input style={{width: '80%'}} maxLength={30} placeholder="请输入用户名"/>
+                                <Input style={{width: '80%'}} maxLength={30} placeholder="请输入姓名"/>
                             )}
                         </FormItem>
                     }
@@ -177,10 +177,10 @@ class Home extends Component {
                     </FormItem>
 
                     {
-                        !this.props.id && <FormItem {...stationEditFormDrawer} label="账号" key='loginAccount'>
+                        !this.props.id && <FormItem {...stationEditFormDrawer} label="用户名" key='loginAccount'>
                             {getFieldDecorator('loginAccount', {
                                 initialValue: record && record.loginAccount,
-                                rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位用户名称'}],
+                                rules: [{required: true, max: 30, whitespace: true, message: '请输入用户名'}],
                             })(
                                 <Input style={{width: '80%'}} maxLength={30} placeholder="请输入用户名"/>
                             )}
@@ -221,7 +221,7 @@ class Home extends Component {
                             )}
                         </FormItem>
                     }
-                    <FormItem {...stationEditFormDrawer} label="联系电话" key='userPhone'>
+                    <FormItem {...stationEditFormDrawer} label="手机号" key='userPhone'>
                         {getFieldDecorator('userPhone', {
                             initialValue: record && record.userPhone,
                             rules: [{
@@ -232,7 +232,7 @@ class Home extends Component {
                                 message: '请输入正确的手机号'
                             }],
                         })(
-                            <Input style={{width: '80%'}} maxLength={11} placeholder="请输入联系电话"/>
+                            <Input style={{width: '80%'}} maxLength={11} placeholder="请输入手机号"/>
                         )}
                     </FormItem>
 

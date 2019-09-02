@@ -2,20 +2,24 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import {is, fromJS} from 'immutable';
 import {object, func} from 'prop-types';
-import {Card, Button, Divider, message, Drawer, Spin, Badge, Popconfirm} from 'antd';
-import {PageHeaderLayout, TableSearch, StandardTable, TableCommon, Utils} from 'dt-antd';
+import {Card, message, Spin, Popconfirm, Button} from 'antd';
+import {PageHeaderLayout, StandardTable} from 'dt-antd';
+import TableSearch from '@/components/tableSearch';
 import Define from './define';
 import {getList} from './action';
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
 import util from '../../utils/base'
 import api from '../../api/api'
+import {getList as getDepartmentList} from '../department/action'
 
 class Home extends Component {
     static propTypes = {
         oneSupplierReducer: object,
         getList: func,
     };
+    canAddSearch = true;
+
     state = {
         showDrawer: false, // 是否显示抽屉编辑
         showDetail: false, // 是否显示详情
@@ -47,6 +51,10 @@ class Home extends Component {
             pageNo: this.state.currentNo,
             pageSize: this.state.pageSize
         });
+        this.props.getDepartmentList({
+            pageNo:0,
+            pageSize:1000
+        })
     }
 
     /**
@@ -59,20 +67,21 @@ class Home extends Component {
             state: this.state,
             values,
             callBack: (json) => {
-                if (json.searchList.rangeTime.length>0) {
-                    if (json.searchList.startTime === json.searchList.endTime) {
-                        json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd') + '  00:00:00'
-                        json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd') + ' 23:59:59'
+                if(json.searchList.rangeTime){
+                    if (json.searchList.rangeTime.length > 0) {
+                        if (json.searchList.startTime === json.searchList.endTime) {
+                            json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd') + '00:00:00'
+                            json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd') + ' 23:59:59'
+                        } else {
+                            json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd hh:mm:ss')
+                            json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd hh:mm:ss')
+                        }
                     } else {
-                        json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd hh:mm:ss')
-                        json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd hh:mm:ss')
+                        json.searchList.startTime = ''
+                        json.searchList.endTime = ''
                     }
-                } else {
-                    json.searchList.startTime = null
-                    json.searchList.endTime = null
+                    delete json.searchList.rangeTime;
                 }
-                delete json.searchList.rangeTime;
-
                 this.setState(json);
                 this.props.getList({
                     couponId: this.props.match.params.id ? this.props.match.params.id : null,
@@ -137,8 +146,81 @@ class Home extends Component {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, showAccount, showTwo} = this.state;
         const {loading, sendList} = this.props.couponSendReducer;
         let {breadMenu, searchMenu} = Define;
+        const departmentList = this.props.departmentReducer.list;
+
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
+
+        if (sendList && sendList.data && this.canAddSearch) {
+            // Define.searchMenu.open = [{
+            //     id: 'mobile',
+            //     label: '手机号',
+            //     type: 'input', // input输入框
+            //     placeholder: '请输入手机号',
+            // }, {
+            //     id: 'sendBatchId',
+            //     label: '发放批次号',
+            //     type: 'input', // input输入框
+            //     placeholder: '请输入发放批次号',
+            // }, {
+            //     id: 'sendId',
+            //     label: '流水号',
+            //     type: 'input', // input输入框
+            //     placeholder: '请输入流水号',
+            // }, {
+            //     id: 'couponId',
+            //     label: '券Id',
+            //     type: 'input', // input输入框
+            //     placeholder: '请输入券ID',
+            // }, {
+            //     id: 'messageState',
+            //     label: '请选择发送信息状态',
+            //     type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
+            //     option: [{
+            //         label: '全部',
+            //         value: null,
+            //     }, {
+            //         label: '已发送',
+            //         value: 'SENDING',
+            //     }, {
+            //         label: '发送中',
+            //         value: 'SUCCESS',
+            //     }, {
+            //         label: '发送失败',
+            //         value: 'FAIL',
+            //     }],
+            // },
+            //     {
+            //         id: 'rangeTime',
+            //         label: '发放时间',
+            //         type: 'rangePicker',
+            //         placeholder: ['开始时间', '结束时间']
+            //     },
+            // ];
+            let option = departmentList && departmentList.data.map((item) => ({
+                value: item.departmentValue,
+                label: item.departmentValue
+            }));
+
+            if (option) {
+                Define.searchMenu.open.push({
+                    id: 'departmentValue',
+                    label: '请选择渠道商',
+                    type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
+                    option: [
+                        {
+                            label: '全部',
+                            value: null,
+                        },
+                        ...option
+                    ]
+                })
+                this.canAddSearch = false
+            }
+
+        }
+
+
         // 列表表头
         const columns = [
             {
@@ -222,14 +304,17 @@ class Home extends Component {
                 render: (record) => (
                     <Fragment>
                         <Popconfirm placement="top" title="确认要重新发送吗？" onConfirm={() => {
-                            api.sendCode({
-                                activityId: record.activityId,
-                                couponId: record.couponId,
-                                mobile: record.mobile
+                            api.reSend({
+                                sendId: record.sendId,
+
                             }).then(result => {
                                 if (result.message === 'success') {
                                     message.success('发送成功！');
-                                    this.props.onClose(true);
+                                    this.props.getList({
+                                        couponId: this.props.match.params.id ? this.props.match.params.id : null,
+                                        pageNo: this.state.currentNo,
+                                        pageSize: this.state.pageSize
+                                    });
                                 } else {
                                     message.error(result.message);
                                 }
@@ -262,30 +347,31 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                                {/*<Button type="primary" icon="plus" onClick={() => {
+                                <Button  icon="export" onClick={() => {
                                     //window.location.href = "http://shande.xajhzx.cn/service/export";
                                     // urlEncode
-                                    var urlEncode = function(param, key, encode) {
-                                        if (param==null) return '';
-                                        var paramStr = '';
-                                        var t = typeof (param);
-                                        if (t == 'string' || t == 'number' || t == 'boolean') {
-                                            paramStr += '&' + key + '='  + ((encode==null||encode) ? encodeURIComponent(param) : param);
-                                        } else {
-                                            for (var i in param) {
-                                                var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
-                                                paramStr += urlEncode(param[i], k, encode)
-                                            }
-                                        }
-                                        return paramStr;
 
+                                    function parseParams(data) {
+                                        try {
+                                            var tempArr = [];
+                                            for (var i in data) {
+                                                var key = encodeURIComponent(i);
+                                                var value = encodeURIComponent(data[i]);
+                                                tempArr.push(key + '=' + value);
+                                            }
+                                            var urlParamsStr = tempArr.join('&');
+                                            return urlParamsStr;
+                                        } catch (err) {
+                                            return '';
+                                        }
                                     }
-                                    var s = urlEncode({...this.state.searchList});
-                                    console.log(s.slice(1));
-                                    window.location.href = "http://shande.xajhzx.cn/service/export?"+s.slice(1);
+
+
+                                    var s =parseParams(this.state.searchList)
+                                    window.location.href = "http://shande.xajhzx.cn/service/batch/export?" + s
                                 }}>
                                     导出
-                                </Button>*/}
+                                </Button>
                             </div>
                             <StandardTable
                                 loading={loading} // 显示加载框
@@ -303,7 +389,9 @@ class Home extends Component {
 }
 
 export default connect((state) => ({
-    couponSendReducer: state.couponSendReducer
+    couponSendReducer: state.couponSendReducer,
+    departmentReducer: state.departmentReducer
 }), {
     getList,
+    getDepartmentList
 })(Home);

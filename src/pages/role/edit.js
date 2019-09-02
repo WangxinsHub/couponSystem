@@ -140,7 +140,7 @@ class Home extends Component {
                             <FormItem {...stationEditFormDrawer} label="角色名" key='roleKey'>
                                 {getFieldDecorator('roleKey', {
                                     initialValue: record && record.departmentValue,
-                                    rules: [{required: true, max: 30, whitespace: true, message: '请输入最多30位角色名'}],
+                                    rules: [{required: true, max: 30, whitespace: true, message: '请输入角色名'}],
                                 })(
                                     <Input style={{width: '80%'}} maxLength={30} placeholder="请输入角色名称"/>
                                 )}

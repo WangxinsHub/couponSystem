@@ -6,7 +6,7 @@ export default {
     /*面包屑导航*/
     breadMenu: [{
         path: '',
-        title: '活动'
+        title: '券库'
     }, {
         path: '',
         title: '发放明细'
@@ -35,11 +35,6 @@ export default {
             type: 'input', // input输入框
             placeholder: '请输入券ID',
         },{
-            id: 'departmentValue',
-            label: '渠道商',
-            type: 'input', // input输入框
-            placeholder: '请输入渠道商',
-        },{
             id: 'messageState',
             label: '请选择发送信息状态',
             type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
@@ -61,7 +56,7 @@ export default {
                 id: 'rangeTime',
                 label: '发放时间',
                 type: 'rangePicker',
-                placeholder: '开始时间、结束时间'
+                placeholder: ['开始时间','结束时间']
             },
         ],
     },

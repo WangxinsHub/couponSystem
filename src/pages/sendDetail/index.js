@@ -60,6 +60,7 @@ class Home extends Component {
             state: this.state,
             values,
             callBack: (json) => {
+                console.error(json)
                 if( json.searchList.rangeTime){
                     json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0],'YYYY/MM/dd hh:mm:ss')
                     json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1],'YYYY/MM/dd hh:mm:ss')
@@ -71,7 +72,7 @@ class Home extends Component {
                     ...json.searchList,
                     pageNo:json.pageNo,
                     activityId:this.props.match.params.aid!=='null'?this.props.match.params.aid:null,
-                    sendBatchId:this.props.match.params.bid!=='null'?this.props.match.params.bid:null,
+                    sendBatchId:this.props.match.params.bid?this.props.match.params.bid:json.searchList.sendBatchId,
                     pageSize:json.pageSize
                 });
             }
@@ -145,6 +146,11 @@ class Home extends Component {
                 dataIndex: 'sendId',
             },
             {
+                title: '批次号',
+                key: 'sendBatchId',
+                dataIndex: 'sendBatchId',
+            },
+            {
                 title: '活动名称',
                 dataIndex: 'activityName',
                 key: 'activityName',
@@ -199,11 +205,7 @@ class Home extends Component {
                 key: 'failMessage',
                 dataIndex: 'failMessage',
             },
-            {
-                title: '发放批次号',
-                key: 'sendBatchId',
-                dataIndex: 'sendBatchId',
-            },
+
         ];
         // 定义表格的数据
         const data = {
@@ -226,30 +228,31 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
-                                <Button type="primary" icon="plus" onClick={() => {
-                                    //window.location.href = "http://shande.xajhzx.cn/service/export";
-                                    // urlEncode
-                                    var urlEncode = function(param, key, encode) {
-                                        if (param==null) return '';
-                                        var paramStr = '';
-                                        var t = typeof (param);
-                                        if (t == 'string' || t == 'number' || t == 'boolean') {
-                                            paramStr += '&' + key + '='  + ((encode==null||encode) ? encodeURIComponent(param) : param);
-                                        } else {
-                                            for (var i in param) {
-                                                var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
-                                                paramStr += urlEncode(param[i], k, encode)
-                                            }
-                                        }
-                                        return paramStr;
+                                <Button  icon="export" onClick={() => {
+                                //window.location.href = "http://shande.xajhzx.cn/service/export";
+                                // urlEncode
 
+                                function parseParams(data) {
+                                    try {
+                                        var tempArr = [];
+                                        for (var i in data) {
+                                            var key = encodeURIComponent(i);
+                                            var value = encodeURIComponent(data[i]);
+                                            tempArr.push(key + '=' + value);
+                                        }
+                                        var urlParamsStr = tempArr.join('&');
+                                        return urlParamsStr;
+                                    } catch (err) {
+                                        return '';
                                     }
-                                    var s = urlEncode({...this.state.searchList});
-                                    console.log(s.slice(1));
-                                    window.location.href = "http://shande.xajhzx.cn/service/export?"+s.slice(1);
-                                }}>
-                                    导出
-                                </Button>
+                                }
+
+
+                                var s =parseParams(this.state.searchList)
+                                window.location.href = "http://shande.xajhzx.cn/service/sendDetail/export?" + s
+                            }}>
+                                导出
+                            </Button>
                             </div>
                             <StandardTable
                                 loading={loading} // 显示加载框

@@ -414,5 +414,5 @@ export default connect((state) => ({
     departmentReducer:state.departmentReducer
 }), {
     getList,
-    getDepartmentList
+    getDepartmentList,
 })(Home);

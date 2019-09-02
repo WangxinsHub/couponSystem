@@ -324,6 +324,28 @@ class API extends Server{
     }
   }
 
+  async activityCoupon(params = {}){
+    try{
+      let result = await this.axios('post', Url.activityCoupon, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async reSend(params = {}){
+    try{
+      let result = await this.axios('post', Url.reSend, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
   async deleteActive(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.deleteActive, params);
@@ -351,7 +373,7 @@ class API extends Server{
 
   async exportTable(params = {}){
     try{
-      let result = await this.axiosEasy('get', Url.exportTable, params);
+      let result = await this.axios('get', Url.exportTable, params);
       if(result) {
         return result;
       }
@@ -359,6 +381,9 @@ class API extends Server{
       throw err;
     }
   }
+
+
+
 
 }
 

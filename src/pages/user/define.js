@@ -9,7 +9,7 @@ export default {
         title: '用户'
     }, {
         path: '',
-        title: '用户列表'
+        title: '用户管理'
     }],
     // 搜索数据，默认一行显示3条
     searchMenu: {

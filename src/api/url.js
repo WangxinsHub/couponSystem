@@ -46,4 +46,7 @@ export default {
     menuList:`${API_HOSTNAME}/service/menu/list`,
     couponStore:`${API_HOSTNAME}/service/activity/coupon`,
     stock:`${API_HOSTNAME}/service/activity/stock`,
+
+    activityCoupon:`${API_HOSTNAME}/service/activity/coupons`,
+    reSend:`${API_HOSTNAME}/service/sendDetail/reSend`,
 }

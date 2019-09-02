@@ -40,6 +40,7 @@ export default class Server {
                 params
             }
             axios.request(_option).then(res => {
+
                 resolve(typeof res.data === 'object' || typeof res.data === 'string' ? res.data : JSON.parse(res.data))
             }, (error) => {
                 if (error.response) {
@@ -69,10 +70,16 @@ export default class Server {
                 params,
             }
             axios.request(_option).then(res => {
+                if(!sessionStorage.loginFlag){
+                    window.location.href = window.location.href.split('/#/')[0] + '/#/login';
+                    return false
+
+                }
                 resolve(typeof res.data === 'object' || typeof res.data === 'string' ? res.data : JSON.parse(res.data))
             }, (error) => {
                 if (error.response) {
-                    console.log(window.location.href.split('/#/')[0] + '/');
+
+
                     if (error.response.status === 404 || 302) {
                         window.location.href = window.location.href.split('/#/')[0] + '/#/login';
                     }

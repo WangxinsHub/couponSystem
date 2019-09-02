@@ -46,7 +46,8 @@ class Home extends Component {
     componentDidMount() {
         this.props.getCouponList({
             pageNo: 1,
-            pageSize: 1000
+            pageSize: 1000,
+            state:'SENDING'
         })
         this.props.getDepartmentList({
             pageNo: 1,
@@ -59,6 +60,17 @@ class Home extends Component {
             })
         }
     }
+
+    disabledStartDate = startValue => {
+        let st = new Date(startValue).valueOf();
+        let now = new Date().valueOf();
+
+        if (this.props.record && this.props.record.validEnd) {
+            return st < moment(this.props.record.validEnd);
+        } else {
+            return st < now
+        }
+    };
 
 
     /*
@@ -109,11 +121,13 @@ class Home extends Component {
                             }
                         )))
                     )
-                    values.validStart = values.rangeTime[0].format("YYYY/MM/DD HH:mm:ss");
-                    values.validEnd = values.rangeTime[1].format("YYYY/MM/DD HH:mm:ss");
+
+                    values.validStart = values.rangeTime[0].format("YYYY/MM/DD")+' 00:00:00';
+                    values.validEnd = values.rangeTime[1].format("YYYY/MM/DD")+' 23:59:59';
                 }else{
+
                     values.departmentValue = this.state.departmentValue;
-                    values.validEnd = values.validEnd.format("YYYY/MM/DD HH:mm:ss");
+                    values.validEnd = values.rangeTime[1].format("YYYY/MM/DD")+' 23:59:59';
                     values.id = that.props.id;
                 }
                 delete values.rangeTime;
@@ -263,7 +277,7 @@ class Home extends Component {
                                             precision={0}
                                             onChange={(number) => {
                                                 function check() {
-                                                    if (number < 0) {
+                                                    if (number <= 0) {
                                                         return {
                                                             validateStatus: 'error',
                                                             errorMsg: "请输入正整数",
@@ -316,7 +330,9 @@ class Home extends Component {
                                 initialValue: validStart && validEnd ? [validStart, validEnd] : '',
                                 rules: [{required: true, message: '必填项'}],
                             })(
-                                <RangePicker/>
+                                <RangePicker
+                                    disabledDate={this.disabledStartDate}
+                                />
                             )}
                         </FormItem>
                     }

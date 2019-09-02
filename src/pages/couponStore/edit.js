@@ -94,8 +94,8 @@ class Home extends Component {
                         }
                     )))
                 )
-                values.id = this.props.match.params.id;
-                result = await API.updateActive(values);
+                values.activityId = this.props.match.params.id;
+                result = await API.activityCoupon(values);
             }
             if (result.message === 'success') {
                 message.success('保存成功！');
@@ -146,12 +146,13 @@ class Home extends Component {
         return (<Form style={{paddingBottom: 30}}>
                 <Spin spinning={this.props.id && !record ? true : false}>
                     {
-                        this.props.couponId && <FormItem {...stationEditFormDrawer} label="增加" key='count'>
+                        this.props.couponId && <FormItem {...stationEditFormDrawer} label="调整" key='count'>
                             {getFieldDecorator('count', {
                                 rules: [{required: true, max: 30, whitespace: true, message: '必填'}],
                             })(
-                                <Input type='number' style={{width: '80%'}} maxLength={30} placeholder="填写增加数量"/>
+                                <Input type='number' style={{width: '80%'}} maxLength={30} placeholder="请输入需要调整的数量"/>
                             )}
+                            <div>提示 : 输入正整数为增加库存，输入负整数为减少库存</div>
                         </FormItem>
                     }
 
