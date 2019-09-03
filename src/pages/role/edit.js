@@ -34,7 +34,7 @@ class Home extends Component {
         });
 
 
-        if(this.props.id){
+        if (this.props.id) {
             api.roleMenu({
                 roleId: this.props.id
             }).then(data => {
@@ -46,10 +46,11 @@ class Home extends Component {
                         pageNo: 1,
                         pageSize: 100
                     }).then(data => {
+                        console.log(data);
                         this.setState({
                             menuList: data.data.map(data => {
-                                if(data) return data
-                            })
+                                if (data.dataUrl) return data
+                            }).filter(item => item)
                         })
                     })
                 })
@@ -71,7 +72,7 @@ class Home extends Component {
                 values.roleId = this.props.id;
                 delete values.id;
 
-                result = await API.updateDepartment(values);
+                result = await API.bindMenu(values);
             } else {
                 values.roleValue = 1;
                 result = await API.createPermission(values);
@@ -112,17 +113,22 @@ class Home extends Component {
                 console.log(err)
             }
         });
-    }
-
-    onSelect = (selectedKeys, info) => {
-        console.log('selected', selectedKeys, info);
     };
 
     onCheck = (checkedKeys, info) => {
-        this.setState({
-            menuCode: checkedKeys.join()
+        this.setState((state) => {
+            let menu = state.menu||[];
+            let _menu = [];
+            if(info.checked){
+                _menu = menu.concat(...checkedKeys)
+            }else{
+                _menu = checkedKeys
+            }
+            return {
+                menuCode: checkedKeys.join(),
+                menu:_menu
+            }
         });
-        console.log('onCheck', checkedKeys, info);
     };
 
 
@@ -162,16 +168,17 @@ class Home extends Component {
 
                             this.state.menuList && <Tree
                                 checkable
-                                defaultExpandedKeys={['qk', 'hd', 'xt']}
+                                defaultExpandedKeys={['qk', 'hd', 'qd', 'xt']}
                                 checkedKeys={this.state.menu}
-                                onSelect={this.onSelect}
+                                onSelect={this.onCheck}
                                 onCheck={this.onCheck}
                             >
 
                                 {
-                                    [1, 2, 3].map(index => (
-                                        <TreeNode title={index === 1 ? '券库' : index === 2 ? '活动' : '系统'}
-                                                  key={index === 1 ? 'qk' : index === 2 ? 'hd' : 'xt'}>
+                                    [1, 2, 3, 4].map(index => (
+                                        <TreeNode
+                                            title={index === 1 ? '券库' : index === 2 ? '活动' : index === 3 ? '渠道' : '系统'}
+                                            key={index === 1 ? 'qk' : index === 2 ? 'hd' : index === 3 ? 'qd' : 'xt'}>
                                             {
                                                 this.state.menuList.map(item => {
                                                     if (item.menuType === index) {

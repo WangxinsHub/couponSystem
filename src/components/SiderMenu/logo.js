@@ -7,7 +7,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
   render(){
     const {logo, title, theme} = this.props;
     return (<div className={`${theme.navTheme === 'light' ? 'navLogo navLogoWhite' : 'navLogo'}`} key="logo">
-      <Link to="/">
+      <Link to="/couponList">
         {/*<img src={logo || logos} alt="logo" />*/}
         <h1>{title || '汇信卡券分发系统'}</h1>
       </Link>

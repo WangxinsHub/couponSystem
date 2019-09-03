@@ -254,3 +254,4 @@ export default connect((state) => ({
 }), {
     getList,
 })(Home);
+

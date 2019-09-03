@@ -269,6 +269,18 @@ class API extends Server{
     }
   }
 
+
+  async bindMenu(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.bindMenu, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
   async connectRole(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.connectRole, params);

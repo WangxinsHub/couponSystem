@@ -236,20 +236,23 @@ class Home extends Component {
             <PageHeaderLayout
                 nav={breadMenu}
             >
-                <Row>
-                    <Col span={6}>
-                        <Statistic title="券名称:" value={couponDetail && couponDetail.couponName}/>
-                    </Col>
-                    <Col span={6}>
-                        <Statistic title="总数量:" value={couponDetail && couponDetail.totalCount}/>
-                    </Col>
-                    <Col span={6}>
-                        <Statistic title="锁定量:" value={couponDetail && couponDetail.lockedCount}/>
-                    </Col>
-                    <Col span={6}>
-                        <Statistic title="库存量:" value={couponDetail && couponDetail.stockCount}/>
-                    </Col>
-                </Row>
+                <div style={{marginBottom:30}}>
+                    <Row>
+                        <Col span={6}>
+                            <Statistic valueStyle={{textAlign:'center'}} title="券名称:" value={couponDetail && couponDetail.couponName}/>
+                        </Col>
+                        <Col span={6}>
+                            <Statistic valueStyle={{textAlign:'center'}} title="总数量:" value={couponDetail && couponDetail.totalCount}/>
+                        </Col>
+                        <Col span={6}>
+                            <Statistic valueStyle={{textAlign:'center'}}  title="锁定量:" value={couponDetail && couponDetail.lockedCount}/>
+                        </Col>
+                        <Col span={6}>
+                            <Statistic  valueStyle={{textAlign:'center'}}  title="库存量:" value={couponDetail && couponDetail.stockCount}/>
+                        </Col>
+                    </Row>
+                </div>
+
 
                 <Spin tip={tips} spinning={tips ? true : false}>
                     <Card bordered={false}>
@@ -297,7 +300,7 @@ class Home extends Component {
                                 </Button>
                                 <Button type="danger" onClick={() => {
                                     const {selectedRow} = this.state;
-                                    if(selectedRow){
+                                    if(selectedRow && selectedRow.length>0){
                                         let id = selectedRow.map((data) => {
                                             if (data.state === 'READY') {
                                                 return data.id
@@ -307,12 +310,16 @@ class Home extends Component {
                                         api.deleteCode({
                                             id:id.join()
                                         }).then((res) => {
+
                                             if (res.message === 'success') {
                                                 message.success('已批量删除！');
                                             } else {
                                                 message.error(res.message);
                                             }
                                             let searchList = this.state.searchList || {};
+                                            this.setState({
+                                                selectedRow:null
+                                            })
                                             this.props.getList({
                                                 couponId: this.props.match.params.id,
                                                 pageNo: this.state.currentNo,

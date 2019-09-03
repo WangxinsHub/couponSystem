@@ -137,4 +137,6 @@ li{
 }
 .ant-upload-list-picture img{
   width: auto!important;
-}
+}.ant-statistic-title{
+  text-align: center;
+ }
