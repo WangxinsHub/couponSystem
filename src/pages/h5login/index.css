@@ -1,0 +1,157 @@
+*{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+  SimSun, sans-serif;
+}
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+}
+.bg {
+  position: relative;
+  background-image: url('./bg.png');
+  background-size: cover;
+  overflow-y: hidden;
+  width: 55%;
+
+}
+
+.leftPart{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+  background: white;
+}
+.mask {
+  position: relative;
+  /* width: 100%; */
+  /* position: absolute; */
+  top: 0;
+  bottom: 0;
+  height: 100%;
+
+}
+.fullpage{
+  display: flex;
+  height: 100vh;
+}
+.loginContainer {
+  z-index: 20;
+  margin: auto;
+  width: 100%;
+  position: relative;
+
+}
+
+.loginMain {
+  //background: rgba(255, 255, 255, 0.2);
+  border-radius: 40px;
+  width: 80%;
+  height: auto;
+  margin: 10px auto 0px auto;
+}
+
+
+
+.loginTitle {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+  SimSun, sans-serif;
+
+  font-weight: bold;
+  font-size: 28px;
+  //color: #ffffff;
+  margin-top: 18px;
+  text-align: center;
+}
+
+.vField {
+  display: flex;
+  height: 45px;
+  position: relative;
+}
+.subTitle{
+  color:grey;
+  text-align: center;
+  margin-top:10px ;
+  font-size: 16px;
+}
+
+.inputDiv {
+  position: relative;
+  width: 58%;
+}
+
+#my_button {
+  position: absolute;
+  right: 0;
+  display: none
+}
+
+#v_container {
+  width: 35%;
+  height: 32px;
+  position: absolute;
+  right: 0
+}
+
+#img_prev {
+  width: 100%;
+  margin-top: 5px;
+  border-radius: 5px
+}
+
+.login .ant-input{
+  border: 0;
+  width: 100%;
+  border-bottom: solid 2px #d3d3d3;
+  background: none!important;
+  border-radius: 0 !important;
+}
+.login .ant-input:focus {
+  border-color: #40a9ff;
+  outline: 0;
+  -webkit-box-shadow: 0 0 0 0px rgba(24, 144, 255, 0.2);
+          box-shadow: 0 0 0 0px rgba(24, 144, 255, 0.2);
+  border-right-width: 1px !important;
+}
+input:-webkit-autofill{
+  background: none !important;
+}
+
+input::placeholder{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+  SimSun, sans-serif;
+
+}
+.loginButton{  
+  background: #63768a;
+  color: white;
+  border-radius: 5px;
+  border: solid 1px  #63768a;
+  cursor: pointer;
+}
+.signButton{
+  width: 40%;
+  background: white;
+  color: #63768a;
+  border-radius: 5px;
+  float: right;
+  border: solid 1px  #63768a;
+  cursor: pointer;
+}
+.copyright{
+  bottom:30px;
+  margin:auto ;
+  position: absolute;
+  text-align: center;
+  font-size: 12px;
+}
+.login{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}

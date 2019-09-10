@@ -97,12 +97,14 @@ class Home extends Component {
             state: this.state,
             pagination,
             callBack: (json) => {
-                this.setState(json);
-                this.props.getList({
-                    ...json.searchList,
-                    activityId:this.props.match.params.id,
+                this.setState(json,()=>{
+                    this.props.getList({
+                        ...json.searchList,
+                        activityId:this.props.match.params.id,
 
+                    });
                 });
+
             }
         });
     }

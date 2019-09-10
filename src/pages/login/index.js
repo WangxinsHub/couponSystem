@@ -58,7 +58,7 @@ class loginPage extends React.Component {
         password: params.password,
       });
 
-      sessionStorage.userNmae =  params.userName;
+      sessionStorage.userName =  params.userName;
       if(result.success) {
         this.setState({
           msg: '登录成功',

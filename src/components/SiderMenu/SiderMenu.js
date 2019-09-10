@@ -157,11 +157,28 @@ export default class SiderDemo extends React.Component {
       openKeys: openKeys[openKeys.length - 1],
     })
   }
+
+  isPC() {
+    var userAgentInfo = navigator.userAgent;
+    var Agents = ["Android", "iPhone",
+      "SymbianOS", "Windows Phone",
+      "iPad", "iPod"];
+    var flag = true;
+    for (var v = 0; v < Agents.length; v++) {
+      if (userAgentInfo.indexOf(Agents[v]) > 0) {
+        flag = false;
+        break;
+      }
+    }
+    return flag;
+  }
+
   /**
    * [render description]
    * @return {[type]} [description]
    */
   render() {
+
     let {
       children, // 框架的中间部分（必填） 
       siderMenu: { // 框架的左边部分
@@ -180,7 +197,15 @@ export default class SiderDemo extends React.Component {
         other, // 头部右边默认只有一个头像+用户名，要加其它东西在这里自定义书写，会累加
       },     
       theme, // 主题
-    } = this.props; 
+    } = this.props;
+
+    if(!this.isPC()){
+      return  <div>
+        {children}
+      </div>
+    }
+
+
     theme = theme || {};
     const isTop = theme && theme.isTop || false;
     const {path, selectedKeys, collapsed, openKeys, maxWidth} = this.state;   

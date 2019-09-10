@@ -58,11 +58,12 @@ class Home extends Component {
             state: this.state,
             values,
             callBack: (json) => {
-                this.setState(json);
-                this.props.getList({
-                    ...json.searchList,
-                    pageNo: json.pageNo,
-                    pageSize: json.pageSize
+                this.setState(json,()=>{
+                    this.props.getList({
+                        ...json.searchList,
+                        pageNo: json.pageNo,
+                        pageSize: json.pageSize
+                    });
                 });
             }
         });

@@ -78,12 +78,14 @@ class Home extends Component {
                     delete json.searchList.rangeTime;
                 }
 
-                this.setState(json);
-                this.props.getList({
-                    ...json.searchList,
-                    pageNo:json.pageNo,
-                    pageSize:json.pageSize
+                this.setState(json,()=>{
+                    this.props.getList({
+                        ...json.searchList,
+                        pageNo:json.pageNo,
+                        pageSize:json.pageSize
+                    });
                 });
+
             }
         });
     }

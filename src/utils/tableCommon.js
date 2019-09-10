@@ -10,7 +10,7 @@ export default {
    * @param  {[type]} options.pagination [分页的返回参数]
    */
   tableChange: ({state, callBack, pagination}) =>{
-
+    console.error(pagination);
     let searchList = {
       ...state.searchList,
       pageNo: pagination.current,
