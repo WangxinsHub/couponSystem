@@ -187,7 +187,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
     sessionStorage.removeItem('accountId');
     sessionStorage.removeItem('Authorization');
     sessionStorage.loginFlag = '';
-    window.location.href = '/#/';
+    window.location.href = 'http://www.xajhzx.cn/platform/#/login';
   }
   /**
    * [render description]

@@ -110,13 +110,21 @@ class Home extends Component {
         });
     }
 
-    stop = (id) => async () => {
+    stop = (id,state) => async () => {
+
+
         let result = await api.updateCoupon({
-            state: 'PAUSE',
+            state: state === 'SENDING' ? 'PAUSE':'SENDING',
             id
         });
         if (result.message === 'success') {
-            message.success('已暂停！');
+
+            message.success(result.message);
+            this.props.getList({
+                pageNo: this.state.currentNo,
+                pageSize: this.state.pageSize,
+            });
+
         } else {
             this.setState({
                 btnDisabled: false
@@ -251,12 +259,16 @@ class Home extends Component {
                             })
                         }}>编辑</a>
                         <Divider type="vertical"/>
-                        <Popconfirm placement="top" title="确认要暂停吗？"
-                                    onConfirm={this.stop(record.id)}
+                        <Popconfirm placement="top"
+                                    title={  record.state === 'SENDING' ?'确认要暂停吗' : '确认要启用吗' }
+                                    onConfirm={this.stop(record.id,record.state)}
                                     okText='确认'
                                     cancelText='取消'
                         >
-                            <a>暂停</a>
+                            {
+                                record.state === 'SENDING' ?  <a>暂停</a> :  <a>启用</a>
+                            }
+
                         </Popconfirm>
                         <Divider type="vertical"/>
                         <a onClick={() => this.props.history.push(`/couponSend/${record.id}`)}>发放明细</a>
