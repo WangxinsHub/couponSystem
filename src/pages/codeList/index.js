@@ -81,13 +81,15 @@ class Home extends Component {
                     delete json.searchList.rangeTime;
                 }
 
-                this.setState(json);
-                this.props.getList({
-                    couponId: this.props.match.params.id,
-                    ...json.searchList,
-                    pageNo: json.pageNo,
-                    pageSize: json.pageSize
+                this.setState(json,()=>{
+                    this.props.getList({
+                        couponId: this.props.match.params.id,
+                        ...json.searchList,
+                        pageNo: json.pageNo,
+                        pageSize: json.pageSize
+                    });
                 });
+
             }
         });
     }
@@ -373,12 +375,7 @@ class Home extends Component {
                                     let searchList = this.state.searchList || {};
 
                                     if (bool) {
-                                        this.props.getList({
-                                            pageNo: this.state.currentNo,
-                                            pageSize: this.state.pageSize,
-                                            couponId: this.props.match.params.id,
-                                            ...searchList
-                                        });
+                                       window.location.reload()
                                     }
                                 }}
                             />}

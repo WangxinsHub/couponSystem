@@ -20,7 +20,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
         {
           userChange || (<span className='action'>
             <Avatar size="small" className='avatar' src={userPhoto || 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'} />
-            <span className={`${theme.isTop && theme.navTheme !== 'light' ? 'colorWhite' : ''}`}>{userName ? userName : sessionStorage.userNmae }</span>
+            <span className={`${theme.isTop && theme.navTheme !== 'light' ? 'colorWhite' : ''}`}>{userName ? userName : sessionStorage.userName }</span>
           </span>)
         }                
       </Dropdown>
