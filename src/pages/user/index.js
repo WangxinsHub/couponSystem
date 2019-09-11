@@ -174,8 +174,11 @@ class Home extends Component {
             },
             {
                 title: '角色',
-                key: 'roleKey',
-                dataIndex: 'roleKey',
+                key: 'roles',
+                dataIndex: 'roles',
+                render:(roles)=>{
+                    return roles && roles.roleKey
+                }
             },
             {
                 title: '创建时间',

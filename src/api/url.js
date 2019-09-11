@@ -49,7 +49,9 @@ export default {
 
     activityCoupon:`${API_HOSTNAME}/service/activity/coupons`,
     reSend:`${API_HOSTNAME}/service/sendDetail/reSend`,
-    bindMenu:`${API_HOSTNAME}/service/menu/connectRole`
+    bindMenu:`${API_HOSTNAME}/service/menu/connectRole`,
+
+    getUserMenu:`${API_HOSTNAME}/service/menu`,
 
 
 }

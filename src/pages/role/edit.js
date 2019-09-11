@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {object, func} from 'prop-types';
-import {Form, Input, Select, Button, Upload, Icon, message, Spin, Popconfirm, Radio, DatePicker, Checkbox} from 'antd';
+import {Form, Input, Button, message, Spin, Popconfirm} from 'antd';
 import {getList} from './action';
 import API from '@/api/api';
 import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
@@ -39,7 +39,7 @@ class Home extends Component {
                 roleId: this.props.id
             }).then(data => {
                 this.setState({
-                    menu: data.data.map(data => data.menuCode)
+                    menu: data.data ? data.data.map(data => data && data.menuCode) : []
                 }, () => {
                     console.log(this.state.menu);
                     api.menuList({

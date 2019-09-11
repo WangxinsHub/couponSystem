@@ -8,6 +8,8 @@ const SubMenu = Menu.SubMenu;
 export default class SiderMenuWrapper extends React.PureComponent {  
   render(){
     const {selectedKeys, menuProps, menu, path, isTop, theme, handleOpen} = this.props;
+    console.error(menu)
+
     return (<Menu
       key="Menu"
       theme={`${theme.navTheme || 'dark'}`}
@@ -24,9 +26,9 @@ export default class SiderMenuWrapper extends React.PureComponent {
             title={<span><Icon type={item.icon}/><span>{item.name}</span></span>}                  
           >
           {
-            item.subMenus && item.subMenus.map((value)=>{                    
+            item.subMenus && item.subMenus && item.subMenus.map((value)=>{
               return (
-              <Menu.Item key={value.code}>
+                value.show && <Menu.Item key={value.code}>
                 {
                   value.url !== path ?
                   (<Link to={`${value.url}`}>{value.name}</Link>) :

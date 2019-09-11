@@ -15,6 +15,7 @@ import {getList as getDepartmentList} from '../department/action'
 
 import NewForm from "./send";
 import Detail from "../../components/tableDrawer/detail";
+import * as types from "./action-type";
 
 class Home extends Component {
     static propTypes = {
@@ -413,6 +414,23 @@ export default connect((state) => ({
     activeListReducer: state.activeListReducer,
     departmentReducer:state.departmentReducer
 }), {
-    getList,
+    getList: (params) => {
+        // 返回函数，异步dispatch
+        return async dispatch => {
+            try{
+                dispatch({
+                    type: types.GET_ACTIVE_LIST,
+                })
+                let result = await API.activeList(params);
+                dispatch({
+                    type: types.GET_ACTIVE_LIST,
+                    data: result,
+                })
+            }catch(err){
+                console.error(err);
+            }
+        }
+    }
+    ,
     getDepartmentList,
 })(Home);
