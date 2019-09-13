@@ -416,23 +416,6 @@ export default connect((state) => ({
     activeListReducer: state.activeListReducer,
     departmentReducer:state.departmentReducer
 }), {
-    getList: (params) => {
-        // 返回函数，异步dispatch
-        return async dispatch => {
-            try{
-                dispatch({
-                    type: types.GET_ACTIVE_LIST,
-                })
-                let result = await API.activeList(params);
-                dispatch({
-                    type: types.GET_ACTIVE_LIST,
-                    data: result,
-                })
-            }catch(err){
-                console.error(err);
-            }
-        }
-    }
-    ,
+    getList,
     getDepartmentList,
 })(Home);

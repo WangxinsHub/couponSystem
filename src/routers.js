@@ -155,6 +155,15 @@ export default class Router extends React.Component {
                 return null
             },
         });
+
+        this.h5showCode = lodable({
+            loader: () => {
+                return import('@/pages/h5showCode/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
     };
 
     /**
@@ -166,7 +175,8 @@ export default class Router extends React.Component {
             <HashRouter>
                 <Switch>
                     <Nav>
-                        <Route path="/login" component={this.login}/>
+                        <Route exact path="/h5/login" component={this.h5login}/>
+                        <Route exact path="/login" component={this.login}/>
                         <Route exact path="/" component={this.login}/>
                         <Route exact path="/couponList" component={this.couponList}/>
                         <Route exact path="/couponSend" component={this.couponSend}/>
@@ -191,8 +201,8 @@ export default class Router extends React.Component {
                         <Route exact path="/codeList/:id/:couponInfo" component={this.codeList}/>
                         <Route exact path="/couponStore/:id" component={this.couponStore}/>
 
-                        <Route exact path="/h5/login" component={this.h5login}/>
                         <Route exact path="/h5/sendCoupon" component={this.h5coupon}/>
+                        <Route exact path="/h5/showCode" component={this.h5showCode}/>
                     </Nav>
                 </Switch>
             </HashRouter>

@@ -11,7 +11,8 @@ const {Option} = Select;
 
 class Home extends Component {
     state = {
-        activeList: null
+        activeList: null,
+        couponList: []
     };
 
     componentDidMount() {
@@ -19,7 +20,8 @@ class Home extends Component {
             pageNo: 1,
             pageSize: 1000,
             loginAccount: sessionStorage.userName,
-        }).then(user => {
+        }).then(data => {
+            let user = data.data;
             if (user.length > 0) {
                 api.activeList({
                     pageNo: 1,
@@ -43,9 +45,9 @@ class Home extends Component {
         let that = this;
         this.props.form.validateFieldsAndScroll({force: true}, (err, values) => {
             if (!err) {
-                if (that.props.id) values.id = that.props.id;
-                // 提交表单
+                console.log(values);
                 that.postData(values);
+                // 提交表单
             } else {
                 this.setState({
                     btnDisabled: false
@@ -57,39 +59,21 @@ class Home extends Component {
 
     postData = async (values) => {
         try {
-            let result, roleReust;
-            if (this.props.id) {
-                result = await api.updateRole({
-                    position: values.position,
-                    userPhone: values.userPhone,
-                    departmentKey: values.departmentKey,
-                    id: values.id
-                });
-                roleReust = await api.connectRole({
-                    userId: values.id,
-                    roleIds: values.roleIds.join() //多选
-                })
-            } else {
-                result = await api.createRole(values);
-            }
-
-            if (this.props.id && result.message === 'success' && roleReust.message === 'success') {
-                message.success('保存成功！');
-                this.props.onClose(true);
-            } else if (!this.props.id && result.message === 'success') {
-                message.success('保存成功！');
-
-            } else {
+            let result = await api.sendCode({
+                activityId: values.activeId,
+                couponId: values.couponId,
+                mobile: values.userPhone,
+                file: null
+            });
+            if( result.message === 'success'){
+                message.success('发送成功！');
+            }else{
                 this.setState({
                     btnDisabled: false
                 })
-                if (result.message !== 'success') {
-                    message.error(result.message);
-                } else {
-                    message.error(roleReust.message);
-                }
+                message.error(result.message);
+
             }
-            this.props.onClose(true);
         } catch (err) {
             this.setState({
                 btnDisabled: false
@@ -99,13 +83,32 @@ class Home extends Component {
     }
 
 
+    selectCoupon = (index) => {
+        const activeList = this.state.activeList.data;
+        let coupon = activeList && activeList.map(data=>{
+            if(data.id === index){
+                return data
+            }
+        }).filter(item=>item);
+
+        if(coupon.length>0){
+            let active = coupon[0];
+
+            this.setState({
+                couponList: active.activityCoupons
+            })
+
+        }
+
+    };
+
     /**
      * [render description]
      * @return {[type]} [description]
      */
     render() {
         const {getFieldDecorator} = this.props.form;
-        const {activeList} = this.state;
+        const {activeList, couponList} = this.state;
         const formItemLayout = {
             labelCol: {span: 4},
             wrapperCol: {span: 24},
@@ -117,10 +120,10 @@ class Home extends Component {
                         label='活动'
                         {...formItemLayout}
                         required={true}>
-                        {getFieldDecorator('note', {
-                            rules: [{required: true, message: 'Please input your note!'}],
+                        {getFieldDecorator('activeId', {
+                            rules: [{required: true, message: '请选择活动'}],
                         })(<Select style={{width: '100%'}}
-                            // onSelect={this.selectCoupon(activeIndex)}
+                                   onSelect={this.selectCoupon}
                                    allowClear={true}
                                    optionFilterProp="children"
                                    placeholder="请选择活动">
@@ -129,7 +132,7 @@ class Home extends Component {
                                 activeList && activeList.data.map((item, index) => {
                                     return (
                                         <Option key={item.id}
-                                                value={index}>
+                                                value={item.id}>
                                             {item.activityName}
                                         </Option>)
                                 })
@@ -141,20 +144,19 @@ class Home extends Component {
                         label='券'
                         {...formItemLayout}
                         required={true}>
-                        {getFieldDecorator('note', {
-                            rules: [{required: true, message: 'Please input your note!'}],
+                        {getFieldDecorator('couponId', {
+                            rules: [{required: true, message: '请选择券'}],
                         })(<Select style={{width: '100%'}}
-                            // onSelect={this.selectCoupon(activeIndex)}
                                    allowClear={true}
                                    optionFilterProp="children"
-                                   placeholder="请选择活动">
+                                   placeholder="请选择券">
 
                             {
-                                activeList && activeList.data.map((item, index) => {
+                                couponList.length > 0 && couponList.map((item, index) => {
                                     return (
-                                        <Option key={item.id}
-                                                value={index}>
-                                            {item.activityName}
+                                        <Option key={item.couponId}
+                                                value={item.couponId}>
+                                            {item.couponName}
                                         </Option>)
                                 })
                             }
@@ -176,7 +178,7 @@ class Home extends Component {
                     </FormItem>
 
                     <Button size={'large'}
-                            style={{margin:"auto"}}
+                            style={{margin: "auto"}}
                             onClick={(e) => {
                                 this.validate(e)
                             }} disabled={this.state.btnDisabled} type="primary">发送</Button>

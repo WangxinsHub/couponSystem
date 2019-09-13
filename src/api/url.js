@@ -52,6 +52,5 @@ export default {
     bindMenu:`${API_HOSTNAME}/service/menu/connectRole`,
 
     getUserMenu:`${API_HOSTNAME}/service/menu`,
-
-
+    verifyCode:`${API_HOSTNAME}/service/verifyCode`,
 }

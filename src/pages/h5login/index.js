@@ -6,6 +6,7 @@ import {Form,Input, Button,Alert, Checkbox} from 'antd';
 import API from '@/api/api';
 import '@/style/animate.css';
 import './index.css';
+import Verify from "../../utils/verify";
 
 const FormItem = Form.Item;
 class loginPage extends React.Component {
@@ -16,7 +17,9 @@ class loginPage extends React.Component {
         vcode: '',
         errMsg: '',
         msg: '',
-        passwordErrCount: 0
+        passwordErrCount: 0,
+        sendText:'获取验证码',
+        canSend:true
     }
 
     /**
@@ -98,18 +101,46 @@ class loginPage extends React.Component {
      * [获取验证码]
      * @param  {[type]} e [description]
      */
-    getVcode = async (e) => {
-        e && e.persist();
-        try {
-            let mobile = document.querySelector('#userName').value;
-            let result = await API.getCaptcha({mobile});
-            if(result.success) {
-                this.setState({
-                    vcode: result.data
-                })
+    getVcode = async () => {
+        if(this.state.phone.length===11){
+            try {
+                if(this.state.canSend){
+
+                    API.verifyCode({
+                        mobile:this.state.phone
+                    }).then(data=>{
+
+                        this.setState({
+                            canSend:false,
+                        });
+                        let counter = 60;
+                        let timer = setInterval(()=>{
+                            counter -- ;
+
+                            if(counter===0){
+                                clearInterval(timer);
+                                this.setState({
+                                    sendText:`获取验证码`,
+                                    canSend:true,
+                                })
+                            }else{
+                                this.setState({
+                                    sendText:`请在(${counter})s后重试`
+                                })
+                            }
+
+                        },1000);
+
+
+                        console.log(data);
+                    })
+                }
+
+            } catch (err) {
+                console.log(err);
             }
-        } catch (err) {
-            console.log(err);
+        }else{
+            alert('请输入正确的手机号')
         }
     }
     render() {
@@ -133,32 +164,34 @@ class loginPage extends React.Component {
                                 <Form onSubmit={this.handleSubmit} className="login-form">
                                     <FormItem>
                                         {getFieldDecorator('userName', {
-                                            initialValue: localStorage.userName || '',
-                                            rules: [{required: true, message: '请输入用户名'}],
+                                            rules: [{
+                                                required: true,
+                                                message: '请输入正确的手机号',
+                                                max: 11,
+                                                whitespace: true,
+                                                pattern: Verify.mobile
+                                            }],
                                         })(
-                                            <Input placeholder="用户名" />
+                                            <Input placeholder="手机号" onChange={(e)=>{
+                                              this.setState({
+                                                  phone:e.target.value
+                                              })
+                                            }} />
                                         )}
                                     </FormItem>
-                                    <FormItem>
+
+                                    { <FormItem>
                                         {getFieldDecorator('password', {
-                                            initialValue: localStorage.password || '',
-                                            rules: [{required: true, message: '请输入您的密码'}],
-                                        })(
-                                            <Input type="password" placeholder="密码"/>
-                                        )}
-                                    </FormItem>
-                                    {vcode && <FormItem>
-                                        {getFieldDecorator('vcode', {
                                             rules: [{required: true, message: '请输入验证码'}],
                                         })(
                                             <div className='vField'>
                                                 <div className='inputDiv'>
                                                     <Input placeholder="请输入验证码"/>
                                                 </div>
-                                                <div onClick={(e) => {
-                                                    this.getVcode(e);
+                                                <div className='getCodeBtn' onClick={(e) => {
+                                                    this.getVcode();
                                                 }}>
-                                                    {vcodeImg}
+                                                    {this.state.sendText}
                                                 </div>
                                             </div>)}
                                     </FormItem>}

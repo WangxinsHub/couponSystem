@@ -71,7 +71,14 @@ export default class Server {
             }
             axios.request(_option).then(res => {
                 if(!sessionStorage.loginFlag){
-                    window.location.href = window.location.href.split('/#/')[0] + '/#/login';
+
+
+                    if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+                        // window.location.href = window.location.href.split('/#/')[0] + '/#/h5/login';
+                    }else {
+                        window.location.href = window.location.href.split('/#/')[0] + '/#/login';
+                    }
+
                     return false
 
                 }
@@ -79,9 +86,12 @@ export default class Server {
             }, (error) => {
                 if (error.response) {
 
-
                     if (error.response.status === 404 || 302) {
-                        window.location.href = window.location.href.split('/#/')[0] + '/#/login';
+                        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+                            window.location.href = window.location.href.split('/#/')[0] + '/#/h5/login';
+                        }else {
+                            window.location.href = window.location.href.split('/#/')[0] + '/#/login';
+                        }
                     }
                     reject(error.response.data)
                 } else {
@@ -110,9 +120,11 @@ export default class Server {
                 if (error.response) {
                     console.log(window.location.href.split('/#/')[0] + '/');
                     if (error.response.status === 404 || 302) {
-                        alert(window.location.href.split('/#/')[0])
-                        window.location.href = window.location.href.split('/#/')[0] + '/#/login';
-                    }
+                        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+                            // window.location.href = window.location.href.split('/#/')[0] + '/#/h5/login';
+                        }else {
+                            window.location.href = window.location.href.split('/#/')[0] + '/#/login';
+                        }                    }
                     reject(error.response.data)
                 } else {
                     reject(error)

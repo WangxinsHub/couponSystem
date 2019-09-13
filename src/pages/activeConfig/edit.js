@@ -126,7 +126,6 @@ class Home extends Component {
                     values.validEnd = values.rangeTime[1].format("YYYY/MM/DD")+' 23:59:59';
                 }else{
 
-                    values.departmentValue = this.state.departmentValue;
                     values.validEnd = values.rangeTime[1].format("YYYY/MM/DD")+' 23:59:59';
                     values.id = that.props.id;
                 }
@@ -134,6 +133,7 @@ class Home extends Component {
 
                 // 提交表单
                 console.log(values);
+                values.departmentValue = this.state.departmentValue;
                 that.postData(values);
             } else {
                 this.setState({

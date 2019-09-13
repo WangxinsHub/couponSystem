@@ -192,6 +192,9 @@ class API extends Server{
       throw err;
     }
   }
+
+
+
   async sendCode(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.sendCode, params);
@@ -393,6 +396,18 @@ class API extends Server{
       throw err;
     }
   }
+
+  async verifyCode(params = {}){
+    try{
+      let result = await this.axios('post', Url.verifyCode, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
 
   async exportTable(params = {}){
     try{
