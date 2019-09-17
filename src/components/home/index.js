@@ -32,7 +32,9 @@ export default class SiderMenuWrapper extends React.PureComponent {
                     menu[index].childMenus.map((child) => {
                         menuList.map((apiMenu) => {
                             if (child.menuCode === apiMenu.menuCode) {
-                                child.show = true
+                                child.show = true;
+                                menu[index].show = true
+
                             }
                         })
                     })
@@ -55,7 +57,8 @@ export default class SiderMenuWrapper extends React.PureComponent {
                         menu[index].childMenus.map((child) => {
                             menuList.map((apiMenu) => {
                                 if (child.menuCode === apiMenu.menuCode) {
-                                    child.show = true
+                                    child.show = true;
+                                    menu[index].show = true
                                 }
                             })
                         })
