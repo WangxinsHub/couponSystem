@@ -123,7 +123,11 @@ class Home extends Component {
         let that = this;
         this.props.form.validateFieldsAndScroll({force: true}, (err, values) => {
             if (!err) {
-                this.postData(values)
+                if((this.props.record.stockCount-0) + (values.count-0)<0){
+                    message.error('减少量不得超过库存量')
+                }else{
+                    this.postData(values)
+                }
             } else {
                 this.setState({
                     btnDisabled: false
@@ -198,6 +202,7 @@ class Home extends Component {
                                                     //     validateStatus: 'error',
                                                     //     errorMsg: 'The prime between 8 and 12 is 11!',
                                                     // };
+                                                    console.log(record);
                                                     return {
                                                         validateStatus: 'success',
                                                         errorMsg: null,

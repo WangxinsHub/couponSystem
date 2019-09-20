@@ -99,7 +99,7 @@ class Home extends Component {
 
                     <FormItem {...stationEditFormDrawer} label="联系人" key='contact'>
                         {getFieldDecorator('contact', {
-                            initialValue: record && record.departmentValue,
+                            //initialValue: record && record.departmentValue,
                             rules: [{required: true, max: 30, whitespace: true, message: '请输入联系人'}],
                         })(
                             <Input style={{width: '80%'}} maxLength={30} placeholder="请输入联系人名称"/>
@@ -147,7 +147,20 @@ class Home extends Component {
     }
 }
 
-const WrappedRegistrationForm = Form.create()(Home);
+const WrappedRegistrationForm = Form.create(
+  {
+      mapPropsToFields(props) {
+          return {
+              contact: Form.createFormField({
+                  value: props.record ?  props.record.contact : '',
+              }),
+          };
+      },
+      onValuesChange(_, values) {
+          console.log(values);
+      },
+  }
+)(Home);
 export default connect((state) => ({
     departmentReducer: state.departmentReducer,
 }), {

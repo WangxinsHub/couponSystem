@@ -201,7 +201,7 @@ class Home extends Component {
 
             Define.searchMenu.open.push({
                 id: 'activityName',
-                label: '请选择活动',
+                label: '活动名(请输入活动名称)',
                 type: 'select',
                 option: [
                     {
@@ -511,12 +511,12 @@ class Home extends Component {
                                         <Divider type="vertical"/>
 
                                         <a onClick={() => {
-                                            this.props.history.push(`/SendDetail/${record.id}/${null}`)
+                                            this.props.history.push(`/sendDetail/${record.id}/${null}`)
                                         }}>活动明细</a>
                                     </Fragment>
                                     : record.state === 'OVER' ? <Fragment>
                                         <a onClick={() => {
-                                            this.props.history.push(`/SendDetail/${record.id}/${null}`)
+                                            this.props.history.push(`/sendDetail/${record.id}/${null}`)
                                         }}>活动明细</a>
                                     </Fragment> : null
                         }

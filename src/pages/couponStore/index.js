@@ -141,8 +141,8 @@ class Home extends Component {
         const columns = [
             {
                 title: 'ID',
-                key: 'id',
-                dataIndex: 'id',
+                key: 'activityId',
+                dataIndex: 'activityId',
             },
             {
                 title: '券名称',
@@ -164,8 +164,8 @@ class Home extends Component {
 
             {
                 title: '截止时间',
-                key: 'validEnd',
-                dataIndex: 'validEnd',
+                key: 'endTime',
+                dataIndex: 'endTime',
                 render: (text, record) => {
                     return text && text.slice(0, 19)
                 }

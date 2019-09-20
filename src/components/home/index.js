@@ -185,7 +185,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
             },
             {
                 menuCode: 'qd',
-                menuName: '渠道管理',
+                menuName: '渠道',
                 childMenus: [
                     {
                         menuCode: 'departmentList',
@@ -195,7 +195,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
             },
             {
                 menuCode: 'yh',
-                menuName: '用户管理',
+                menuName: '用户',
                 childMenus: [
                     {
                         menuCode: 'userList',
@@ -228,8 +228,8 @@ export default class SiderMenuWrapper extends React.PureComponent {
      * @return {[type]}      [description]
      */
     logOut = (type) => {
-        sessionStorage.removeItem('accountId');
-        sessionStorage.removeItem('Authorization');
+        sessionStorage.removeItem('userName');
+        sessionStorage.removeItem('loginFlag');
         sessionStorage.loginFlag = '';
         window.location.href = 'http://www.xajhzx.cn/platform/#/login';
     }

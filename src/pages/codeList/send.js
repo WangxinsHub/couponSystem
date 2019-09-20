@@ -58,11 +58,11 @@ class Home extends Component {
             let result, that = this;
             result = await API.codeImport(values);
             if (result.message === 'success') {
-                Modal.info({
+                Modal.success({
                     title: '提示',
                     content: (
                         <div>
-                            <p>导入成功</p>
+                            <p>系统处理中，请稍后刷新页面查看结果</p>
                         </div>
                     ),
                     onOk() {

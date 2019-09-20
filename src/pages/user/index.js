@@ -43,17 +43,19 @@ class Home extends Component {
      * @return {[type]} [description]
      */
     componentDidMount() {
-        this.props.getList({
-            pageNo:this.state.currentNo,
-            pageSize:this.state.pageSize
-        });
 
         if(this.props.match.params.id){
             this.props.getList({
                 pageNo:this.state.currentNo,
                 pageSize:this.state.pageSize,
-                departmentKey:this.state.departmentKey,
+                departmentKey:this.props.match.params.id,
             });
+        }else{
+            this.props.getList({
+                pageNo:this.state.currentNo,
+                pageSize:this.state.pageSize
+            });
+
         }
     }
 

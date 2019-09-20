@@ -12,7 +12,7 @@ export default {
         title: '活动配置'
     },{
         path: '',
-        title: '增加库存'
+        title: '调整库存'
     }],
     // 搜索数据，默认一行显示3条
     searchMenu: {

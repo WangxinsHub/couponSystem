@@ -169,7 +169,6 @@ class Home extends Component {
         const {getFieldDecorator} = form;
 
         return (<Form style={{paddingBottom: 30}}>
-                <Spin spinning={this.props.id && !record ? true : false}>
 
                     {
                         !this.props.type && [
@@ -252,7 +251,6 @@ class Home extends Component {
                     }
 
 
-                </Spin>
                 <div className="drawerBtns">
                     <Popconfirm
                         title='点击取消后您页面上的数据将全部丢弃，是否确认取消？'
