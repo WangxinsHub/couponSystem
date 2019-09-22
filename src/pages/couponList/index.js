@@ -316,25 +316,11 @@ class Home extends Component {
                 <Button icon="export" onClick={() => {
                   //window.location.href = "http://shande.xajhzx.cn/service/export";
                   // urlEncode
-
-                  function parseParams(data) {
-                    try {
-                      var tempArr = [];
-                      for (var i in data) {
-                        var key = encodeURIComponent(i);
-                        var value = encodeURIComponent(data[i]);
-                        tempArr.push(key + '=' + value);
-                      }
-                      var urlParamsStr = tempArr.join('&');
-                      return urlParamsStr;
-                    } catch (err) {
-                      return '';
-                    }
+                  if(this.state.checkedIds){
+                    window.location.href = "http://shande.xajhzx.cn/service/coupon/export?couponIds=" + this.state.checkedIds
+                  }else{
+                    window.location.href = "http://shande.xajhzx.cn/service/coupon/export"
                   }
-
-
-                  var s = parseParams(this.state.searchList)
-                  window.location.href = "http://shande.xajhzx.cn/service/coupon/export?" + s
                 }}>
                   导出
                 </Button>
@@ -356,6 +342,15 @@ class Home extends Component {
                 rowKey={columns => columns.id}
                 onChange={this.handleStandardTableChange}
                 noCheck={false}
+                onSelectRow={data => {
+                  if(data.length>0){
+                   let ids =  data.map((coupon)=>(coupon.id));
+                    this.setState({
+                      checkedIds: ids.join()
+                    })
+                  }
+
+                }}
               />
             </div>
           </Card>

@@ -171,6 +171,18 @@ class API extends Server{
     }
   }
 
+  async delCoupon(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.delCoupon, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
   async departmentList(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.departmentList, params);

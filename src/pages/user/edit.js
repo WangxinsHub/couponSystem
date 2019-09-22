@@ -50,14 +50,21 @@ class Home extends Component {
             if (this.props.id) {
                 result = await API.updateRole({
                     position: values.position,
+                    loginPass: values.loginPass,
                     userPhone: values.userPhone,
                     departmentKey: values.departmentKey,
                     id: values.id
                 });
-                roleReust = await API.connectRole({
-                    userId: values.id,
-                    roleIds: values.roleIds.join() //多选
-                })
+                if(values.roleIds){
+                    roleReust = await API.connectRole({
+                        userId: values.id,
+                        roleIds: typeof values.roleIds === 'object' ? values.roleIds.join() :  values.roleIds //多选
+                    })
+                }else{
+                    roleReust ={}
+                    roleReust.message = 'success'
+                }
+
             } else {
                 result = await API.createRole(values);
             }
@@ -110,6 +117,7 @@ class Home extends Component {
 
     render() {
         let {record} = this.props;
+        console.error(record)
 
         const {submitting, form, onClose} = this.props;
         const {getFieldDecorator} = form;
@@ -188,7 +196,7 @@ class Home extends Component {
                     }
 
                     {
-                        !this.props.id && <FormItem {...stationEditFormDrawer} label="密码" key='loginPass'>
+                         <FormItem {...stationEditFormDrawer} label="密码" key='loginPass'>
                             {getFieldDecorator('loginPass', {
                                 rules: [{required: true, message: '请输入密码'}],
                             })(
@@ -201,7 +209,7 @@ class Home extends Component {
                     {
                         this.props.id && <FormItem label='角色' {...stationEditFormDrawer} key="roleIds">
                             {getFieldDecorator('roleIds', {
-                                initialValue: record && record.roleIds ? record.roleIds : undefined,
+                                initialValue: record && record.roles ? record.roles.roleId : undefined,
                                 rules: [{required: true, message: '必填项'}],
                             })(
                                 <Select style={{width: '50%'}}

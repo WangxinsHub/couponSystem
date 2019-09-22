@@ -53,4 +53,5 @@ export default {
 
     getUserMenu:`${API_HOSTNAME}/service/menu`,
     verifyCode:`${API_HOSTNAME}/service/verifyCode`,
+    delCoupon:`${API_HOSTNAME}/service/activity/delCoupon`,
 }

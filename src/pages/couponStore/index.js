@@ -109,9 +109,16 @@ class Home extends Component {
         });
     }
 
-    stop = (id) => async () => {
-        let result = await api.deleteCode({
-            id
+    stop = (record) => async () => {
+        console.log(record);
+        const {
+            activityId,
+            couponId
+        } = record;
+
+        let result = await api.delCoupon({
+            activityId,
+            couponId
         });
         if (result.message === 'success') {
             message.success('删除成功！');
@@ -184,7 +191,7 @@ class Home extends Component {
                         }}>调整库存</a>
                         <Divider type="vertical"/>
                         <Popconfirm placement="top" title="确认要删除吗？"
-                                    onConfirm={this.stop(record.id)}
+                                    onConfirm={this.stop(record)}
                                     okText='确认'
                                     cancelText='取消'
                         >

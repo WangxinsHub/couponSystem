@@ -267,27 +267,12 @@ class Home extends Component {
                             <div className='tableListOperator'>
 
                                 <Button  icon="export" onClick={() => {
-                                    //window.location.href = "http://shande.xajhzx.cn/service/export";
-                                    // urlEncode
-
-                                    function parseParams(data) {
-                                        try {
-                                            var tempArr = [];
-                                            for (var i in data) {
-                                                var key = encodeURIComponent(i);
-                                                var value = encodeURIComponent(data[i]);
-                                                tempArr.push(key + '=' + value);
-                                            }
-                                            var urlParamsStr = tempArr.join('&');
-                                            return urlParamsStr;
-                                        } catch (err) {
-                                            return '';
-                                        }
+                                    if(this.state.checkedIds){
+                                        window.location.href = `http://shande.xajhzx.cn/service/code/export?couponId=${this.props.match.params.id}&codeIds=` + this.state.checkedIds
+                                    }else{
+                                        window.location.href = `http://shande.xajhzx.cn/service/code/export?couponId=${this.props.match.params.id}`
                                     }
 
-
-                                    var s =parseParams(this.state.searchList)
-                                    window.location.href = "http://shande.xajhzx.cn/service/code/export?" + s
                                 }}>
                                     导出
                                 </Button>
@@ -343,10 +328,17 @@ class Home extends Component {
                                 onChange={this.handleStandardTableChange}
                                 noCheck={false}
                                 onSelectRow={data => {
+                                    if(data.length>0){
+                                        let ids =  data.map((code)=>(code.id));
+                                        this.setState({
+                                            checkedIds: ids.join()
+                                        })
+                                    }
                                     this.setState({
                                         selectedRow: data
                                     })
                                 }}
+
                             />
                         </div>
 
