@@ -26,10 +26,10 @@ class Home extends Component {
      * @return {[type]} [description]
      */
     componentDidMount() {
-        this.props.getList({
-            pageNo: 1,
-            pageSize: 100
-        })
+        // this.props.getList({
+        //     pageNo: 1,
+        //     pageSize: 100
+        // })
         this.props.getDepartmentList({
             pageNo: 1,
             pageSize: 1000
@@ -198,7 +198,7 @@ class Home extends Component {
                     {
                          <FormItem {...stationEditFormDrawer} label="密码" key='loginPass'>
                             {getFieldDecorator('loginPass', {
-                                rules: [{required: true, message: '请输入密码'}],
+                                rules: [{required: !this.props.id, message: '请输入密码'}],
                             })(
                                 <Input style={{width: '80%'}} placeholder="请填写密码"/>
                             )}

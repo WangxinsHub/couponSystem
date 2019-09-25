@@ -41,6 +41,8 @@ class Home extends Component {
         return !is(fromJS(this.props), fromJS(nextProps)) || !is(fromJS(this.state), fromJS(nextState))
     }
 
+
+
     /**
      * [componentDidMount 加载render方法之前,获取所有用户列表]
      * @return {[type]} [description]
@@ -153,58 +155,16 @@ class Home extends Component {
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
 
-        if (sendList && sendList.data && this.canAddSearch) {
-            // Define.searchMenu.open = [{
-            //     id: 'mobile',
-            //     label: '手机号',
-            //     type: 'input', // input输入框
-            //     placeholder: '请输入手机号',
-            // }, {
-            //     id: 'sendBatchId',
-            //     label: '发放批次号',
-            //     type: 'input', // input输入框
-            //     placeholder: '请输入发放批次号',
-            // }, {
-            //     id: 'sendId',
-            //     label: '流水号',
-            //     type: 'input', // input输入框
-            //     placeholder: '请输入流水号',
-            // }, {
-            //     id: 'couponId',
-            //     label: '券Id',
-            //     type: 'input', // input输入框
-            //     placeholder: '请输入券ID',
-            // }, {
-            //     id: 'messageState',
-            //     label: '请选择发送信息状态',
-            //     type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
-            //     option: [{
-            //         label: '全部',
-            //         value: null,
-            //     }, {
-            //         label: '已发送',
-            //         value: 'SENDING',
-            //     }, {
-            //         label: '发送中',
-            //         value: 'SUCCESS',
-            //     }, {
-            //         label: '发送失败',
-            //         value: 'FAIL',
-            //     }],
-            // },
-            //     {
-            //         id: 'rangeTime',
-            //         label: '发放时间',
-            //         type: 'rangePicker',
-            //         placeholder: ['开始时间', '结束时间']
-            //     },
-            // ];
+        if (sendList && sendList.data && !Define.canpush) {
+
             let option = departmentList && departmentList.data.map((item) => ({
                 value: item.departmentValue,
                 label: item.departmentValue
             }));
 
             if (option) {
+                console.log(Define);
+                Define.canpush = true
                 Define.searchMenu.open.push({
                     id: 'departmentValue',
                     label: '请选择渠道商',
