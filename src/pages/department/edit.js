@@ -25,10 +25,10 @@ class Home extends Component {
      * @return {[type]} [description]
      */
     componentDidMount() {
-        this.props.getList({
-            pageNo: 1,
-            pageSize: 100
-        })
+        // this.props.getList({
+        //     pageNo: 1,
+        //     pageSize: 100
+        // })
     }
 
 

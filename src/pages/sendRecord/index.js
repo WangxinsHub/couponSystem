@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import {is, fromJS} from 'immutable';
 import {object, func} from 'prop-types';
-import {Card, Spin,} from 'antd';
+import {Button, Card, Spin,} from 'antd';
 import {PageHeaderLayout, StandardTable} from 'dt-antd';
 import TableSearch from '@/components/tableSearch';
 
@@ -248,6 +248,35 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
+                                <Button  icon="export" onClick={() => {
+                                    //window.location.href = "http://shande.xajhzx.cn/service/export";
+                                    // urlEncode
+                                    function parseParams(data) {
+                                        try {
+                                            var tempArr = [];
+                                            for (var i in data) {
+                                                var key = encodeURIComponent(i);
+                                                var value = encodeURIComponent(data[i]);
+                                                tempArr.push(key + '=' + value);
+                                            }
+                                            var urlParamsStr = tempArr.join('&');
+                                            return urlParamsStr;
+                                        } catch (err) {
+                                            return '';
+                                        }
+                                    }
+                                    if( this.props.match.params.id ){
+                                        var s =  parseParams(Object.assign({activityId: this.props.match.params.id},this.state.searchList))
+                                        window.location.href = "http://shande.xajhzx.cn/service/batch/export?" + s
+
+                                    }else{
+                                        var s =parseParams(this.state.searchList);
+                                        window.location.href = "http://shande.xajhzx.cn/service/batch/export?" + s
+                                    }
+                                    console.log('导出条件---' + s);
+                                }}>
+                                    导出
+                                </Button>
                             </div>
                             <StandardTable
                                 loading={loading} // 显示加载框

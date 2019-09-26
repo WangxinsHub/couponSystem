@@ -310,9 +310,6 @@ class Home extends Component {
                             </div>
                             <div className='tableListOperator'>
                                 <Button  icon="export" onClick={() => {
-                                    //window.location.href = "http://shande.xajhzx.cn/service/export";
-                                    // urlEncode
-
                                     function parseParams(data) {
                                         try {
                                             var tempArr = [];
@@ -327,10 +324,15 @@ class Home extends Component {
                                             return '';
                                         }
                                     }
+                                    if( this.props.match.params.id ){
+                                        var s =  parseParams(Object.assign({couponId: this.props.match.params.id},this.state.searchList))
+                                        window.location.href = "http://shande.xajhzx.cn/service/sendDetail/export?" + s
 
-
-                                    var s =parseParams(this.state.searchList)
-                                    window.location.href = "http://shande.xajhzx.cn/service/batch/export?" + s
+                                    }else{
+                                        var s =parseParams(this.state.searchList);
+                                        window.location.href = "http://shande.xajhzx.cn/service/sendDetail/export?" + s
+                                    }
+                                    console.log('导出条件---' + s);
                                 }}>
                                     导出
                                 </Button>
