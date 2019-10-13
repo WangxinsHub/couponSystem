@@ -68,7 +68,7 @@ class loginPage extends React.Component {
         // sessionStorage.accountId = result.data.accountId;
         // sessionStorage.enterpriseName = result.data.enterpriseName;
         sessionStorage.loginFlag = true;
-        this.props.history.push('/couponList');
+        this.props.history.push('/default');
       } else {
         this.setState({
           btnDisabled: false

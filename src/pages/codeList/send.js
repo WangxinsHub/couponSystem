@@ -104,9 +104,13 @@ class Home extends Component {
                 var formData = new FormData();
                 formData.append("couponId", this.props.id);
                 if (this.state.file) formData.append("file", this.state.file);
-                if (values.code) values.code = values.code.replace(/\n/g, ',');
+                if (values.code){
+                    values.code = values.code.replace(/\n/g, ',');
+                    formData.append("code", values.code);
+                }else{
+                    formData.append("code", '');
 
-                formData.append("code", values.code);
+                }
 
                 values.couponId = this.props.id;
                 values.file = this.state.file;

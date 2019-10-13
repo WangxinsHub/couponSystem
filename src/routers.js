@@ -164,6 +164,14 @@ export default class Router extends React.Component {
                 return null
             },
         });
+        this.default = lodable({
+            loader: () => {
+                return import('@/pages/default/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
     };
 
     /**
@@ -178,6 +186,8 @@ export default class Router extends React.Component {
                         <Route exact path="/h5/login" component={this.h5login}/>
                         <Route exact path="/login" component={this.login}/>
                         <Route exact path="/" component={this.login}/>
+                        <Route exact path="/default" component={this.default}/>
+
                         <Route exact path="/couponList" component={this.couponList}/>
                         <Route exact path="/couponSend" component={this.couponSend}/>
                         <Route exact path="/couponSend/:id" component={this.couponSend}/>
