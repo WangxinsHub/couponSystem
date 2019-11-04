@@ -38,7 +38,7 @@ class Home extends Component {
   }
 
   getCode(code) {
-    return <div className='qr'>
+    return <div className='qr' style={{marginTop:10}}>
       <QRCode value={code}/>
     </div>
   }

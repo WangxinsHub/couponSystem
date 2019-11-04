@@ -236,7 +236,7 @@ class Home extends Component {
                                     onSelect={this.handleSelect}
                                     placeholder="请选择渠道商">
                                 {
-                                    departmentList && departmentList.data.map((item, index) => {
+                                    departmentList &&  departmentList.data &&departmentList.data.map((item, index) => {
                                         return (<Option key={item.departmentKey}
                                                         value={item.departmentKey}>
                                             {item.departmentValue}

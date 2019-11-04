@@ -138,7 +138,7 @@ class Home extends Component {
                                     placeholder="请选择"
                             >
                                 {
-                                    departmentList && departmentList.data.map((item, index) => {
+                                    departmentList  && departmentList.data && departmentList.data.map((item, index) => {
                                         return (<Option key={item.departmentKey}
                                                         value={item.departmentKey}>
                                             {item.departmentValue}

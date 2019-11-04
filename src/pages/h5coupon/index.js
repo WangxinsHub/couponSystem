@@ -5,6 +5,7 @@ import {Form, Select, Row, Input, Spin, Button, message} from "antd";
 import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
 import './index.css'
 import Verify from "../../utils/verify";
+import {Link} from 'react-router-dom';
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -182,6 +183,8 @@ class Home extends Component {
                             onClick={(e) => {
                                 this.validate(e)
                             }} disabled={this.state.btnDisabled} type="primary">发送</Button>
+
+                    <Link to='/h5/sendListH5' style={{float:'right'}}>发放明细</Link>
                 </Form>
 
             </div>)

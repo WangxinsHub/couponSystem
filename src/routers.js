@@ -172,6 +172,14 @@ export default class Router extends React.Component {
                 return null
             },
         });
+        this.sendListH5 = lodable({
+            loader: () => {
+                return import('@/pages/h5coupon/sendListH5');
+            },
+            loading: () => {
+                return null
+            },
+        });
     };
 
     /**
@@ -213,6 +221,7 @@ export default class Router extends React.Component {
 
                         <Route exact path="/h5/sendCoupon" component={this.h5coupon}/>
                         <Route exact path="/h5/showCode" component={this.h5showCode}/>
+                        <Route exact path="/h5/sendListH5" component={this.sendListH5}/>
                     </Nav>
                 </Switch>
             </HashRouter>

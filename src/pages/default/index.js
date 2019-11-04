@@ -13,15 +13,12 @@ class Home extends Component {
     state = {
     }
 
-
-
-
     render() {
 
         return (
            <div>
                <Card bordered={false}>
-                   欢迎使用 汇信卡券分发系统
+                   <span style={{fontWeight:500,fontSize:17,textAlign:'center',width:'100%'}}>欢迎使用 : 汇信卡券分发系统</span>
                    <img style={{width:600,margin:'auto'}} src={defaultImg} alt=""/>
                </Card>
            </div>

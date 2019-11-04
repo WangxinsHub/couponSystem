@@ -21,6 +21,9 @@
     height: 130px;
     margin: 25px auto ;
     position: relative;
+    border-bottom: dotted 3px gainsboro;
+    margin-top: 15%;
+
 }
 .coupon-btm{
     width: 90%;
@@ -28,7 +31,7 @@
     background: white;
     padding-top: 20px;
     margin-top: -25px;
-    padding-bottom: 25px;
+    padding-bottom: 55px;
 }
 
 .coupon-head:after{

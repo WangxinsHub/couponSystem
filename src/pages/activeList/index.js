@@ -167,7 +167,7 @@ class Home extends Component {
                     value: 'OVER',
                 }],
             },];
-            let option = departmentList && departmentList.data.map((item) => ({
+            let option = departmentList && departmentList.data && departmentList.data.map((item) => ({
                 value: item.departmentKey,
                 label: item.departmentValue
             }));
