@@ -12,6 +12,8 @@ export default {
 
     updateCoupon: `${API_HOSTNAME}/service/coupon/update`,
     createCoupon: `${API_HOSTNAME}/service/coupon/create`,
+    getCoupon: `${API_HOSTNAME}/service/coupon/get`,
+
     uploadFile:`${API_HOSTNAME}/service/code/import`,
     sendList:`${API_HOSTNAME}/service/sendDetail/list`,
     createPlantForm:`${API_HOSTNAME}/service/platform/create`,
@@ -36,6 +38,11 @@ export default {
     userList:`${API_HOSTNAME}/service/user/list`,
     createRole:`${API_HOSTNAME}/service/user/create`,
     updateRole:`${API_HOSTNAME}/service/user/update`,
+
+    deleteUser:`${API_HOSTNAME}/service/user/delete`,
+    updateUser:`${API_HOSTNAME}/service/user/update`,
+
+
     deleteActive:`${API_HOSTNAME}/service/activity/delete`,
 
     codeList:`${API_HOSTNAME}/service/code/list`,

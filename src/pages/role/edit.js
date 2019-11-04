@@ -46,9 +46,13 @@ class Home extends Component {
                         pageNo: 1,
                         pageSize: 100
                     }).then(data => {
-                        console.log(data);
+                        if(data.code==403){
+                            message.error('没有权限');
+                            this.props.onClose(true);
+                            return;
+                        }
                         this.setState({
-                            menuList: data.data.map(data => {
+                            menuList: data.data && data.data.map(data => {
                                 if (data.dataUrl) return data
                             }).filter(item => item)
                         })

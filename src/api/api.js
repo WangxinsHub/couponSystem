@@ -250,6 +250,38 @@ class API extends Server{
       throw err;
     }
   }
+  async updateUser(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.updateUser, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+  async deleteUser(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.deleteUser, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async getCoupon(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.getCoupon, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
   async createDepartment(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.createDepartment, params);

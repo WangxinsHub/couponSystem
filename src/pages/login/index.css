@@ -82,6 +82,19 @@ input:-webkit-autofill {
   position: relative;
   width: 58%;
 }
+.getCodeBtn{
+  border: solid 1px;
+  border-radius: 2px;
+  text-align: center;
+  margin-left: 20px;
+  width: 130px;
+  height: 40px;
+  line-height: 40px;
+
+  color: #1890ff;
+
+}
+
 
 #my_button {
   position: absolute;
