@@ -10,25 +10,16 @@ import {
     Upload,
     Icon,
     message,
-    Spin,
     Popconfirm,
-    Radio,
     DatePicker,
-    Checkbox,
     Modal
 } from 'antd';
-import UploadImage from '@/components/uploadImage/index';
-import apiUrl from '@/api/url';
+
 import {getList, platformList, createCoupon, updateCoupon} from './action';
 import API from '@/api/api';
 import {stationEditFormDrawer, tailFormItemLayout} from '@/utils/formStyle'
-import Url from '@/api/url'
-
-const {TextArea} = Input;
-const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const {Option} = Select;
-const CheckboxGroup = Checkbox.Group;
 
 class Home extends Component {
     static propTypes = {
@@ -37,6 +28,7 @@ class Home extends Component {
     };
     state = {
         btnDisabled: false,
+        platformId:this.props.record && this.props.record.platformId
     }
 
     /**
@@ -123,9 +115,10 @@ class Home extends Component {
         let that = this;
         this.props.form.validateFieldsAndScroll({force: true}, (err, values) => {
             if (!err) {
-                values.file = that.state.file;
-                if (that.state) values.platformName = that.state.platformName;
 
+                values.file = that.state.file;
+                values.platformId = that.state.platformId;
+                if (that.state) values.platformName = that.state.platformName;
                 if (!this.props.type) {
                     values.validEnd = values.validEnd.format('YYYY/MM/DD HH:mm:ss');
                     if (that.props.id) values.id = that.props.id;
@@ -162,11 +155,11 @@ class Home extends Component {
 
 
     render() {
-        const {imageUrl} = this.state;
         let {record} = this.props;
         const {submitting, form, onClose} = this.props;
         const {platformList} = this.props.couponReducer;
         const {getFieldDecorator} = form;
+        console.error(record)
 
         return (<Form style={{paddingBottom: 30}}>
 
@@ -204,10 +197,9 @@ class Home extends Component {
                                             allowClear={true}
                                             optionFilterProp="children"
                                             onSelect={(v, p) => {
-                                                console.log(v, p);
-                                                console.log(p.props.children)
                                                 this.setState({
-                                                    platformName: p.props.children
+                                                    platformName: p.props.children,
+                                                    platformId:v
                                                 })
                                             }}
                                             placeholder="请选择券平台">

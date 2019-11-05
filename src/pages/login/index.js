@@ -25,6 +25,7 @@ class loginPage extends React.Component {
    * [componentDidMount description]
    */
   componentDidMount() {
+    document.title = '汇信卡券分发管理后台'
     sessionStorage.removeItem('accountId');
     sessionStorage.removeItem('Authorization');
   }

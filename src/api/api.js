@@ -107,7 +107,17 @@ class API extends Server{
 
   async updateCoupon(params = {}){
     try{
-      let result = await this.axiosCommon('post', Url.updateCoupon, params);
+      let result = await this.axios('post', Url.updateCoupon, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+  async sendCode(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.sendCode, params);
       if(result) {
         return result;
       }
@@ -273,7 +283,7 @@ class API extends Server{
 
   async getCoupon(params = {}){
     try{
-      let result = await this.axiosCommon('post', Url.getCoupon, params);
+      let result = await this.axios('post', Url.getCoupon, params);
       if(result) {
         return result;
       }

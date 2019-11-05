@@ -122,15 +122,18 @@ class Home extends Component {
                         )))
                     )
 
-                    values.validStart = values.rangeTime[0].format("YYYY/MM/DD")+' 00:00:00';
-                    values.validEnd = values.rangeTime[1].format("YYYY/MM/DD")+' 23:59:59';
+                    values.validEnd = values.validEnd.format("YYYY/MM/DD")+' 23:59:59';
                 }else{
-
-                    values.validEnd = values.rangeTime[1].format("YYYY/MM/DD")+' 23:59:59';
+                    values.activity = [{
+                        couponId:'',
+                        couponName: '',
+                        totalCount: '',
+                    }]
+                    values.validEnd = values.validEnd.format("YYYY/MM/DD")+' 23:59:59';
                     values.id = that.props.id;
                 }
-                delete values.rangeTime;
 
+                delete values.rangeTime;
                 // 提交表单
                 console.log(values);
                 values.departmentValue = this.state.departmentValue;

@@ -15,33 +15,32 @@ class Home extends Component {
 
   componentWillMount() {
     document.title = '卡券详情'
-
   }
 
   componentDidMount() {
     let couponId = util.getQueryString('couponId');
     api.getCoupon({
-      couponId
+      couponId,
     }).then(data => {
       if (data.data) {
         this.setState({
           coupon: data.data
-        });
-        JsBarcode(this.barcode, data.data.couponCode, {
-          displayValue: false,
-          width: 2,
-          height: 50,
-          margin: 0,
+        },()=>{
+          console.log(data.data);
+          JsBarcode(this.barcode, data.data.couponCode, {
+            displayValue: false,
+            width: 2,
+            height: 50,
+            margin: 0,
+          });
         });
       }
+    }).catch(e=>{
+      console.log(e);
     })
   }
 
-  getCode(code) {
-    return <div className='qr' style={{marginTop:10}}>
-      <QRCode value={code}/>
-    </div>
-  }
+
 
   /**
    * [render description]
@@ -78,7 +77,9 @@ class Home extends Component {
               <div className='code'>
                 {coupon.couponCode}
               </div>
-              {coupon.couponCode && this.getCode(coupon.couponCode)}
+              {coupon.couponCode && <div className='qr' style={{marginTop:10}}>
+                <QRCode value={coupon.couponCode}/>
+              </div>}
             </div>
           </div>
         }
