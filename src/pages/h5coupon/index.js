@@ -17,27 +17,14 @@ class Home extends Component {
     };
 
     componentDidMount() {
-        api.userList({
+        api.activeList({
             pageNo: 1,
             pageSize: 1000,
-            loginAccount: sessionStorage.userName,
-        }).then(data => {
-            let user = data.data;
-            if (user.length > 0) {
-                api.activeList({
-                    pageNo: 1,
-                    pageSize: 1000,
-                    departmentKey: user[0]['departmentKey'],
-                    state: 'ONLINE',
-                }).then((data) => {
-                    console.log(data);
-                    this.setState({
-                        activeList: data
-                    })
-                })
-            }
-            console.log(user);
-
+            state: 'ONLINE',
+        }).then((data) => {
+            this.setState({
+                activeList: data
+            })
         })
     }
 
