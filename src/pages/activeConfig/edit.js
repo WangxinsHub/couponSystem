@@ -8,13 +8,10 @@ import {
     Select,
     Button,
     DatePicker,
-    Icon,
     message,
     Spin,
     Popconfirm,
-    Radio,
     InputNumber,
-    Checkbox
 } from 'antd';
 import {getList, getDepartmentList,} from './action';
 import API from '@/api/api';
@@ -23,7 +20,6 @@ import {getList as getCouponList} from '../couponList/action'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const CheckboxGroup = Checkbox.Group;
 const {RangePicker,} = DatePicker;
 const {TextArea} = Input;
 
@@ -63,11 +59,12 @@ class Home extends Component {
 
     disabledStartDate = startValue => {
         let st = new Date(startValue).valueOf();
-        let now = new Date().valueOf();
+        let now = new Date().valueOf() - 24*60*60*1000;
 
         if (this.props.record && this.props.record.validEnd) {
             return st < moment(this.props.record.validEnd);
         } else {
+            console.log(111);
             return st < now
         }
     };
@@ -120,9 +117,14 @@ class Home extends Component {
                                 totalCount: item.totalCount,
                             }
                         )))
-                    )
+                    );
 
-                    values.validEnd = values.validEnd.format("YYYY/MM/DD")+' 23:59:59';
+                    if(values.validEnd ){
+                        values.validEnd = values.validEnd.format("YYYY/MM/DD")+' 23:59:59';
+                    }else{
+                        values.validStart = values.rangeTime[0].format("YYYY/MM/DD")+' 00:00:00';
+                        values.validEnd = values.rangeTime[1].format("YYYY/MM/DD")+' 23:59:59';
+                    }
                 }else{
                     values.activity = [{
                         couponId:'',
@@ -137,6 +139,7 @@ class Home extends Component {
                 // 提交表单
                 console.log(values);
                 values.departmentValue = this.state.departmentValue;
+                console.error(values)
                 that.postData(values);
             } else {
                 this.setState({

@@ -55,7 +55,7 @@ class Home extends Component {
           coupon && <div className={'container'}>
             <div className='coupon-head'>
               <div className='platformName'>
-                {coupon.platformName}
+                {/*券平台:{coupon.platformName}*/}
               </div>
 
               <div className='coupon-name'>
@@ -63,7 +63,7 @@ class Home extends Component {
               </div>
 
               <div className='time-value'>
-                活动有效期: {coupon.updateTime} - {coupon.validEnd}
+                券码有效期: {coupon.updateTime} - {coupon.validEnd}
               </div>
             </div>
             <div className='coupon-btm'>
