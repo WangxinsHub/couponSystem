@@ -199,11 +199,12 @@ export default class SiderDemo extends React.Component {
       theme, // 主题
     } = this.props;
 
-    if(!this.isPC()){
+    if(!this.isPC() ||!sessionStorage.loginFlag ){
       return  <div>
         {children}
       </div>
     }
+
 
 
     theme = theme || {};

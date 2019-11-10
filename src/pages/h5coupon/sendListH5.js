@@ -2,17 +2,10 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import {is, fromJS} from 'immutable';
 import {object, func} from 'prop-types';
-import {Button, Card, Spin,} from 'antd';
-import {PageHeaderLayout, StandardTable} from 'dt-antd';
-import TableSearch from '@/components/tableSearch';
-
-import Define from '../sendRecord/define';
-import {getList} from '../sendRecord/action';
+import { StandardTable} from 'dt-antd';
+import {getList} from '../sendDetail/action';
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
-import util from '../../utils/base'
-import {getList as getActiveList} from '../activeList/action'
-import {Link} from "react-router-dom";
 
 class Home extends Component {
     static propTypes = {
@@ -55,8 +48,8 @@ class Home extends Component {
             pageSize: this.state.pageSize,
             modifyUser:'admin'
         });
-    }
 
+    }
 
     /**
      * [表格点击编辑之后 description]
@@ -99,10 +92,14 @@ class Home extends Component {
         // 列表表头
         const columns = [
             {
+                title: '流水号',
+                key: 'sendId',
+                dataIndex: 'sendId',
+            },
+            {
                 title: '批次号',
-                key: 'batchId',
-                dataIndex: 'batchId',
-                render: (text) => text + ''
+                key: 'sendBatchId',
+                dataIndex: 'sendBatchId',
             },
             {
                 title: '活动名称',
@@ -110,9 +107,20 @@ class Home extends Component {
                 key: 'activityName',
             },
             {
-                title: '券名',
+                title: '券名称',
                 key: 'couponName',
                 dataIndex: 'couponName',
+            },
+            {
+                title: '码值',
+                key: 'code',
+                dataIndex: 'code',
+            },
+
+            {
+                title: '手机号',
+                key: 'mobile',
+                dataIndex: 'mobile',
             },
 
             {
@@ -124,17 +132,29 @@ class Home extends Component {
                 title: '发放时间',
                 key: 'sendTime',
                 dataIndex: 'sendTime',
+                render: (text, record) => {
+                    return text && text.slice(0, 19)
+                }
             },
+            {
+                title: '短信状态',
+                key: 'messageState',
+                dataIndex: 'messageState',
+                render: (text) => {
+                    if (text === 'SUCCESS') {
+                        return '成功'
+                    } else if (text === 'SENDING') {
+                        return '发送中'
+                    } else {
+                        return '失败'
+                    }
+                }
 
-            {
-                title: '上传量',
-                key: 'sendTotalCount',
-                dataIndex: 'sendTotalCount',
             },
             {
-                title: '发放量',
-                key: 'sendRealCount',
-                dataIndex: 'sendRealCount',
+                title: '失败原因',
+                key: 'failMessage',
+                dataIndex: 'failMessage',
             },
 
         ];
@@ -169,5 +189,5 @@ export default connect((state) => ({
     activeListReducer: state.activeListReducer,
 }), {
     getList,
-    getActiveList
+
 })(Home);

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {func} from 'prop-types';
 import md5 from 'js-md5';
-import {Form,Input, Button,Alert, Checkbox} from 'antd';
+import {Form, Input, Button, Alert, Checkbox, message} from 'antd';
 import API from '@/api/api';
 import '@/style/animate.css';
 import './index.css';
@@ -106,30 +106,31 @@ class loginPage extends React.Component {
           API.verifyCode({
             mobile: this.state.phone
           }).then(data => {
+            if(data.success){
+              this.setState({
+                canSend: false,
+              });
+              let counter = 60;
+              let timer = setInterval(() => {
+                counter--;
 
-            this.setState({
-              canSend: false,
-            });
-            let counter = 60;
-            let timer = setInterval(() => {
-              counter--;
+                if (counter === 0) {
+                  clearInterval(timer);
+                  this.setState({
+                    sendText: `获取验证码`,
+                    canSend: true,
+                  })
+                } else {
+                  this.setState({
+                    sendText: `请在(${counter})s后重试`
+                  })
+                }
 
-              if (counter === 0) {
-                clearInterval(timer);
-                this.setState({
-                  sendText: `获取验证码`,
-                  canSend: true,
-                })
-              } else {
-                this.setState({
-                  sendText: `请在(${counter})s后重试`
-                })
-              }
+              }, 1000);
+            }else{
+              message.error(data.message)
+            }
 
-            }, 1000);
-
-
-            console.log(data);
           })
         }
 

@@ -19,20 +19,20 @@ class Home extends Component {
 
   componentDidMount() {
     let couponId = util.getQueryString('couponId');
+    let code = util.getQueryString('code');
+    JsBarcode(this.barcode, code, {
+      displayValue: false,
+      width: 2,
+      height: 50,
+      margin: 0,
+    });
+
     api.getCoupon({
       couponId,
     }).then(data => {
       if (data.data) {
         this.setState({
           coupon: data.data
-        },()=>{
-          console.log(data.data);
-          JsBarcode(this.barcode, data.data.couponCode, {
-            displayValue: false,
-            width: 2,
-            height: 50,
-            margin: 0,
-          });
         });
       }
     }).catch(e=>{
@@ -48,6 +48,7 @@ class Home extends Component {
    */
   render() {
     const {coupon} = this.state;
+    let code = util.getQueryString('code');
     return (
       <div>
 
@@ -62,7 +63,7 @@ class Home extends Component {
                 {coupon.couponName}
               </div>
 
-              <div className='time-value'>
+              <div className='time-vallue'>
                 券码有效期: {coupon.updateTime} - {coupon.validEnd}
               </div>
             </div>
@@ -77,9 +78,9 @@ class Home extends Component {
               <div className='code'>
                 {coupon.couponCode}
               </div>
-              {coupon.couponCode && <div className='qr' style={{marginTop:10}}>
-                <QRCode value={coupon.couponCode}/>
-              </div>}
+              <div className='qr' style={{marginTop:10}}>
+                <QRCode value={code||''}/>
+              </div>
             </div>
           </div>
         }

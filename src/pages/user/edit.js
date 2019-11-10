@@ -53,7 +53,7 @@ class Home extends Component {
                     loginPass: values.loginPass,
                     userPhone: values.userPhone,
                     departmentKey: values.departmentKey,
-                    id: values.id
+                    userId: values.id
                 });
                 if(values.roleIds){
                     roleReust = await API.connectRole({
