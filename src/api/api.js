@@ -474,6 +474,49 @@ class API extends Server{
     }
   }
 
+  async giftLogin(params = {}){
+    try{
+      let result = await this.axios('post', Url.giftLogin, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
+  async giftVerify(params = {}){
+    try{
+      let result = await this.axios('post', Url.giftVerify, params);
+      return result;
+
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async giftApply(params = {}){
+    try{
+      let result = await this.axios('post', Url.giftApply, params);
+      return result;
+
+    }catch(err){
+      throw err;
+    }
+  }
+
+
+  async giftHistory(params = {}){
+    try{
+      let result = await this.axios('post', Url.giftHistory, params);
+      return result;
+
+    }catch(err){
+      throw err;
+    }
+  }
+
 
 
 

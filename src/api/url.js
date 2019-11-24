@@ -61,4 +61,10 @@ export default {
     getUserMenu:`${API_HOSTNAME}/service/menu`,
     verifyCode:`${API_HOSTNAME}/service/verifyCode`,
     delCoupon:`${API_HOSTNAME}/service/activity/delCoupon`,
+
+
+    giftVerify:`${API_HOSTNAME}/gift/verify`,
+    giftLogin:`${API_HOSTNAME}/gift/check`,
+    giftApply:`${API_HOSTNAME}/gift/apply`,
+    giftHistory:`${API_HOSTNAME}/gift/history`,
 }

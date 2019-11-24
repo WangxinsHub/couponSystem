@@ -172,9 +172,47 @@ export default class Router extends React.Component {
                 return null
             },
         });
+
+
         this.sendListH5 = lodable({
             loader: () => {
                 return import('@/pages/h5coupon/sendListH5');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+        this.giftLogin = lodable({
+            loader: () => {
+                return import('@/pages/h5gift/login');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+        this.giftLogin = lodable({
+            loader: () => {
+                return import('@/pages/h5gift/login');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+        this.gift = lodable({
+            loader: () => {
+                return import('@/pages/h5gift/gift');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+        this.giftList = lodable({
+            loader: () => {
+                return import('@/pages/h5gift/giftList');
             },
             loading: () => {
                 return null
@@ -222,6 +260,12 @@ export default class Router extends React.Component {
                         <Route exact path="/h5/sendCoupon" component={this.h5coupon}/>
                         <Route exact path="/h5/showCode" component={this.h5showCode}/>
                         <Route exact path="/h5/sendListH5" component={this.sendListH5}/>
+
+
+                        <Route exact path="/h5/gift/login" component={this.giftLogin}/>
+                        <Route exact path="/h5/gift/verify" component={this.giftVerify}/>
+                        <Route exact path="/h5/gift/gift" component={this.gift}/>
+                        <Route exact path="/h5/gift/giftList" component={this.giftList}/>
                     </Nav>
                 </Switch>
             </HashRouter>

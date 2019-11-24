@@ -1,0 +1,49 @@
+
+.gift{
+    padding: 10px;
+}
+.gift-sub{
+    font-size: 14px;
+    padding: 5px 0;
+    color: #7b7b7d;
+}
+.label{
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.active{
+ background: #4f97bf;
+    color: white;
+}
+.phone{
+    display: flex;
+    margin-top: 10px
+}
+.gift-list{
+    width: 100%;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    display: flex;
+}
+.gift-title{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.gift-item{
+    font-size: 13px;
+    width:32%;
+    height: 50px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #4f97bf;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    font-weight: bold;
+}
