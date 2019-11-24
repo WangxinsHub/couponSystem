@@ -105,11 +105,13 @@ class Home extends Component {
                 title: '活动名称',
                 dataIndex: 'activityName',
                 key: 'activityName',
+                width: '350px',
             },
             {
                 title: '券名称',
                 key: 'couponName',
                 dataIndex: 'couponName',
+                width: 150,
             },
             {
                 title: '码值',
@@ -171,6 +173,7 @@ class Home extends Component {
         return (
             <div style={{overflow:'scroll'}}>
                 <StandardTable
+                    scroll={{ x: 1600 }}
                     loading={loading} // 显示加载框
                     data={data}
                     columns={columns}

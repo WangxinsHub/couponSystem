@@ -13,6 +13,9 @@
   align-content: center;
   justify-content: center;
 }
+.time-vallue{
+    padding: 10px;
+}
 .coupon-head{
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;

@@ -20,17 +20,18 @@ class Home extends Component {
   componentDidMount() {
     let couponId = util.getQueryString('couponId');
     let code = util.getQueryString('code');
-    JsBarcode(this.barcode, code, {
-      displayValue: false,
-      width: 2,
-      height: 50,
-      margin: 0,
-    });
+
 
     api.getCoupon({
       couponId,
     }).then(data => {
       if (data.data) {
+        JsBarcode(this.barcode, code, {
+          displayValue: false,
+          width: 2,
+          height: 50,
+          margin: 0,
+        });
         this.setState({
           coupon: data.data
         });
@@ -53,7 +54,7 @@ class Home extends Component {
       <div>
 
         {
-          coupon && <div className={'container'}>
+        <div className={'container'}>
             <div className='coupon-head'>
               <div className='platformName'>
                 {/*券平台:{coupon.platformName}*/}
@@ -76,7 +77,7 @@ class Home extends Component {
                 />
               </div>
               <div className='code'>
-                {coupon.couponCode}
+                {code}
               </div>
               <div className='qr' style={{marginTop:10}}>
                 <QRCode value={code||''}/>

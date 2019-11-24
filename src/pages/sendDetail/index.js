@@ -263,7 +263,8 @@ class Home extends Component {
                 </Button>
               </div>
               <StandardTable
-                loading={loading} // 显示加载框
+                  scroll={{ x: 1600 }}
+                  loading={loading} // 显示加载框
                 data={data}
                 columns={columns}
                 rowKey={columns => columns.id}
