@@ -35,6 +35,13 @@ export default {
     roleMenu:`${API_HOSTNAME}/service/menu/roleMenu`,
 
 
+    mList:`${API_HOSTNAME}/service/meeting/mList`,
+    addMeet:`${API_HOSTNAME}/service/meeting/mCreate`,
+    mUpdate:`${API_HOSTNAME}/service/meeting/mUpdate`,
+    blList:`${API_HOSTNAME}/service/meeting/blList`,
+    blDelete:`${API_HOSTNAME}/service/meeting/blDelete`,
+
+
     userList:`${API_HOSTNAME}/service/user/list`,
     createRole:`${API_HOSTNAME}/service/user/create`,
     updateRole:`${API_HOSTNAME}/service/user/update`,

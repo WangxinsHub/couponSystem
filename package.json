@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "@antv/data-set": "^0.9.5",
-    "antd": "^3.7.3",
+    "antd": "^3.26.4",
+    "antd-mobile": "^2.3.1",
     "axios": "^0.17.1",
     "babel-plugin-direct-import": "^0.5.0",
     "babel-preset-stage-0": "^6.24.1",
@@ -25,7 +26,7 @@
     "qrcode.react": "^0.9.3",
     "qs": "^6.7.0",
     "rc-drawer": "^1.7.6",
-    "react": "^16.5.2",
+    "react": "^16.12.0",
     "react-addons-css-transition-group": "^15.6.2",
     "react-amap-binding": "^0.0.22",
     "react-dom": "^16.2.0",

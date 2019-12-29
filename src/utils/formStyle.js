@@ -32,7 +32,18 @@ export default {
       xs: { span: 24 },
       sm: { span: 18 },
     },
-  },  
+  },
+
+  inlineLayout: {
+    labelCol: {
+      xs: { span: 3 },
+      sm: { span: 5 },
+    },
+    wrapperCol: {
+      xs: { span: 1 },
+      sm: { span: 18 },
+    },
+  },
   /**
    * [formItemLayout]
    * @return {[type]}      [设置的值]

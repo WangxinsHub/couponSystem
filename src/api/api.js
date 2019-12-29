@@ -338,6 +338,62 @@ class API extends Server{
   }
 
 
+  async mList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.mList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
+  async addMeet(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.addMeet, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async mUpdate(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.mUpdate, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async blList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.blList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+  async blDelete(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.blDelete, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
   async bindMenu(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.bindMenu, params);

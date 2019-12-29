@@ -217,6 +217,75 @@ export default class Router extends React.Component {
             loading: () => {
                 return null
             },
+        })
+
+        this.shopLogin = lodable({
+            loader: () => {
+                return import('@/pages/shoppingMall/login');
+            },
+            loading: () => {
+                return null
+            },
+        });
+        this.pay = lodable({
+            loader: () => {
+                return import('@/pages/shoppingMall/pay');
+            },
+            loading: () => {
+                return null
+            },
+        });
+        this.pay = lodable({
+            loader: () => {
+                return import('@/pages/shoppingMall/pay');
+            },
+            loading: () => {
+                return null
+            },
+        });
+        this.bill = lodable({
+            loader: () => {
+                return import('@/pages/shoppingMall/bill');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+        this.billDetail = lodable({
+            loader: () => {
+                return import('@/pages/shoppingMall/billDetail');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+        this.result = lodable({
+            loader: () => {
+                return import('@/pages/shoppingMall/result');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+
+        this.hall = lodable({
+            loader: () => {
+                return import('@/pages/hall/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
+        this.blackWhite = lodable({
+            loader: () => {
+                return import('@/pages/blackWhite/index');
+            },
+            loading: () => {
+                return null
+            },
         });
     };
 
@@ -229,6 +298,17 @@ export default class Router extends React.Component {
             <HashRouter>
                 <Switch>
                     <Nav>
+
+
+                        <Route exact path="/shoppingMall/login" component={this.shopLogin}/>
+                        <Route exact path="/shoppingMall/pay" component={this.pay}/>
+                        <Route exact path="/shoppingMall/bill" component={this.bill}/>
+                        <Route exact path="/shoppingMall/billDetail" component={this.billDetail}/>
+                        <Route exact path="/shoppingMall/result" component={this.result}/>
+
+
+
+
                         <Route exact path="/h5/login" component={this.h5login}/>
                         <Route exact path="/login" component={this.login}/>
                         <Route exact path="/" component={this.login}/>
@@ -246,6 +326,10 @@ export default class Router extends React.Component {
                         <Route exact path="/sendRecord" component={this.sendRecord}/>
                         <Route exact path="/sendDetail" component={this.sendDetail}/>
                         <Route exact path="/sendDetail/:aid/:bid" component={this.sendDetail}/>
+
+
+                        <Route exact path="/shop/hall" component={this.hall}/>
+                        <Route exact path="/shop/blackWhite" component={this.blackWhite}/>
 
                         <Route exact path="/departmentList" component={this.department}/>
 
@@ -266,6 +350,7 @@ export default class Router extends React.Component {
                         <Route exact path="/h5/gift/verify" component={this.giftVerify}/>
                         <Route exact path="/h5/gift/gift" component={this.gift}/>
                         <Route exact path="/h5/gift/giftList" component={this.giftList}/>
+
                     </Nav>
                 </Switch>
             </HashRouter>

@@ -52,7 +52,6 @@ class Home extends Component {
     let code = util.getQueryString('code');
     return (
       <div>
-
         {
         <div className={'container'}>
             <div className='coupon-head'>

@@ -16,6 +16,7 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 // mock数据，正式时删除掉
 // import '@/mock/mockData';
 
+import 'antd-mobile/dist/antd-mobile.css';  // or 'antd-mobile/dist/antd-mobile.less'
 
 FastClick.attach(document.body);
 /**
