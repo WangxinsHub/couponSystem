@@ -40,6 +40,7 @@ export default {
     mUpdate:`${API_HOSTNAME}/service/meeting/mUpdate`,
     blList:`${API_HOSTNAME}/service/meeting/blList`,
     blDelete:`${API_HOSTNAME}/service/meeting/blDelete`,
+    cargoList:`${API_HOSTNAME}/service/meeting/cargoList`,
 
 
     userList:`${API_HOSTNAME}/service/user/list`,

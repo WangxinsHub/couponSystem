@@ -393,6 +393,17 @@ class API extends Server{
     }
   }
 
+  async cargoList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.cargoList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
 
   async bindMenu(params = {}){
     try{

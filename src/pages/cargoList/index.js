@@ -43,7 +43,7 @@ class Home extends Component {
     }
 
     getData(params){
-        api.blList({
+        api.cargoList({
             blackListType:0,
             meetingId:1,
             ...params
@@ -141,17 +141,42 @@ class Home extends Component {
         // 列表表头
         const columns = [
             {
-                title: '手机号',
-                key: 'blackMobile',
-                dataIndex: 'blackMobile',
+                title: 'Id',
+                key: 'goodsId',
+                dataIndex: 'goodsId',
             },
             {
-                title: '创建时间',
-                dataIndex: 'createTime',
-                key: 'createTime',
+                title: '名称',
+                dataIndex: 'goodsName',
+                key: 'goodsName',
             },
             {
-                title: '操作人',
+                title: '类型',
+                key: 'goodsType',
+                dataIndex: 'goodsType',
+            },
+            {
+                title: '交货方式',
+                key: 'deliveType',
+                dataIndex: 'deliveType',
+            },
+            {
+                title: '售价',
+                key: 'price',
+                dataIndex: 'price',
+            },
+            {
+                title: '状态',
+                key: 'cargoStatus',
+                dataIndex: 'cargoStatus',
+            },
+            {
+                title: '更新时间',
+                key: 'updateTime',
+                dataIndex: 'updateTime',
+            },
+            {
+                title: '更新人',
                 key: 'operatorUser',
                 dataIndex: 'operatorUser',
             },

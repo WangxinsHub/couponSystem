@@ -287,6 +287,16 @@ export default class Router extends React.Component {
                 return null
             },
         });
+
+        this.cargoList = lodable({
+            loader: () => {
+                return import('@/pages/cargoList/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
     };
 
     /**
@@ -330,6 +340,7 @@ export default class Router extends React.Component {
 
                         <Route exact path="/shop/hall" component={this.hall}/>
                         <Route exact path="/shop/blackWhite" component={this.blackWhite}/>
+                        <Route exact path="/shop/cargoList" component={this.cargoList}/>
 
                         <Route exact path="/departmentList" component={this.department}/>
 
