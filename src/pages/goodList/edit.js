@@ -27,41 +27,61 @@ class Home extends Component {
     platformId: this.props.record && this.props.record.platformId,
     goodsConfigArr: [
       {key: '', value: ''}
-    ]
-  }
+    ],
+    goodsDesc:'',
+    typeList:[]
+  };
 
   /**
    * [componentDidMount 加载render方法之前,获取所有用户列表]
    * @return {[type]} [description]
    */
   componentDidMount() {
+    API.typeList().then(data=>{
+      this.setState({
+        typeList:data.data
+      })
+    })
 
   }
 
-
-  /*
-  上传表单数据
-   */
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const {record} = nextProps;
+    // 当传入的type发生变化的时候，更新state
+    if (record && record.goodsConfig) {
+      console.log(record);
+      let goodObj = JSON.parse(record.goodsConfig);
+      let goodsConfigArr = [];
+      Object.keys(goodObj).map((key)=>{
+        goodsConfigArr.push({
+          key,
+          value:goodObj[key]
+        })
+      });
+      return {
+        goodsConfigArr,
+      };
+    }
+    // 否则，对于state不进行任何操作
+    return null;
+  }
   postData = async (values) => {
     const that = this;
+    const {goodsConfigArr,goodsDesc} = this.state;
     try {
       let result;
-      if (this.props.record) {
-        values.code = '';
-        values.meetingId = this.props.record.meetingId;
-        result = await API.mUpdate(values);
-        if (result.message === 'success') {
-          message.success(result.message);
-          this.props.onClose(true);
-        } else {
-          this.setState({
-            btnDisabled: false
-          });
-          message.error(result.message);
-        }
-      } else {
 
-        result = await API.addMeet(values);
+      let goodsConfig = {};
+      goodsConfigArr.map((item)=>{
+        goodsConfig[item.key] = item.value
+      });
+      values.goodsDesc = goodsDesc;
+      values.goodsConfig = JSON.stringify(goodsConfig);
+
+      if (this.props.record) {
+        values.goodsId = this.props.record.goodsId;
+
+        result = await API.updateGoods(values);
         if (result.message === 'success') {
           message.success('保存成功！');
           this.props.onClose(true);
@@ -71,13 +91,23 @@ class Home extends Component {
           });
           message.error(result.message);
         }
+      } else {
+
+        result = await API.goodsCreate(values);
+        if (result.message === 'success') {
+          message.success('保存成功！');
+          this.props.onClose(true);
+        } else {
+          this.setState({
+            btnDisabled: false
+          });
+        }
       }
 
     } catch (err) {
       this.setState({
         btnDisabled: false
       })
-      console.error(err);
     }
   }
   /**
@@ -120,7 +150,8 @@ class Home extends Component {
     let {record} = this.props;
     const {submitting, form, onClose} = this.props;
     const {getFieldDecorator} = form;
-    const {goodsConfigArr} = this.state;
+    const {goodsConfigArr,typeList} = this.state;
+    // 0: {goodsId: 1, goodsName: "商品一个111", updateTime: "2019-12-28 18:06:43",…}
 
     return (<Form style={{paddingBottom: 30}}>
 
@@ -133,14 +164,17 @@ class Home extends Component {
           )}
         </FormItem>
 
-        <FormItem label='类型' key='goodsType'  {...inline}>
-          {getFieldDecorator('goodsType', {
-            initialValue: record && record.goodsType,
+        <FormItem label='类型' key='goodsTypeId'  {...inline}>
+          {getFieldDecorator('goodsTypeId', {
+            initialValue: record && record.goodsTypeId,
             rules: [{required: true, message: '请选择活动类型'}],
           })(
             <Select style={{width: 150}} placeholder='请选择活动类型'>
-              <Option value={0}>关闭</Option>
-              <Option value={1}>开启</Option>
+              {
+                typeList.map((type,index)=>(
+                    <Option value={type.goodsId} key={index}>{type.goodsName}</Option>
+                ))
+              }
             </Select>
           )}
         </FormItem>
@@ -169,20 +203,6 @@ class Home extends Component {
         </FormItem>
 
 
-
-
-        <FormItem label='交货方式' key='deliveType' {...inline}>
-          {getFieldDecorator('deliveType', {
-            initialValue: record && record.deliveType,
-            rules: [{required: true, message: '请选择交货方式'}],
-          })(
-            <Select placeholder='请选择交货方式'>
-              <Option value={0}>直冲</Option>
-              <Option value={1}>卡密</Option>
-              <Option value={1}>邮递</Option>
-            </Select>
-          )}
-        </FormItem>
 
 
         <FormItem label='状态' key='goodsStatus'  {...inline}>
@@ -263,8 +283,10 @@ class Home extends Component {
 
 
         <FormItem label='商品详情'>
-          <Uedit getUmEditorValue={(e) => {
-            console.log(e);
+          <Uedit
+              initialValue={record && record.goodsDesc}
+              getUmEditorValue={(e) => {
+            this.setState({goodsDesc:e})
           }}/>
         </FormItem>
         <div className="drawerBtns">

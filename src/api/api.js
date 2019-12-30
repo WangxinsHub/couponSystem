@@ -404,6 +404,52 @@ class API extends Server{
     }
   }
 
+  async goodsCreate(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.goodsCreate, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async goodsList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.goodsList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
+  async typeList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.typeList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async updateGoods(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.updateGoods, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
 
   async bindMenu(params = {}){
     try{

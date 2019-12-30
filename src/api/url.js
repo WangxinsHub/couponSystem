@@ -41,6 +41,10 @@ export default {
     blList:`${API_HOSTNAME}/service/meeting/blList`,
     blDelete:`${API_HOSTNAME}/service/meeting/blDelete`,
     cargoList:`${API_HOSTNAME}/service/meeting/cargoList`,
+    goodsCreate:`${API_HOSTNAME}/service/goods/create`,
+    goodsList:`${API_HOSTNAME}/service/goods/list`,
+    typeList:`${API_HOSTNAME}/service/goods/typeList`,
+    updateGoods:`${API_HOSTNAME}/service/goods/update`,
 
 
     userList:`${API_HOSTNAME}/service/user/list`,
