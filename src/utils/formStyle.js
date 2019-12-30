@@ -37,11 +37,11 @@ export default {
   inlineLayout: {
     labelCol: {
       xs: { span: 3 },
-      sm: { span: 5 },
+      sm: { span: 1 },
     },
     wrapperCol: {
       xs: { span: 1 },
-      sm: { span: 18 },
+      sm: { span: 1 },
     },
   },
   /**

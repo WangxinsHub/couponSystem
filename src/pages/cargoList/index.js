@@ -1,14 +1,12 @@
 import React, {Component, Fragment} from 'react';
-import {connect} from 'react-redux';
 import {is, fromJS} from 'immutable';
-import {object, func} from 'prop-types';
 import {Card, Button, Divider, message, Drawer, Spin, Badge, Popconfirm} from 'antd';
 import {PageHeaderLayout, TableSearch, StandardTable, TableCommon, Utils} from 'dt-antd';
 import Define from './define';
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
 import util from '../../utils/base'
-import NewForm from "./send";
+import NewForm from "./edit";
 import api from "../../api/api";
 
 class Home extends Component {
@@ -221,6 +219,17 @@ class Home extends Component {
                                 <TableSearch {...searchMenu} />
                             </div>
                             <div className='tableListOperator'>
+                                <Button  icon="export" onClick={() => {
+                                    if(this.state.checkedIds){
+                                        window.location.href = `http://shande.xajhzx.cn/service/goods/export?couponId=${this.props.match.params.id}&codeIds=` + this.state.checkedIds
+                                    }else{
+                                        window.location.href = `http://shande.xajhzx.cn/service/goods/export?couponId=${this.props.match.params.id}`
+                                    }
+
+                                }}>
+                                    导出
+                                </Button>
+
                                 <Button type="primary" icon="plus" onClick={() => {
                                     this.setState({
                                         showDrawer: true,
@@ -231,35 +240,7 @@ class Home extends Component {
                                 }}>
                                     新增
                                 </Button>
-                                <Button type="danger" onClick={() => {
-                                    const {selectedRow} = this.state;
-                                    if(selectedRow && selectedRow.length>0){
-                                        let id = selectedRow.map((data) =>data.id).filter(item=>item);
 
-                                        api.blDelete({
-                                            meetingBlackListId:id.join()
-                                        }).then((res) => {
-
-                                            if (res.message === 'success') {
-                                                message.success('已批量删除！');
-                                            } else {
-                                                message.error(res.message);
-                                            }
-                                            let searchList = this.state.searchList || {};
-                                            this.setState({
-                                                selectedRow:null
-                                            });
-
-                                            this.getData({
-                                                pageNo:this.state.currentNo,
-                                                pageSize:this.state.pageSize,
-                                                ...searchList
-                                            })
-                                        })
-                                    }
-                                }}>
-                                    删除所选
-                                </Button>
                             </div>
 
 

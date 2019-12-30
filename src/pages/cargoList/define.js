@@ -15,10 +15,21 @@ export default {
     searchMenu: {
         // 常在的选项
         open: [{
-            id: 'blackMobile',
-            label: '手机号',
+            id: 'goodsName',
+            label: '商品名称',
             type: 'input', // input输入框
-            placeholder: '请输入手机号',
-        },],
+            placeholder: '请输入商品名称',
+        },{
+            id: 'goodsStatus',
+            label: '状态',
+            type: 'select', //充值状态 0 以提交 1- 成功 2-提交失败
+            option: [{
+                label: '已上架',
+                value: '0',
+            }, {
+                label: '已下架',
+                value: '1',
+            }],
+        }],
     },
 }
