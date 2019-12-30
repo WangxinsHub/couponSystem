@@ -11,7 +11,7 @@ import {
   Popconfirm,
 
 } from 'antd';
-
+import Uedit from '../../components/umeditor'
 import API from '@/api/api';
 
 const FormItem = Form.Item;
@@ -113,6 +113,10 @@ class Home extends Component {
 
 
   render() {
+    const inline = {
+      labelCol: {span: 5},
+      wrapperCol: {span: 19},
+    }
     let {record} = this.props;
     const {submitting, form, onClose} = this.props;
     const {getFieldDecorator} = form;
@@ -120,7 +124,7 @@ class Home extends Component {
 
     return (<Form style={{paddingBottom: 30}}>
 
-        <FormItem label="名称" key='goodsName'>
+        <FormItem label="名称" key='goodsName' {...inline}>
           {getFieldDecorator('goodsName', {
             initialValue: record && record.goodsName,
             rules: [{required: true, max: 30, whitespace: true, message: '请输入商品的名称'}],
@@ -129,7 +133,7 @@ class Home extends Component {
           )}
         </FormItem>
 
-        <FormItem label='类型' key='goodsType'>
+        <FormItem label='类型' key='goodsType'  {...inline}>
           {getFieldDecorator('goodsType', {
             initialValue: record && record.goodsType,
             rules: [{required: true, message: '请选择活动类型'}],
@@ -141,7 +145,7 @@ class Home extends Component {
           )}
         </FormItem>
 
-        <FormItem label='售价' key='price'>
+        <FormItem label='售价' key='price'  {...inline}>
           {getFieldDecorator('price', {
             initialValue: record && record.goodsType,
             rules: [{required: true, message: '请输入商品售价'}],
@@ -151,12 +155,12 @@ class Home extends Component {
         </FormItem>
 
 
-        <FormItem label='交货方式'>
+        <FormItem label='交货方式'  {...inline}>
           {getFieldDecorator('deliveType', {
             initialValue: record && record.deliveType,
             rules: [{required: true, message: '请选择交货方式'}],
           })(
-            <Select style={{width: 150}} placeholder='请选择交货方式'>
+            <Select placeholder='请选择交货方式'>
               <Option value={0}>直冲</Option>
               <Option value={1}>卡密</Option>
               <Option value={2}>邮递</Option>
@@ -165,7 +169,44 @@ class Home extends Component {
         </FormItem>
 
 
-        <FormItem label='配置信息'>
+
+
+        <FormItem label='交货方式' key='deliveType' {...inline}>
+          {getFieldDecorator('deliveType', {
+            initialValue: record && record.deliveType,
+            rules: [{required: true, message: '请选择交货方式'}],
+          })(
+            <Select placeholder='请选择交货方式'>
+              <Option value={0}>直冲</Option>
+              <Option value={1}>卡密</Option>
+              <Option value={1}>邮递</Option>
+            </Select>
+          )}
+        </FormItem>
+
+
+        <FormItem label='状态' key='goodsStatus'  {...inline}>
+          {getFieldDecorator('goodsStatus', {
+            initialValue: record && record.goodsStatus,
+            rules: [{required: true, message: '请选择商品状态'}],
+          })(
+            <Select placeholder='请选择商品状态'>
+              <Option value={0}>上架</Option>
+              <Option value={1}>下架</Option>
+            </Select>
+          )}
+        </FormItem>
+
+        <FormItem label='图片地址' key='goodsImg'  {...inline}>
+          {getFieldDecorator('goodsImg', {
+            initialValue: record && record.goodsType,
+            rules: [{required: true, message: '请输入图片地址'}],
+          })(
+            <Input style={{width: '80%'}} placeholder="请输入图片地址"/>
+          )}
+        </FormItem>
+
+        <FormItem label='配置信息'  >
           <a onClick={() => {
             this.setState({goodsConfigArr: goodsConfigArr.concat({key: '', value: ''})})
           }}>新增配置</a>
@@ -175,35 +216,37 @@ class Home extends Component {
           goodsConfigArr.map((item, index) => {
             return (
               <div key={index} style={{display: 'flex', width: '100%',}}>
-                <FormItem label='键' {
-                  ...{
-                    labelCol: {span: 3},
-                    wrapperCol: {span: 12},
-                  }
-                }>
-                  <Input style={{width: 110}} placeholder='参数名'
-                         value={goodsConfigArr[index]['key']}
-                         onChange={(v) => {
-                           goodsConfigArr[index]['key'] = v.target.value;
-                           this.setState({goodsConfigArr})
-                         }}
-                  />
-                </FormItem>
+                <div style={{width:'40%'}}>
+                  <FormItem label='键'
+                            {... {
+                              labelCol: {span: 4},
+                              wrapperCol: {span: 8},
+                            }}>
+                    <Input style={{width: 110}} placeholder='参数名'
+                           value={goodsConfigArr[index]['key']}
+                           onChange={(v) => {
+                             goodsConfigArr[index]['key'] = v.target.value;
+                             this.setState({goodsConfigArr})
+                           }}
+                    />
+                  </FormItem>
+                </div>
+                <div style={{width:'40%'}}>
+                  <FormItem label='值'
+                            {... {
+                              labelCol: {span: 4},
+                              wrapperCol: {span: 8},
+                            }}>
+                    <Input style={{width: 110}} placeholder='参数值'
+                           value={goodsConfigArr[index]['value']}
+                           onChange={(v) => {
+                             goodsConfigArr[index]['value'] = v.target.value;
+                             this.setState({goodsConfigArr})
+                           }}
+                    />
+                  </FormItem>
+                </div>
 
-                <FormItem label='值'  {
-                  ...{
-                    labelCol: {span: 3},
-                    wrapperCol: {span: 9},
-                  }
-                }>
-                  <Input style={{width: 110}} placeholder='参数值'
-                         value={goodsConfigArr[index]['value']}
-                         onChange={(v) =>{
-                           goodsConfigArr[index]['value'] = v.target.value;
-                           this.setState({goodsConfigArr})
-                         }}
-                  />
-                </FormItem>
                 {
                   goodsConfigArr.length > 1 && <a onClick={() => {
                     goodsConfigArr.splice(index, 1);
@@ -219,7 +262,11 @@ class Home extends Component {
         }
 
 
-
+        <FormItem label='商品详情'>
+          <Uedit getUmEditorValue={(e) => {
+            console.log(e);
+          }}/>
+        </FormItem>
         <div className="drawerBtns">
           <Popconfirm
             title='点击取消后您页面上的数据将全部丢弃，是否确认取消？'
