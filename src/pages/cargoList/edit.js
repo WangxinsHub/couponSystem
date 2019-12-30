@@ -7,18 +7,12 @@ import {
   Input,
   Select,
   Button,
-  Upload,
-  Icon,
   message,
   Popconfirm,
-  DatePicker,
-  Modal,
-  Row,
-  Col
+
 } from 'antd';
 
 import API from '@/api/api';
-import {stationEditFormDrawer, inlineLayout} from '@/utils/formStyle'
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -31,7 +25,9 @@ class Home extends Component {
   state = {
     btnDisabled: false,
     platformId: this.props.record && this.props.record.platformId,
-    goodsConfigArr:[]
+    goodsConfigArr: [
+      {key: '', value: ''}
+    ]
   }
 
   /**
@@ -169,119 +165,59 @@ class Home extends Component {
         </FormItem>
 
 
-        <FormItem label='配置信息' >
-          <a onClick={()=>{
-            this.setState(())
+        <FormItem label='配置信息'>
+          <a onClick={() => {
+            this.setState({goodsConfigArr: goodsConfigArr.concat({key: '', value: ''})})
           }}>新增配置</a>
         </FormItem>
-        <div style={{display: 'flex', width: '100%',}}>
-          {
-            goodsConfigArr.map((item,index)=>{
-              return (
-                <div key={index}>
-                  <FormItem label='键' {
-                    ...{
-                      labelCol: {span: 5},
-                      wrapperCol: {span: 8},
-                    }
-                  }>
-                    {getFieldDecorator('limitMessage', {
-                      initialValue: record && record.limitMessage,
-                      rules: [{required: true, whitespace: true, message: '请输入参数名'}],
-                    })(
-                      <Input style={{width: 130}} placeholder='参数名'/>
-                    )}
-                  </FormItem>
 
-                  <FormItem label='值'  {
-                    ...{
-                      labelCol: {span: 4},
-                      wrapperCol: {span: 8},
-                    }
-                  }>
-                    {getFieldDecorator('limitMessage', {
-                      initialValue: record && record.limitMessage,
-                      rules: [{required: true, whitespace: true, message: '请输入参数值'}],
-                    })(
-                      <Input style={{width: 130}} placeholder='参数值'/>
-                    )}
-                  </FormItem>
+        {
+          goodsConfigArr.map((item, index) => {
+            return (
+              <div key={index} style={{display: 'flex', width: '100%',}}>
+                <FormItem label='键' {
+                  ...{
+                    labelCol: {span: 3},
+                    wrapperCol: {span: 12},
+                  }
+                }>
+                  <Input style={{width: 110}} placeholder='参数名'
+                         value={goodsConfigArr[index]['key']}
+                         onChange={(v) => {
+                           goodsConfigArr[index]['key'] = v.target.value;
+                           this.setState({goodsConfigArr})
+                         }}
+                  />
+                </FormItem>
 
-                  <a>删除</a>
-                </div>
-              )
-            })
-          }
+                <FormItem label='值'  {
+                  ...{
+                    labelCol: {span: 3},
+                    wrapperCol: {span: 9},
+                  }
+                }>
+                  <Input style={{width: 110}} placeholder='参数值'
+                         value={goodsConfigArr[index]['value']}
+                         onChange={(v) =>{
+                           goodsConfigArr[index]['value'] = v.target.value;
+                           this.setState({goodsConfigArr})
+                         }}
+                  />
+                </FormItem>
+                {
+                  goodsConfigArr.length > 1 && <a onClick={() => {
+                    goodsConfigArr.splice(index, 1);
+                    console.error(goodsConfigArr)
+                    this.setState({
+                      goodsConfigArr: [...goodsConfigArr]
+                    })
+                  }}>删除</a>
+                }
+              </div>
+            )
+          })
+        }
 
-        </div>
-
-
-        <FormItem label="黑名单提示">
-          {getFieldDecorator('blackLimitMessage', {
-            initialValue: record && record.blackLimitMessage,
-            rules: [{required: true, whitespace: true, message: '请输入被限用户的提示语'}],
-          })(
-            <Input placeholder='请输入黑名单用户提示语'/>
-          )}
-        </FormItem>
-
-
-        <FormItem {...stationEditFormDrawer} label="支付限制" key='payLimitType'>
-          {getFieldDecorator('payLimitType', {
-            initialValue: record && record.payLimitType,
-            rules: [{required: true, message: '请输入支付限制'}],
-          })(
-            <Select placeholder='请选择支付限制'>
-              <Option value={0}>不限</Option>
-              <Option value={1}>建行卡</Option>
-              <Option value={2}>建行行用卡</Option>
-              <Option value={3}>银联卡</Option>
-            </Select>
-          )}
-        </FormItem>
-
-        <FormItem key='payLimitTimes'>
-          每人限制 {getFieldDecorator('payLimitTimes', {
-          initialValue: record && record.payLimitTimes,
-          rules: [{required: true, message: '请输入限制次数'}],
-        })(
-          <Input style={{width: 60}} type='number'/>
-        )} 次
-        </FormItem>
-
-
-        <FormItem key='payLimitMessage'>
-          {getFieldDecorator('payLimitMessage', {
-            initialValue: record && record.payLimitMessage,
-            rules: [{required: true, whitespace: true, message: '请输入被限购的提示语'}],
-          })(
-            <Input placeholder='请输入被限购的提示语'/>
-          )}
-        </FormItem>
-
-
-        <FormItem {...stationEditFormDrawer} label="会场地址" key='meetingUrl'>
-
-          {getFieldDecorator('meetingUrl', {
-            initialValue: record && record.meetingUrl,
-            rules: [{required: true, whitespace: true, message: '请输入会场页面地址'}],
-          })(
-            <Input placeholder='请输入会场页面地址'/>
-          )}
-
-        </FormItem>
-
-
-        <FormItem {...stationEditFormDrawer} label="会场说明" key='intro'>
-
-          {getFieldDecorator('intro', {
-            initialValue: record && record.intro,
-            rules: [{whitespace: true, message: '请输入会场会场说明'}],
-          })(
-            <Input.TextArea placeholder='请输入会场会场说明'/>
-          )}
-
-        </FormItem>
 
 
         <div className="drawerBtns">
