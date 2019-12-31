@@ -45,7 +45,7 @@ class Home extends Component {
 
 
   getData(params) {
-    api.channelList(params).then(data => {
+    api.cargoList(params).then(data => {
       console.error(data);
       this.setState({
         data: data,
@@ -134,32 +134,62 @@ class Home extends Component {
     // 列表表头
     const columns = [
       {
-        title: 'id',
+        title: '订单号',
         key: 'channelId',
         dataIndex: 'channelId',
       },
       {
-        title: '名称',
+        title: '会场名称',
         dataIndex: 'channelName',
         key: 'channelName',
       },
       {
-        title: '地址',
+        title: '商品名称',
         key: 'channelUrl',
         dataIndex: 'channelUrl',
       },
       {
-        title: '创建时间',
+        title: '手机号',
         key: 'createTime',
         dataIndex: 'createTime',
       },
       {
-        title: '更新时间',
+        title: '发放账号',
         key: 'updateTime',
         dataIndex: 'updateTime',
       },
       {
-        title: '更新人',
+        title: '支付方式',
+        key: 'operatorUser',
+        dataIndex: 'operatorUser',
+      },
+      {
+        title: '支付时间',
+        key: 'operatorUser',
+        dataIndex: 'operatorUser',
+      },
+      {
+        title: '支付金额',
+        key: 'operatorUser',
+        dataIndex: 'operatorUser',
+      },
+      {
+        title: '交货方式',
+        key: 'operatorUser',
+        dataIndex: 'operatorUser',
+      },
+      {
+        title: '状态',
+        key: 'operatorUser',
+        dataIndex: 'operatorUser',
+      },
+      {
+        title: '入口渠道',
+        key: 'operatorUser',
+        dataIndex: 'operatorUser',
+      },
+      {
+        title: '发货备注',
         key: 'operatorUser',
         dataIndex: 'operatorUser',
       },
