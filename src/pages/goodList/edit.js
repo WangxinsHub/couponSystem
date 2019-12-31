@@ -67,6 +67,7 @@ class Home extends Component {
   }
   postData = async (values) => {
     const that = this;
+    values.price = values.price * 100;
     const {goodsConfigArr,goodsDesc} = this.state;
     try {
       let result;
@@ -181,7 +182,7 @@ class Home extends Component {
 
         <FormItem label='售价' key='price'  {...inline}>
           {getFieldDecorator('price', {
-            initialValue: record && record.goodsType,
+            initialValue: record && record.price,
             rules: [{required: true, message: '请输入商品售价'}],
           })(
             <Input style={{width: '80%'}} type={'number'} placeholder="请输入商品售价"/>

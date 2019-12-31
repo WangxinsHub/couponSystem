@@ -45,6 +45,9 @@ export default {
     goodsList:`${API_HOSTNAME}/service/goods/list`,
     typeList:`${API_HOSTNAME}/service/goods/typeList`,
     updateGoods:`${API_HOSTNAME}/service/goods/update`,
+    addType:`${API_HOSTNAME}/service/goods/typeCreate`,
+    updateType:`${API_HOSTNAME}/service/goods/typeUpdate`,
+    channelList:`${API_HOSTNAME}/service/channel/list`,
 
 
     userList:`${API_HOSTNAME}/service/user/list`,

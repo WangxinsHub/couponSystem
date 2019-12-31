@@ -37,17 +37,19 @@ class Home extends Component {
      * @return {[type]} [description]
      */
     componentDidMount() {
-        this.getData();
+        this.getData({
+            pageNo: 0,
+            pageSize: 10
+        });
     }
 
 
     getData(params) {
-        api.goodsList().then(data => {
+        api.goodsList(params).then(data => {
             this.setState({
                 data: data,
-                blList: data.data || []
+                blList: data.data || [],
             })
-            console.log(data);
         })
     }
 
@@ -61,12 +63,6 @@ class Home extends Component {
             state: this.state,
             values,
             callBack: (json) => {
-                if (json.searchList.rangeTime) {
-                    json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd hh:mm:ss')
-                    json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd hh:mm:ss')
-                    delete json.searchList.rangeTime;
-                }
-
                 this.setState(json, () => {
                     this.getData({
                         ...json.searchList,
@@ -189,8 +185,24 @@ class Home extends Component {
                             })
                         }}>编辑</a>
                         <Divider type="vertical"/>
+                        <a onClick={()=>{
+                            let goodsStatus  =  record.goodsStatus==0 ? 1 :0;
+                            api.updateGoods({goodsStatus}).then(result=>{
+                                if (result.message === 'success') {
+                                    message.success('保存成功！');
+                                    this.getData({
+                                        pageNo: this.state.currentNo,
+                                        pageSize: this.state.pageSize,
+                                        ...searchList
+                                    })
+                                } else {
+                                    message.error(result.message);
+                                }
+                            });
 
-                        <a>渠道</a>
+                        }}>  {
+                            record.goodsStatus == 1 ?'下架' : '上架'
+                        }</a>
                     </Fragment>
                 ),
             },

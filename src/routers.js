@@ -306,6 +306,44 @@ export default class Router extends React.Component {
             },
         });
 
+        this.goodsType = lodable({
+            loader: () => {
+                return import('@/pages/goodsType/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+        this.entryList = lodable({
+            loader: () => {
+                return import('@/pages/entryList/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+
+        this.channelList = lodable({
+            loader: () => {
+                return import('@/pages/channelList/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
+
+        this.shopcart = lodable({
+            loader: () => {
+                return import('@/pages/shopcart/index');
+            },
+            loading: () => {
+                return null
+            },
+        });
+
     };
 
     /**
@@ -326,6 +364,16 @@ export default class Router extends React.Component {
                         <Route exact path="/shoppingMall/result" component={this.result}/>
 
 
+                        <Route exact path="/shop/hall" component={this.hall}/>
+                        <Route exact path="/shop/blackWhite" component={this.blackWhite}/>
+                        <Route exact path="/shop/cargoList" component={this.cargoList}/>
+                        <Route exact path="/shop/goodList" component={this.goodList}/>
+                        <Route exact path="/shop/goodType" component={this.goodsType}/>
+                        <Route exact path="/shop/entryList" component={this.entryList}/>
+                        <Route exact path="/shop/channelList" component={this.channelList}/>
+                        <Route exact path="/shop/shopcart" component={this.shopcart}/>
+
+
 
 
                         <Route exact path="/h5/login" component={this.h5login}/>
@@ -336,21 +384,15 @@ export default class Router extends React.Component {
                         <Route exact path="/couponList" component={this.couponList}/>
                         <Route exact path="/couponSend" component={this.couponSend}/>
                         <Route exact path="/couponSend/:id" component={this.couponSend}/>
-
                         <Route exact path="/couponPlant" component={this.couponPlant}/>
 
                         <Route exact path="/activeConfig" component={this.activeConfig}/>
                         <Route exact path="/activeList" component={this.activeList}/>
+
                         <Route exact path="/sendRecord/:id" component={this.sendRecord}/>
                         <Route exact path="/sendRecord" component={this.sendRecord}/>
                         <Route exact path="/sendDetail" component={this.sendDetail}/>
                         <Route exact path="/sendDetail/:aid/:bid" component={this.sendDetail}/>
-
-
-                        <Route exact path="/shop/hall" component={this.hall}/>
-                        <Route exact path="/shop/blackWhite" component={this.blackWhite}/>
-                        <Route exact path="/shop/cargoList" component={this.cargoList}/>
-                        <Route exact path="/shop/goodList" component={this.goodList}/>
 
                         <Route exact path="/departmentList" component={this.department}/>
 
@@ -365,7 +407,6 @@ export default class Router extends React.Component {
                         <Route exact path="/h5/sendCoupon" component={this.h5coupon}/>
                         <Route exact path="/h5/showCode" component={this.h5showCode}/>
                         <Route exact path="/h5/sendListH5" component={this.sendListH5}/>
-
 
                         <Route exact path="/h5/gift/login" component={this.giftLogin}/>
                         <Route exact path="/h5/gift/verify" component={this.giftVerify}/>
