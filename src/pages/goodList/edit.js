@@ -49,15 +49,19 @@ class Home extends Component {
     const {record} = nextProps;
     // 当传入的type发生变化的时候，更新state
     if (record && record.goodsConfig) {
-      console.log(record);
-      let goodObj = JSON.parse(record.goodsConfig);
       let goodsConfigArr = [];
-      Object.keys(goodObj).map((key)=>{
-        goodsConfigArr.push({
-          key,
-          value:goodObj[key]
-        })
-      });
+      try {
+        let goodObj = JSON.parse(record.goodsConfig);
+        Object.keys(goodObj).map((key)=>{
+          goodsConfigArr.push({
+            key,
+            value:goodObj[key]
+          })
+        });
+      }catch (e) {
+        goodsConfigArr = []
+      }
+
       return {
         goodsConfigArr,
       };

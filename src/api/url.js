@@ -39,6 +39,7 @@ export default {
     addMeet:`${API_HOSTNAME}/service/meeting/mCreate`,
     mUpdate:`${API_HOSTNAME}/service/meeting/mUpdate`,
     blList:`${API_HOSTNAME}/service/meeting/blList`,
+    adBl:`${API_HOSTNAME}/service/meeting/blCreate`,
     blDelete:`${API_HOSTNAME}/service/meeting/blDelete`,
     cargoList:`${API_HOSTNAME}/service/meeting/cargoList`,
     goodsCreate:`${API_HOSTNAME}/service/goods/create`,

@@ -208,11 +208,11 @@ class Home extends Component {
                         </Popconfirm>
                         <Divider type="vertical" />
                         <a onClick={()=>{
-                            this.props.history.push(`/shop/blackWhite/0/${record.meetingId}`)
+                            this.props.history.push(`/shop/blackWhite/0/${record.meetingId}/${record.meetingName}`)
                         }}>白名单</a>
                         <Divider type="vertical" />
                         <a onClick={()=>{
-                            this.props.history.push(`/shop/blackWhite/1/${record.meetingId}`)
+                            this.props.history.push(`/shop/blackWhite/1/${record.meetingId}/${record.meetingName}`)
                         }}>黑名单</a>
                     </Fragment>
                 ),

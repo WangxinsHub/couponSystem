@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import {is, fromJS} from 'immutable';
 import {object, func} from 'prop-types';
-import {Card, Button, Divider, message, Drawer, Spin, Badge, Popconfirm} from 'antd';
+import {Card, Button, Divider, message, Drawer, Spin, Badge, Popconfirm, Row, Col} from 'antd';
 import {PageHeaderLayout, TableSearch, StandardTable, TableCommon, Utils} from 'dt-antd';
 import Define from './define';
 import tableCommon from '../../utils/tableCommon.js';
@@ -133,6 +133,12 @@ class Home extends Component {
     render() {
         const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, record, blList} = this.state;
         let {breadMenu, searchMenu} = Define;
+
+        const pageName = this.props.match.params.type ==1?'黑名单':"白名单"
+        const _breadMenu = [...breadMenu,{
+            path:'',
+            title:pageName
+        }]
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
         const searchList = this.state.searchList || {};
@@ -187,8 +193,17 @@ class Home extends Component {
 
         return (
             <PageHeaderLayout
-                nav={breadMenu}
+                nav={_breadMenu}
             >
+                <Row>
+                    <Col span={6}>
+                        <div style={{padding:20,fontSize:15}}>
+                            会场：<a onClick={()=>window.history.back(-1)}>{this.props.match.params.meetName}</a>
+                        </div>
+                    </Col>
+                </Row>
+
+
                 <Spin tip={tips} spinning={tips ? true : false}>
                     <Card bordered={false}>
                         <div className='tableList'>
@@ -257,13 +272,12 @@ class Home extends Component {
                             />
                         </div>
 
-
-
                         <Drawer
-                            title={'发送券码'}
+                            title={'添加'+pageName}
                             width='560'
                             visible={showDrawer}
                             maskClosable={false}
+
                             onClose={()=>{
                                 this.setState({
                                     showDrawer: false,
@@ -273,7 +287,8 @@ class Home extends Component {
                             }}
                         >
                             { showDrawer && <NewForm
-                                id={showDrawerId}
+                                meetingId={this.props.match.params.meetId}
+                                blackListType={this.props.match.params.type}
                                 onClose={(bool)=>{
                                     this.setState({
                                         showDrawer: false,

@@ -495,6 +495,18 @@ class API extends Server{
     }
   }
 
+  async adBl(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.adBl, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
 
 
   async updateGoods(params = {}){

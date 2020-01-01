@@ -374,13 +374,14 @@ export default class Router extends React.Component {
 
 
             <Route exact path="/shop/hall" component={this.hall}/>
-            <Route exact path="/shop/blackWhite/:type/:meetId" component={this.blackWhite}/>
+            <Route exact path="/shop/blackWhite/:type/:meetId/:meetName" component={this.blackWhite}/>
             <Route exact path="/shop/cargoList" component={this.cargoList}/>
             <Route exact path="/shop/goodList" component={this.goodList}/>
             <Route exact path="/shop/goodType" component={this.goodsType}/>
             <Route exact path="/shop/entryList" component={this.entryList}/>
             <Route exact path="/shop/channelList/:data" component={this.channelList}/>
             <Route exact path="/shop/shopcart" component={this.shopcart}/>
+            <Route exact path="/shop/cargoList" component={this.cargoList}/>
             <Route exact path="/shop/cargoList" component={this.cargoList}/>
 
 
