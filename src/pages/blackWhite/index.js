@@ -44,8 +44,8 @@ class Home extends Component {
 
     getData(params){
         api.blList({
-            blackListType:0,
-            meetingId:1,
+            blackListType:this.props.match.params.type,
+            meetingId:this.props.match.params.meetId,
             ...params
         }).then(data=>{
             this.setState({

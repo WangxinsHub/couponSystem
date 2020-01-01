@@ -48,6 +48,8 @@ export default {
     addType:`${API_HOSTNAME}/service/goods/typeCreate`,
     updateType:`${API_HOSTNAME}/service/goods/typeUpdate`,
     channelList:`${API_HOSTNAME}/service/channel/list`,
+    addChannel:`${API_HOSTNAME}/service/channel/create`,
+    updateChannel:`${API_HOSTNAME}/service/channel/update`,
 
 
     userList:`${API_HOSTNAME}/service/user/list`,

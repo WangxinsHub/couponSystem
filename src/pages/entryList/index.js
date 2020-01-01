@@ -39,7 +39,8 @@ class Home extends Component {
   componentDidMount() {
     this.getData({
       pageNo: 0,
-      pageSize: 10
+      pageSize: 10,
+      channelType:0
     });
   }
 
@@ -176,13 +177,7 @@ class Home extends Component {
               })
             }}>编辑</a>
             <Divider type="vertical"/>
-            <a onClick={() => {
-              this.setState({
-                showDrawer: true,
-                showDrawerId: record.goodsId,
-                record,
-              })
-            }}>渠道</a>
+            <a onClick={() => this.props.history.push(`/shop/channelList/${JSON.stringify(record)}`)}>渠道</a>
           </Fragment>
         ),
       },
@@ -225,19 +220,8 @@ class Home extends Component {
               <StandardTable
                 data={data}
                 columns={columns}
-                rowKey={columns => columns.id}
-                onChange={this.handleStandardTableChange}
-                onSelectRow={data => {
-                  if (data.length > 0) {
-                    let ids = data.map((code) => (code.id));
-                    this.setState({
-                      checkedIds: ids.join()
-                    })
-                  }
-                  this.setState({
-                    selectedRow: data
-                  })
-                }}
+                rowKey={columns => columns.id}                                noCheck={true}
+                onCheck={true}
               />
             </div>
 

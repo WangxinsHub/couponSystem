@@ -130,7 +130,20 @@ class Home extends Component {
     searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
     const searchList = this.state.searchList || {};
 
-
+    // cargoStatus: 0
+    // sorted: 1
+    // updateTime: "2019-12-29 00:01:24"
+    // createTime: "2019-12-28 23:51:19"
+    // cargoId: 1
+    // meetingId: 1
+    // price: 100
+    // discountPrice: 50
+    // totalCount: 120
+    // goodsId: 1
+    // storeCount: 20
+    // goodsType: "视频类"
+    // goodsName: "爱奇艺周卡"
+    // deliveType: 1
     // 列表表头
     const columns = [
       {

@@ -207,15 +207,13 @@ class Home extends Component {
                             <a>明细</a>
                         </Popconfirm>
                         <Divider type="vertical" />
-                        <Popconfirm placement="top" title="确认要关闭吗？" onConfirm={() => {
-                        }} okText='确认' cancelText='取消'>
-                            <a>白名单</a>
-                        </Popconfirm>
+                        <a onClick={()=>{
+                            this.props.history.push(`/shop/blackWhite/0/${record.meetingId}`)
+                        }}>白名单</a>
                         <Divider type="vertical" />
-                        <Popconfirm placement="top" title="确认要关闭吗？" onConfirm={() => {
-                        }} okText='确认' cancelText='取消'>
-                            <a>黑名单</a>
-                        </Popconfirm>
+                        <a onClick={()=>{
+                            this.props.history.push(`/shop/blackWhite/1/${record.meetingId}`)
+                        }}>黑名单</a>
                     </Fragment>
                 ),
             },

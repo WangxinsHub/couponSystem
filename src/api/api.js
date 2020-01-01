@@ -473,6 +473,30 @@ class API extends Server{
   }
 
 
+  async addChannel(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.addChannel, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async updateChannel(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.updateChannel, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
+
   async updateGoods(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.updateGoods, params);
