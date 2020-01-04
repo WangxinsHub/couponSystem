@@ -179,10 +179,10 @@ class Home extends Component {
                             >
 
                                 {
-                                    [1, 2, 3, 4].map(index => (
+                                    [1, 2, 3, 4,5].map(index => (
                                         <TreeNode
-                                            title={index === 1 ? '券库' : index === 2 ? '活动' : index === 3 ? '渠道' : '系统'}
-                                            key={index === 1 ? 'qk' : index === 2 ? 'hd' : index === 3 ? 'qd' : 'xt'}>
+                                            title={index === 1 ? '券库' : index === 2 ? '活动' : index === 3 ? '渠道' : index===5?"商城":'系统'}
+                                            key={index === 1 ? 'qk' : index === 2 ? 'hd' : index === 3 ? 'qd' : index===5?'sc': 'xt'}>
                                             {
                                                 this.state.menuList.map(item => {
                                                     if (item.menuType === index) {

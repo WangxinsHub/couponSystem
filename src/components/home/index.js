@@ -31,6 +31,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
                 [0, 1, 2, 3,4].map((index) => {
                     menu[index].childMenus.map((child) => {
                         menuList.map((apiMenu) => {
+
                             if (child.menuCode === apiMenu.menuCode) {
                                 child.show = true;
                                 menu[index].show = true
@@ -144,7 +145,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
         menu['hd'] = 'gold';
         menu['qd'] = 'deployment-unit';
         menu['yh'] = 'user';
-        menu['sc'] = 'user';
+        menu['sc'] = 'sc';
 
         //menu['order.Manage'] = 'order.Manage';
         // 定义code对应的icon
