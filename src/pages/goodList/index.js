@@ -187,7 +187,7 @@ class Home extends Component {
                         <Divider type="vertical"/>
                         <a onClick={()=>{
                             let goodsStatus  =  record.goodsStatus==0 ? 1 :0;
-                            api.updateGoods({goodsStatus}).then(result=>{
+                            api.updateGoods({goodsStatus,goodsId:record.goodsId}).then(result=>{
                                 if (result.message === 'success') {
                                     message.success('保存成功！');
                                     this.getData({
@@ -201,7 +201,7 @@ class Home extends Component {
                             });
 
                         }}>  {
-                            record.goodsStatus == 1 ?'下架' : '上架'
+                            record.goodsStatus == 1 ?'上架' : '下架'
                         }</a>
                     </Fragment>
                 ),

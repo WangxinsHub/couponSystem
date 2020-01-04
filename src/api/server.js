@@ -68,20 +68,22 @@ export default class Server {
                 withCredentials: true, //是否携带cookies发起请求
                 data: params || null,
                 params,
+
             }
             axios.request(_option).then(res => {
                 if(!sessionStorage.loginFlag){
 
 
                     if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+                        resolve(typeof res.data === 'object' || typeof res.data === 'string' ? res.data : JSON.parse(res.data))
                         // window.location.href = window.location.href.split('/#/')[0] + '/#/h5/login';
                     }else {
                         window.location.href = window.location.href.split('/#/')[0] + '/#/login';
                     }
 
                     return false
-
                 }
+
                 resolve(typeof res.data === 'object' || typeof res.data === 'string' ? res.data : JSON.parse(res.data))
             }, (error) => {
                 if (error.response) {

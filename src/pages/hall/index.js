@@ -43,7 +43,6 @@ class Home extends Component {
     }
 
 
-
     /**
      * [componentDidMount 加载render方法之前,获取所有用户列表]
      * @return {[type]} [description]
@@ -51,8 +50,8 @@ class Home extends Component {
     componentDidMount() {
         this.props.getList();
         this.props.getDepartmentList({
-            pageNo:0,
-            pageSize:1000
+            pageNo: 0,
+            pageSize: 1000
         })
     }
 
@@ -66,7 +65,7 @@ class Home extends Component {
             state: this.state,
             values,
             callBack: (json) => {
-                if(json.searchList.rangeTime){
+                if (json.searchList.rangeTime) {
                     if (json.searchList.rangeTime.length > 0) {
                         if (json.searchList.startTime === json.searchList.endTime) {
                             json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd') + '00:00:00'
@@ -81,7 +80,7 @@ class Home extends Component {
                     }
                     delete json.searchList.rangeTime;
                 }
-                this.setState(json,()=>{
+                this.setState(json, () => {
                     this.props.getList({
                         couponId: this.props.match.params.id ? this.props.match.params.id : null,
                         ...json.searchList,
@@ -186,8 +185,8 @@ class Home extends Component {
                         }} okText='确认' cancelText='取消'>
                             <a>关闭</a>
                         </Popconfirm>
-                        <Divider type="vertical" />
-                        <a onClick={()=>{
+                        <Divider type="vertical"/>
+                        <a onClick={() => {
                             this.setState({
                                 showDrawer: true,
                                 showDrawerId: record.id,
@@ -196,23 +195,22 @@ class Home extends Component {
                                 type: null
                             })
                         }}>编辑</a>
-                        <Divider type="vertical" />
-                        <Popconfirm placement="top" title="确认要关闭吗？" onConfirm={() => {
-                        }} okText='确认' cancelText='取消'>
-                            <a>商品</a>
-                        </Popconfirm>
-                        <Divider type="vertical" />
+                        <Divider type="vertical"/>
+                        <a onClick={()=>{
+                            this.props.history.push(`/cargoList/${record.meetingId}/${record.meetingName}`)
+                        }}>商品</a>
+                        <Divider type="vertical"/>
                         <Popconfirm placement="top" title="确认要关闭吗？" onConfirm={() => {
                         }} okText='确认' cancelText='取消'>
                             <a>明细</a>
                         </Popconfirm>
-                        <Divider type="vertical" />
-                        <a onClick={()=>{
-                            this.props.history.push(`/shop/blackWhite/0/${record.meetingId}/${record.meetingName}`)
+                        <Divider type="vertical"/>
+                        <a onClick={() => {
+                            this.props.history.push(`/blackWhite/0/${record.meetingId}/${record.meetingName}`)
                         }}>白名单</a>
-                        <Divider type="vertical" />
-                        <a onClick={()=>{
-                            this.props.history.push(`/shop/blackWhite/1/${record.meetingId}/${record.meetingName}`)
+                        <Divider type="vertical"/>
+                        <a onClick={() => {
+                            this.props.history.push(`/blackWhite/1/${record.meetingId}/${record.meetingName}`)
                         }}>黑名单</a>
                     </Fragment>
                 ),

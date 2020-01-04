@@ -177,7 +177,7 @@ class Home extends Component {
               })
             }}>编辑</a>
             <Divider type="vertical"/>
-            <a onClick={() => this.props.history.push(`/shop/channelList/${JSON.stringify(record)}`)}>渠道</a>
+            <a onClick={() => this.props.history.push(`/channelList/${JSON.stringify(record)}`)}>渠道</a>
           </Fragment>
         ),
       },

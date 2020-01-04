@@ -287,15 +287,15 @@ export default class Router extends React.Component {
         return null
       },
     });
-
-    this.cargoList = lodable({
-      loader: () => {
-        return import('@/pages/cargoList/index');
-      },
-      loading: () => {
-        return null
-      },
-    });
+    //
+    // this.cargoList = lodable({
+    //   loader: () => {
+    //     return import('@/pages/cargoList/index');
+    //   },
+    //   loading: () => {
+    //     return null
+    //   },
+    // });
 
     this.goodList = lodable({
       loader: () => {
@@ -353,6 +353,33 @@ export default class Router extends React.Component {
       },
     });
 
+    this.meet = lodable({
+      loader: () => {
+        return import('@/pages/shoppingMall/meet');
+      },
+      loading: () => {
+        return null
+      },
+    });
+
+    this.goods = lodable({
+      loader: () => {
+        return import('@/pages/shoppingMall/goods');
+      },
+      loading: () => {
+        return null
+      },
+    });
+
+    this.redGoods = lodable({
+      loader: () => {
+        return import('@/pages/shoppingMall/redGood');
+      },
+      loading: () => {
+        return null
+      },
+    });
+
   };
 
   /**
@@ -367,22 +394,25 @@ export default class Router extends React.Component {
 
 
             <Route exact path="/shoppingMall/login" component={this.shopLogin}/>
-            <Route exact path="/shoppingMall/pay" component={this.pay}/>
+            <Route exact path="/shoppingMall/pay/:cargoId" component={this.pay}/>
             <Route exact path="/shoppingMall/bill" component={this.bill}/>
             <Route exact path="/shoppingMall/billDetail" component={this.billDetail}/>
             <Route exact path="/shoppingMall/result" component={this.result}/>
+            <Route exact path="/shoppingMall/meet" component={this.meet}/>
+            <Route exact path="/shoppingMall/goods" component={this.goods}/>
+            <Route exact path="/shoppingMall/redGoods" component={this.redGoods}/>
 
 
-            <Route exact path="/shop/hall" component={this.hall}/>
-            <Route exact path="/shop/blackWhite/:type/:meetId/:meetName" component={this.blackWhite}/>
-            <Route exact path="/shop/cargoList" component={this.cargoList}/>
-            <Route exact path="/shop/goodList" component={this.goodList}/>
-            <Route exact path="/shop/goodType" component={this.goodsType}/>
-            <Route exact path="/shop/entryList" component={this.entryList}/>
-            <Route exact path="/shop/channelList/:data" component={this.channelList}/>
-            <Route exact path="/shop/shopcart" component={this.shopcart}/>
-            <Route exact path="/shop/cargoList" component={this.cargoList}/>
-            <Route exact path="/shop/cargoList" component={this.cargoList}/>
+            <Route exact path="/hall" component={this.hall}/>
+            <Route exact path="/blackWhite/:type/:meetId/:meetName" component={this.blackWhite}/>
+            <Route exact path="/cargoList/:mid/:data" component={this.cargoList}/>
+            <Route exact path="/goodList" component={this.goodList}/>
+            <Route exact path="/goodType" component={this.goodsType}/>
+            <Route exact path="/entryList" component={this.entryList}/>
+            <Route exact path="/channelList/:data" component={this.channelList}/>
+            <Route exact path="/shopcart" component={this.shopcart}/>
+            {/*<Route exact path="/shop/cargoList" component={this.cargoList}/>*/}
+            {/*<Route exact path="/shop/cargoList" component={this.cargoList}/>*/}
 
 
             <Route exact path="/h5/login" component={this.h5login}/>

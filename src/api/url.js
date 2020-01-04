@@ -42,6 +42,8 @@ export default {
     adBl:`${API_HOSTNAME}/service/meeting/blCreate`,
     blDelete:`${API_HOSTNAME}/service/meeting/blDelete`,
     cargoList:`${API_HOSTNAME}/service/meeting/cargoList`,
+    cargoCreate:`${API_HOSTNAME}/service/meeting/cargoCreate`,
+    cargoUpdate:`${API_HOSTNAME}/service/meeting/cargoUpdate`,
     goodsCreate:`${API_HOSTNAME}/service/goods/create`,
     goodsList:`${API_HOSTNAME}/service/goods/list`,
     typeList:`${API_HOSTNAME}/service/goods/typeList`,
@@ -51,6 +53,11 @@ export default {
     channelList:`${API_HOSTNAME}/service/channel/list`,
     addChannel:`${API_HOSTNAME}/service/channel/create`,
     updateChannel:`${API_HOSTNAME}/service/channel/update`,
+    pay:`${API_HOSTNAME}/pay/info`,//使用帮助-h5,
+
+    memberInfo:`${API_HOSTNAME}/weChat/memberInfo`,//使用帮助-h5,
+    bindMobile:`${API_HOSTNAME}/weChat/bindMobile`,//使用帮助-h5,
+    bindSubmit:`${API_HOSTNAME}/weChat/submitBind`,//使用帮助-h5,
 
 
     userList:`${API_HOSTNAME}/service/user/list`,

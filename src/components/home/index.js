@@ -28,17 +28,18 @@ export default class SiderMenuWrapper extends React.PureComponent {
             }, (state) => {
                 const menuList = this.state.menuList.filter(item => item);
                 const menu = this.state.menu.concat(...this.leftMenu());
-                [0, 1, 2, 3].map((index) => {
+                [0, 1, 2, 3,4].map((index) => {
                     menu[index].childMenus.map((child) => {
                         menuList.map((apiMenu) => {
                             if (child.menuCode === apiMenu.menuCode) {
                                 child.show = true;
                                 menu[index].show = true
-
                             }
+
                         })
                     })
                 });
+                console.error(menu)
                 this.setState({menu})
             })
         });
@@ -143,6 +144,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
         menu['hd'] = 'gold';
         menu['qd'] = 'deployment-unit';
         menu['yh'] = 'user';
+        menu['sc'] = 'user';
 
         //menu['order.Manage'] = 'order.Manage';
         // 定义code对应的icon
@@ -190,6 +192,30 @@ export default class SiderMenuWrapper extends React.PureComponent {
                     {
                         menuCode: 'departmentList',
                         menuName: '渠道列表'
+                    }
+                ]
+            },
+            {
+                menuCode: 'sc',
+                menuName: '商城',
+                childMenus: [
+                    {
+                        menuCode: 'hall',
+                        menuName: '会场列表'
+                    }, {
+                        menuCode: 'shopcart',
+                        menuName: '购买明细'
+                    },
+                    {
+                        menuCode: 'goodList',
+                        menuName: '商品列表'
+                    }, {
+                        menuCode: 'goodType',
+                        menuName: '类型管理'
+                    },
+                    {
+                        menuCode: 'entryList',
+                        menuName: '入口管理'
                     }
                 ]
             },

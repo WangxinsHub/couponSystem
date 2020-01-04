@@ -338,14 +338,53 @@ class API extends Server{
   }
 
 
-  async mList(params = {}){
+  async pay(params = {}){
     try{
-      let result = await this.axiosCommon('post', Url.mList, params);
+      let result = await this.axiosCommon('post', Url.pay, params);
       if(result) {
         return result;
       }
     }catch(err){
       throw err;
+    }
+  }
+
+
+  async memberInfo(params = {}){
+    try{
+      let result = await this.axios('post', Url.memberInfo, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
+
+
+  async mList(params = {}){
+    let result = await this.axiosCommon('post', Url.mList, params);
+    if(result) {
+      console.log(result);
+      return result;
+    }
+  }
+
+  async bindMobile(params = {}){
+    let result = await this.axiosCommon('post', Url.bindMobile, params);
+    if(result) {
+      console.log(result);
+      return result;
+    }
+  }
+
+  async bindSubmit(params = {}){
+    let result = await this.axiosCommon('post', Url.bindSubmit, params);
+    if(result) {
+      console.log(result);
+      return result;
     }
   }
 
@@ -418,6 +457,31 @@ class API extends Server{
   async goodsList(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.goodsList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
+
+  async cargoCreate(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.cargoCreate, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+
+  async cargoUpdate(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.cargoUpdate, params);
       if(result) {
         return result;
       }

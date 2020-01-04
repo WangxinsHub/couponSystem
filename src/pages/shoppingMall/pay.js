@@ -1,9 +1,77 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import './style/pay.less'
 import qq from './icon/qq.png'
 import {InputItem} from 'antd-mobile'
+import API from '@/api/api';
+import util from '../../utils/base'
 
-export default ()=>{
+export default (props)=>{
+    const [data,setData] = useState({});
+    const wx = window.wx;
+    useEffect(()=>{
+        API.cargoList({
+            meetingId:sessionStorage.meetId,
+            cargoId: props.match.params.cargoId
+        }).then(res => {
+            setData(res.data[0]||[])
+        })
+    },[]);
+
+    function wechatPay(param) {
+        let that = this;
+
+        wx.ready(function () {
+            wx.chooseWXPay({
+                timestamp: param.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                nonceStr: param.nonceStr, // 支付签名随机串，不长于 32 位
+                package: param.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                signType: param.signType, // 签名方式，默认为´SHA1´，使用新版支付需传入´MD5´
+                paySign: param.paySign, // 支付签名
+                success: function (res) {
+                    if (res.errMsg == "chooseWXPay:ok") {
+                        alert('充值成功')
+                    } else {
+                        alert('充值失败')
+                    }
+                },
+                error(res) {
+                    alert('充值失败')
+
+                },
+                cancel: function (res) {
+                    alert('取消支付')
+                }
+            });
+        });
+    }
+
+
+    function handlePay() {
+        API.pay({
+            amount: data.discountPrice,
+            account:data.price,
+            projectName: data.goodsName,
+            userId:sessionStorage.openId||'test',
+            meetingId : sessionStorage.meetId,
+            cargoId : data.cargoId,
+        }).then(res => {
+            if (data.data) {
+                let credential = JSON.parse(data.data.credential);
+                wx.config({
+                    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    appId: credential.appId, // 必填，公众号的唯一标识
+                    timestamp: credential.timeStamp, // 必填，生成签名的时间戳
+                    nonceStr: credential.nonceStr, // 必填，生成签名的随机串
+                    signature: credential.timeStamp, // 必填，调用js签名，
+                    jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，这里只写支付的
+                });
+                wechatPay(credential);
+            } else {
+                alert('充值失败，请联系客服');
+            }
+        });
+    }
+
     function renderQQ() {
         return (
             <div className='mall-input-field'>
@@ -40,24 +108,22 @@ export default ()=>{
                 </div>
                 <div className='right-content'>
                     <div className='goods-title'>
-                        QQ音乐月卡
+                        {data.goodsName}
                     </div>
                     <div className='goods-sub'>
-                        听我想听的
+                        {data.goodsType}
                     </div>
 
                     <div className='goods-price'>
-                       <span className='price-red'>￥1</span>
-                       <span className='price-gery'>￥5</span>
+                       <span className='price-red'>￥{(data.discountPrice/100).toFixed(2)}</span>
+                       <span className='price-gery'>￥{(data.price/100).toFixed(2)}</span>
                     </div>
                 </div>
             </div>
 
-            {renderQQ()}
+            {data.goodsName && data.goodsName.indexOf('qq')>-1 ? renderQQ():renderPhone()}
 
-            {renderPhone()}
-
-            <div className='confirm-btn'>
+            <div className='confirm-btn' onClick={handlePay}>
                 购买
             </div>
         </div>

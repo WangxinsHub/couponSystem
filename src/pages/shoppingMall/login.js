@@ -1,27 +1,75 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import './style/login.less'
 import {InputItem} from 'antd-mobile'
 import {message} from "antd";
 import API from '@/api/api';
 
-export default () => {
+export default (props) => {
     // 声明一个叫 "count" 的 state 变量
-    const [count, setCount] = useState(60);
+    const [code, setCode] = useState(60);
     const [countText, setCountText] = useState('获得验证码');
-    const [phone, setPhone] = useState('获得验证码');
+    const [falg, setFlag] = useState(true);
+    const [phone, setPhone] = useState('');
+    const [meet, setMeet] = useState('');
+
+    useEffect(()=>{
+        API.mList({
+            meetingId:sessionStorage.meetId
+        }).then(res=>{
+            console.log(res);
+        })
+    })
+    
+    function handleSubmit() {
+        API.bindSubmit({
+            verifyCode:code,
+            openId:sessionStorage.openId,
+            mobile:phone.replace(/\s*/g,"")
+        }).then(res=>{
+            if(res.code ===200 ){
+                props.history.push(`/shoppingMall/goods`);
+            }else{
+                message.warn(res.message)
+            }
+        });
+    }
 
     function countDown() {
         let counter = 60;
-        let timer = setInterval(() => {
-            counter--;
-            if (counter === 0) {
-                clearInterval(timer);
-                setCountText(`获取验证码`);
-            } else {
-                setCountText(`(${counter})s重新获取`);
+        if(falg){
+            if(!phone){
+                message.error('请先输入手机号！')
             }
 
-        }, 1000);
+            setFlag(false);
+            let timer = setInterval(() => {
+                counter--;
+                if (counter === 0) {
+                    setFlag(true);
+                    clearInterval(timer);
+                    setCountText(`获取验证码`);
+                } else {
+                    setCountText(`(${counter})s重新获取`);
+                }
+
+            }, 1000);
+
+            API.bindMobile({
+                meetingId:sessionStorage.meetId,
+                openId:sessionStorage.openId,
+                mobile:phone.replace(/\s*/g,"")
+            }).then(res=>{
+                if(res.code ===200 ){
+                    message.success(res.message)
+                }else{
+                    clearInterval(timer);
+                    setCountText(`获取验证码`);
+                    setFlag(true);
+                    message.warn(res.message)
+                }
+            });
+
+        }
     }
 
     return (
@@ -40,7 +88,6 @@ export default () => {
                             type="phone"
                             placeholder="输入手机号"
                             onChange={(e) => {
-                                console.log(e);
                                 setPhone(e)
                             }}
                         />
@@ -56,6 +103,10 @@ export default () => {
                         <InputItem
                             type="number"
                             placeholder="输入验证码"
+                            onChange={(e)=>{
+                                console.log(e);
+                                setCode(e)
+                            }}
                         />
                     </div>
                     <div className='extra' onClick={() => countDown()}>
@@ -64,7 +115,7 @@ export default () => {
                 </div>
             </div>
 
-            <div className='confirm-btn'>
+            <div className='confirm-btn' onClick={handleSubmit}>
                 验证
             </div>
         </div>
