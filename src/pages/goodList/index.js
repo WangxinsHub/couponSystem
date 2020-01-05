@@ -160,6 +160,9 @@ class Home extends Component {
                 title: '售价',
                 key: 'price',
                 dataIndex: 'price',
+                render:(text)=>{
+                    return (text/100).toFixed(2)
+                }
             },
             {
                 title: '状态',

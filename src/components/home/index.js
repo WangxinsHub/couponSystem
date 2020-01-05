@@ -64,7 +64,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
                         const menuList = this.state.menuList.filter(item => item);
 
                         const menu = [...this.leftMenu()];
-                        [0, 1, 2, 3,4,5].map((index) => {
+                        [0, 1, 2, 3,4].map((index) => {
                             menu[index].childMenus.map((child) => {
                                 menuList.map((apiMenu) => {
                                     if (child.menuCode === apiMenu.menuCode) {

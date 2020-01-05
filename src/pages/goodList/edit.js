@@ -42,12 +42,8 @@ class Home extends Component {
         typeList:data.data
       })
     })
+    const {record} = this.props;
 
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const {record} = nextProps;
-    // 当传入的type发生变化的时候，更新state
     if (record && record.goodsConfig) {
       let goodsConfigArr = [];
       try {
@@ -58,20 +54,22 @@ class Home extends Component {
             value:goodObj[key]
           })
         });
+        this.setState({goodsConfigArr})
       }catch (e) {
-        goodsConfigArr = []
+        goodsConfigArr = [];
+        this.setState({goodsConfigArr})
+
       }
 
-      return {
-        goodsConfigArr,
-      };
+
     }
-    // 否则，对于state不进行任何操作
-    return null;
+
   }
+
   postData = async (values) => {
     const that = this;
-    values.price = values.price * 100;
+    values.goodsType = this.state.goodsType;
+
     const {goodsConfigArr,goodsDesc} = this.state;
     try {
       let result;
@@ -85,6 +83,7 @@ class Home extends Component {
 
       if (this.props.record) {
         values.goodsId = this.props.record.goodsId;
+        values.goodsType = this.state.goodsType || this.props.record.goodsType;
 
         result = await API.updateGoods(values);
         if (result.message === 'success') {
@@ -97,7 +96,8 @@ class Home extends Component {
           message.error(result.message);
         }
       } else {
-
+        values.price = values.price * 100;
+        values.goodsType = this.state.goodsType
         result = await API.goodsCreate(values);
         if (result.message === 'success') {
           message.success('保存成功！');
@@ -156,8 +156,7 @@ class Home extends Component {
     const {submitting, form, onClose} = this.props;
     const {getFieldDecorator} = form;
     const {goodsConfigArr,typeList} = this.state;
-    // 0: {goodsId: 1, goodsName: "商品一个111", updateTime: "2019-12-28 18:06:43",…}
-
+    console.log(goodsConfigArr);
     return (<Form style={{paddingBottom: 30}}>
 
         <FormItem label="名称" key='goodsName' {...inline}>
@@ -174,7 +173,10 @@ class Home extends Component {
             initialValue: record && record.goodsTypeId,
             rules: [{required: true, message: '请选择活动类型'}],
           })(
-            <Select style={{width: 150}} placeholder='请选择活动类型'>
+            <Select style={{width: 150}} onChange={(goodsType,option)=>{
+              console.log(option);
+              this.setState({goodsType:option.props.children})
+            }} placeholder='请选择活动类型'>
               {
                 typeList.map((type,index)=>(
                     <Option value={type.goodsId} key={index}>{type.goodsName}</Option>
@@ -186,7 +188,7 @@ class Home extends Component {
 
         <FormItem label='售价' key='price'  {...inline}>
           {getFieldDecorator('price', {
-            initialValue: record && record.price,
+            initialValue: record && record.price/100,
             rules: [{required: true, message: '请输入商品售价'}],
           })(
             <Input style={{width: '80%'}} type={'number'} placeholder="请输入商品售价"/>
@@ -250,8 +252,11 @@ class Home extends Component {
                     <Input style={{width: 110}} placeholder='参数名'
                            value={goodsConfigArr[index]['key']}
                            onChange={(v) => {
+                             console.log(v.target.value);
+                             console.log(goodsConfigArr[index]['key']);
                              goodsConfigArr[index]['key'] = v.target.value;
-                             this.setState({goodsConfigArr})
+                             console.log(goodsConfigArr);
+                             this.setState({goodsConfigArr:[...goodsConfigArr]})
                            }}
                     />
                   </FormItem>

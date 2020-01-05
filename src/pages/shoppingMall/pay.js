@@ -65,7 +65,7 @@ export default (props) => {
                     timestamp: credential.timeStamp, // 必填，生成签名的时间戳
                     nonceStr: credential.nonceStr, // 必填，生成签名的随机串
                     signature: credential.timeStamp, // 必填，调用js签名，
-                    channel: credential.channel, // 必填，调用js签名，
+                    channel: sessionStorage.channel, // 必填，调用js签名，
                     jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，这里只写支付的
                 });
                 wechatPay(credential);
