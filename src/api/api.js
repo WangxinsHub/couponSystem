@@ -411,6 +411,28 @@ class API extends Server{
     }
   }
 
+  async orderList(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.orderList, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
+  async orderOperator(params = {}){
+    try{
+      let result = await this.axiosCommon('post', Url.orderOperator, params);
+      if(result) {
+        return result;
+      }
+    }catch(err){
+      throw err;
+    }
+  }
+
   async blList(params = {}){
     try{
       let result = await this.axiosCommon('post', Url.blList, params);

@@ -232,7 +232,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
                         menuCode: 'hall',
                         menuName: '会场列表'
                     }, {
-                        menuCode: 'shopcart',
+                        menuCode: 'orderList',
                         menuName: '购买明细'
                     },
                     {

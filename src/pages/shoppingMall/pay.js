@@ -3,7 +3,7 @@ import './style/pay.less'
 import qq from './icon/qq.png'
 import {InputItem} from 'antd-mobile'
 import API from '@/api/api';
-import util from '../../utils/base'
+import {message} from "antd";
 
 export default (props) => {
     const [data, setData] = useState(null);
@@ -30,17 +30,18 @@ export default (props) => {
                 paySign: param.paySign, // 支付签名
                 success: function (res) {
                     if (res.errMsg == "chooseWXPay:ok") {
-                        alert('充值成功')
+                        message('充值成功');
+                        props.history.push( `/shoppingMall/result/success`);
                     } else {
-                        alert('充值失败')
+                        message('充值失败')
                     }
                 },
                 error(res) {
-                    alert('充值失败')
+                    message('充值失败')
 
                 },
                 cancel: function (res) {
-                    alert('取消支付')
+                    message('取消支付')
                 }
             });
         });
@@ -56,9 +57,8 @@ export default (props) => {
             meetingId: sessionStorage.meetId,
             cargoId: data.cargoId,
         }).then(res => {
-            if (data.data) {
-                let credential = JSON.parse(data.data.credential);
-                alert(JSON.stringify(data.data.credential))
+            if (res.data) {
+                let credential = JSON.parse(res.data.credential);
                 wx.config({
                     debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                     appId: credential.appId, // 必填，公众号的唯一标识
@@ -70,7 +70,8 @@ export default (props) => {
                 });
                 wechatPay(credential);
             } else {
-                alert(data.message);
+                props.history.push( `/shoppingMall/result`);
+                message.error(res.message);
             }
         });
     }
@@ -90,6 +91,9 @@ export default (props) => {
     function renderPhone() {
         return (
             <div className='mall-input-field'>
+                <div className='input-label'>
+                    请输入手机号
+                </div>
 
                 <InputItem
                     type="phone"

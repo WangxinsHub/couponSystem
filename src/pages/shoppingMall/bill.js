@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
-
+import React, {useState,useEffect} from 'react';
+import API from '@/api/api';
 import {Tabs, List} from 'antd-mobile';
 import './style/bill.less'
 
 const tabs = [
     {title: '全部'},
-    {title: '支付中'},
-    {title: '完成'},
-    {title: '失败'},
+    {title: '待支付'},//0
+    {title: '完成'},//5
+    {title: '退款中'},//4
 ];
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -15,43 +15,67 @@ const Brief = Item.Brief;
 
 export default () => {
     function handleTabChange(tabData, index) {
-        console.log(tabData);
+        console.log(index);
+        if(index == 0){
+            getData()
+        }else if(index==1){
+            getData(0)
+        }else if(index==2){
+            getData(5)
+        }else if(index==3){
+            getData(4)
+        }
     }
+
+    function getData(orderStatus) {
+        API.orderList({
+            account:sessionStorage.openId,
+            orderStatus
+        }).then(res=>{
+            if(res.code===200){
+                setOrderList(res.data)
+            }
+        })
+    }
+
+    const [orderList,setOrderList] = useState([])
+    useEffect(()=>{
+        getData();
+    },[]);
 
     return (
         <div>
-            <div className='phone-field'>15616760175</div>
+            <div className='phone-field'>{
+                sessionStorage.mobile
+            }</div>
             <Tabs tabs={tabs}
                   onChange={handleTabChange}
                   animated={false}
                   useOnPan={false}
             >
-                <div>
-                    <Item multipleLine
-                          onClick={() => {}}
-                    >
-                        5元话费充值 <span className='tag-blue'>直冲</span>
-                        <Brief>2019-12-12 12:12:12</Brief>
-                    </Item>
-                </div>
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '250px',
-                    backgroundColor: '#fff'
-                }}>
-                    支付中
-                </div>
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '250px',
-                    backgroundColor: '#fff'
-                }}>
-                    Content of third tab
-                </div>
+                {tabs.map((tab,index)=>(
+                    <div key={index}>
+                        {
+                            orderList&&orderList.length>0 && orderList.map((item,index)=>(
+                                <Item multipleLine
+                                      onClick={() => {}}
+                                >
+                                    {item.subject} <span className='tag-blue'>{
+                                    item.deliveType == 0 ? '直冲' :   item.deliveType == 1 ? '卡密' : '邮递'
+                                }</span>
+                                    <Brief>{
+                                        item.orderCreateTime
+                                    }</Brief>
+                                </Item>
+                            ))
+                        }
+
+                    </div>
+                ))
+
+                }
+
+
             </Tabs>
 
         </div>

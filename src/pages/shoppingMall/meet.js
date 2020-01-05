@@ -38,6 +38,7 @@ export default (props) => {
                                          props.history.push(`/shoppingMall/login`);
                                      }
                                  } else {
+                                     sessionStorage.mobile = res.data.mobile;
                                      props.history.push(index % 2 === 0 ? `/shoppingMall/redGoods` : `/shoppingMall/goods`);
                                  }
                              })

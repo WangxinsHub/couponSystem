@@ -58,6 +58,8 @@ export default {
     memberInfo:`${API_HOSTNAME}/weChat/memberInfo`,//使用帮助-h5,
     bindMobile:`${API_HOSTNAME}/weChat/bindMobile`,//使用帮助-h5,
     bindSubmit:`${API_HOSTNAME}/weChat/submitBind`,//使用帮助-h5,
+    orderList:`${API_HOSTNAME}/service/meeting/orderList`,//使用帮助-h5,
+    orderOperator:`${API_HOSTNAME}/service/meeting/orderOperator`,//使用帮助-h5,
 
 
     userList:`${API_HOSTNAME}/service/user/list`,

@@ -69,29 +69,17 @@ class Home extends Component {
     const that = this;
     try {
       let result;
-
-      if (this.props.record) {
-        values.goodsId = this.props.record.goodsId;
-        result = await API.updateType(values);
-        if (result.message === 'success') {
-          message.success('保存成功！');
-          this.props.onClose(true);
-        } else {
-          this.setState({
-            btnDisabled: false
-          });
-          message.error(result.message);
-        }
+      values.orderId = this.props.record.orderId;
+      values.orderStatus = 2;
+      result = await API.orderOperator(values);
+      if (result.message === 'success') {
+        message.success('保存成功！');
+        this.props.onClose(true);
       } else {
-        result = await API.addType(values);
-        if (result.message === 'success') {
-          message.success('保存成功！');
-          this.props.onClose(true);
-        } else {
-          this.setState({
-            btnDisabled: false
-          });
-        }
+        this.setState({
+          btnDisabled: false
+        });
+        message.error(result.message);
       }
 
     } catch (err) {
@@ -120,17 +108,6 @@ class Home extends Component {
     });
   };
 
-  disabledStartDate = startValue => {
-    let st = new Date(startValue).valueOf();
-    let now = new Date().valueOf();
-
-    if (this.props.record && this.props.record.validEnd) {
-      return st < moment(this.props.record.validEnd);
-    } else {
-      return st < now
-    }
-  };
-
 
   render() {
     const inline = {
@@ -144,12 +121,12 @@ class Home extends Component {
 
     return (<Form style={{paddingBottom: 30}}>
 
-        <FormItem label="名称" key='goodsName' >
-          {getFieldDecorator('goodsName', {
-            initialValue: record && record.goodsName,
-            rules: [{required: true, max: 30, whitespace: true, message: '请输入商品类型名称'}],
+        <FormItem label="备注" key='remark' >
+          {getFieldDecorator('remark', {
+            initialValue: record && record.remark,
+            rules: [{required: true, max: 30, whitespace: true, message: '请输入快递公司和订单号'}],
           })(
-            <Input style={{width: '80%'}} maxLength={30} placeholder="请输入商品类型名称"/>
+            <Input style={{width: '80%'}} maxLength={30} placeholder="请输入快递公司和订单号"/>
           )}
         </FormItem>
 
