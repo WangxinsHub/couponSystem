@@ -230,10 +230,10 @@ class Home extends Component {
                 </FormItem>
 
 
-                <FormItem {...stationEditFormDrawer} label="会场说明" key='intro'>
+                <FormItem {...stationEditFormDrawer} label="会场说明" key='meetingDec'>
 
-                    {getFieldDecorator('intro', {
-                        initialValue: record && record.intro,
+                    {getFieldDecorator('meetingDec', {
+                        initialValue: record && record.meetingDec,
                         rules: [{ whitespace: true, message: '请输入会场会场说明'}],
                     })(
                         <Input.TextArea placeholder='请输入会场会场说明'/>

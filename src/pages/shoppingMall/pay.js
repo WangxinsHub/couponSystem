@@ -8,12 +8,14 @@ import util from '../../utils/base'
 export default (props) => {
     const [data, setData] = useState(null);
     const wx = window.wx;
-    useEffect(async () => {
-        const response = await  API.cargoList({
+    useEffect( () => {
+          API.cargoList({
             meetingId: sessionStorage.meetId,
             cargoId: props.match.params.cargoId
-        });
-        setData(response.data[0] || [])
+        }).then(response=>{
+              setData(response.data[0] || [])
+
+          })
     }, []);
 
     function wechatPay(param) {
@@ -56,8 +58,9 @@ export default (props) => {
         }).then(res => {
             if (data.data) {
                 let credential = JSON.parse(data.data.credential);
+                alert(JSON.stringify(data.data.credential))
                 wx.config({
-                    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                     appId: credential.appId, // 必填，公众号的唯一标识
                     timestamp: credential.timeStamp, // 必填，生成签名的时间戳
                     nonceStr: credential.nonceStr, // 必填，生成签名的随机串
@@ -67,7 +70,7 @@ export default (props) => {
                 });
                 wechatPay(credential);
             } else {
-                alert('充值失败，请联系客服');
+                alert(data.message);
             }
         });
     }
@@ -79,7 +82,7 @@ export default (props) => {
                     请输入QQ号
                 </div>
 
-                <input type="number" placeholder='输入需要开通会员的qq号'/>
+                <input type="number" placeholder='输入需要开通会员的qq号' autofocus/>
             </div>
         )
     }
@@ -91,6 +94,7 @@ export default (props) => {
                 <InputItem
                     type="phone"
                     placeholder="输入手机号"
+                    autofocus
                     onChange={(e) => {
                         console.log(e);
                     }}

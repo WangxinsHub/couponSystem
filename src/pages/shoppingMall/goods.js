@@ -13,19 +13,21 @@ export default (props) => {
 
     const [type, setType] = useState([]);
 
-    useEffect(async () => {
+    useEffect( () => {
         API.typeList().then(res=>{
-            setType(res.data);
-            res.data.map((type)=>{
-                API.cargoList({
-                    meetingId:sessionStorage.meetId,
-                    goodsId:type.goodsId+''
-                }).then(res => {
-                    type.cargo=res.data;
-
-                    setMlist(res.data)
+            if(res.data && res.data.length>0){
+                setType(res.data);
+                res.data.map((type)=>{
+                    API.cargoList({
+                        meetingId:sessionStorage.meetId,
+                        goodsId:type.goodsId+''
+                    }).then(res => {
+                        type.cargo=res.data;
+                        setMlist(res.data)
+                    })
                 })
-            })
+            }
+
         })
 
     }, []);
