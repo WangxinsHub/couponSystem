@@ -7,7 +7,8 @@ import {
 import {object} from 'prop-types';
 import lodable from 'react-loadable';
 import Nav from '@/components/home/index';
-
+import redgoods from '@/pages/shoppingMall/redGood'
+import meet from '@/pages/shoppingMall/meet'
 
 export default class Router extends React.Component {
   static contextTypes = {
@@ -400,7 +401,7 @@ export default class Router extends React.Component {
             <Route exact path="/shoppingMall/result" component={this.result}/>
             <Route exact path="/shoppingMall/meet" component={this.meet}/>
             <Route exact path="/shoppingMall/goods" component={this.goods}/>
-            <Route exact path="/shoppingMall/redGoods" component={this.redGoods}/>
+            <Route exact path="/shoppingMall/redGoods" component={redgoods}/>
 
 
             <Route exact path="/hall" component={this.hall}/>

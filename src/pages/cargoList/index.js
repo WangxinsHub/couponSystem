@@ -157,6 +157,9 @@ class Home extends Component {
                 title: '状态',
                 key: 'cargoStatus',
                 dataIndex: 'cargoStatus',
+                render:(text)=>{
+                    return text==0?'已下架':'已上架'
+                }
             },
             {
                 title: '原价',
@@ -170,13 +173,13 @@ class Home extends Component {
             },
             {
                 title: '总数量',
-                key: 'cargoStatus',
-                dataIndex: 'cargoStatus',
+                key: 'totalCount',
+                dataIndex: 'totalCount',
             },
             {
                 title: '库存',
-                key: 'totalCount',
-                dataIndex: 'totalCount',
+                key: 'storeCount',
+                dataIndex: 'storeCount',
             },
             {
                 title: '交货方式',

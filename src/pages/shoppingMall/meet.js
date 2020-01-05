@@ -7,7 +7,8 @@ import mlist from './style/mlist.less'
 import util from "../../utils/base";
 
 export default (props) => {
-    sessionStorage.openId = util.getQueryString('openId') || 'eeea'
+    sessionStorage.openId = util.getQueryString('openId') || 'eeea';
+    sessionStorage.channel = util.getQueryString('channel') || 'channel';
     // 声明一个叫 "count" 的 state 变量
     let [mlist, setMlist] = useState([]);
     useEffect(() => {

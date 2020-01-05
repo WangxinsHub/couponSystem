@@ -22,55 +22,83 @@ export default class SiderMenuWrapper extends React.PureComponent {
 
 
     componentDidMount() {
-        API.getUserMenu().then(data => {
-            this.setState({
-                menuList: data.data ? data.data : []
-            }, (state) => {
-                const menuList = this.state.menuList.filter(item => item);
-                const menu = this.state.menu.concat(...this.leftMenu());
-                [0, 1, 2, 3,4].map((index) => {
-                    menu[index].childMenus.map((child) => {
-                        menuList.map((apiMenu) => {
-
-                            if (child.menuCode === apiMenu.menuCode) {
-                                child.show = true;
-                                menu[index].show = true
-                            }
-
-                        })
-                    })
-                });
-                console.error(menu)
-                this.setState({menu})
-            })
-        });
-    }
-
-    componentWillReceiveProps(nextProps, nextContext) {
-        if(this.state.menu.length===0){
+        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+        }else{
             API.getUserMenu().then(data => {
                 this.setState({
                     menuList: data.data ? data.data : []
                 }, (state) => {
                     const menuList = this.state.menuList.filter(item => item);
-
-                    const menu = [...this.leftMenu()];
-                    [0, 1, 2, 3].map((index) => {
+                    const menu = this.state.menu.concat(...this.leftMenu());
+                    [0, 1, 2, 3,4].map((index) => {
                         menu[index].childMenus.map((child) => {
                             menuList.map((apiMenu) => {
+
                                 if (child.menuCode === apiMenu.menuCode) {
                                     child.show = true;
                                     menu[index].show = true
                                 }
+
                             })
                         })
                     });
+                    console.error(menu)
                     this.setState({menu})
                 })
             });
         }
+
     }
 
+    componentWillUnmount() {
+        this.setState = (state, callback) => {
+            return;
+        };
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+        }else{
+            if(this.state.menu.length===0){
+                API.getUserMenu().then(data => {
+                    this.setState({
+                        menuList: data.data ? data.data : []
+                    }, (state) => {
+                        const menuList = this.state.menuList.filter(item => item);
+
+                        const menu = [...this.leftMenu()];
+                        [0, 1, 2, 3,4,5].map((index) => {
+                            menu[index].childMenus.map((child) => {
+                                menuList.map((apiMenu) => {
+                                    if (child.menuCode === apiMenu.menuCode) {
+                                        child.show = true;
+                                        menu[index].show = true
+                                    }
+                                })
+                            })
+                        });
+                        this.setState({menu})
+                    })
+                });
+            }
+        }
+
+    }
+
+    isPC() {
+        var userAgentInfo = navigator.userAgent;
+        var Agents = ["Android", "iPhone",
+            "SymbianOS", "Windows Phone",
+            "iPad", "iPod"];
+        var flag = true;
+        for (var v = 0; v < Agents.length; v++) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
 
     /**
      * [getData 获取菜单数据]
@@ -145,7 +173,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
         menu['hd'] = 'gold';
         menu['qd'] = 'deployment-unit';
         menu['yh'] = 'user';
-        menu['sc'] = 'sc';
+        menu['sc'] = 'shopping'
 
         //menu['order.Manage'] = 'order.Manage';
         // 定义code对应的icon
@@ -266,23 +294,29 @@ export default class SiderMenuWrapper extends React.PureComponent {
      * @return {[type]} [description]
      */
     render() {
-        let path = {
-            ...this.props,
-            siderMenu: {
-                title: '',
-                menu: this.state.menu
-            },
-            pageHead: {
-                user: {
-                    userName: this.state.userName,
-                    logOut: this.logOut,
-                }
-            },
-            // theme: {
-            //   navTheme: 'light', // 主题
-            //   isTop: true, // 头部是否在顶部，默认false
-            // }
+        if(!this.isPC()){
+            return  <div>
+                {this.props.children}
+            </div>
+        }else{
+            let path = {
+                ...this.props,
+                siderMenu: {
+                    title: '',
+                    menu: this.state.menu
+                },
+                pageHead: {
+                    user: {
+                        userName: this.state.userName,
+                        logOut: this.logOut,
+                    }
+                },
+                // theme: {
+                //   navTheme: 'light', // 主题
+                //   isTop: true, // 头部是否在顶部，默认false
+                // }
+            }
+            return <SiderMenu {...path} />
         }
-        return <SiderMenu {...path} />
     }
 }

@@ -34,7 +34,7 @@ export default (props) => {
                             mlist && mlist.map((item,index)=>(
 
                                 <div className='goods-item' key={index} onClick={() => {
-                                    props.history.push(`/shoppingMall/pay/${item.goodsId}`);
+                                    props.history.push(`/shoppingMall/pay/${item.cargoId}`);
                                 }}>
                                     <img src={qq} alt=""/>
                                     <div className='goods-info'>

@@ -81,7 +81,6 @@ class Home extends Component {
             this.setState({
                 btnDisabled: false
             })
-            console.error(err);
         }
     }
     /**
@@ -121,7 +120,6 @@ class Home extends Component {
         const {submitting, form, onClose} = this.props;
         const {platformList} = this.props.couponReducer;
         const {getFieldDecorator} = form;
-        console.error(record)
 
         return (<Form style={{paddingBottom: 30}}>
 

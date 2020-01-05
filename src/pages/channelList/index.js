@@ -158,12 +158,8 @@ class Home extends Component {
                         }}>编辑</a>
                         <Divider type="vertical"/>
                         <a onClick={() => {
-                            this.setState({
-                                showDrawer: true,
-                                showDrawerId: record.goodsId,
-                                record,
-                            })
-                        }}>渠道</a>
+
+                        }}>下载</a>
                     </Fragment>
                 ),
             },

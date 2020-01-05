@@ -13,6 +13,7 @@ import util from '../../utils/base'
 import api from '../../api/api'
 import {getList as getDepartmentList} from '../department/action'
 import NewForm from "./edit";
+import API from '@/api/api';
 
 class Home extends Component {
     static propTypes = {
@@ -165,6 +166,9 @@ class Home extends Component {
                 title: '状态',
                 key: 'meetingState',
                 dataIndex: 'meetingState',
+                render: (text) => {
+                    return text == 0 ? '关闭' : '开启'
+                }
             },
             {
                 title: '更新时间',
@@ -181,9 +185,29 @@ class Home extends Component {
                 key: 'deal',
                 render: (record) => (
                     <Fragment>
-                        <Popconfirm placement="top" title="确认要关闭吗？" onConfirm={() => {
-                        }} okText='确认' cancelText='取消'>
-                            <a>关闭</a>
+                        <Popconfirm placement="top"
+                                    title={`确认要${record.meetingState == 0 ? '开启' : '关闭'}吗`}
+                                    onConfirm={() => {
+                                      API.mUpdate({
+                                          meetingId:record.meetingId,
+                                          meetingState:  record.meetingState == 0 ? 1 :0
+                                      }).then(res=>{
+                                          if(res.code==200){
+                                              let searchList = this.state.searchList || {};
+                                              message.success('操作成功');
+                                              this.props.getList({
+                                                  pageNo: this.state.currentNo,
+                                                  pageSize: this.state.pageSize,
+                                                  ...searchList
+                                              });
+                                          }else{
+                                              message.error(res.message)
+                                          }
+                                      })
+                                    }} okText='确认' cancelText='取消'>
+                            <a>{
+                                record.meetingState == 0 ? `开启` : '关闭'
+                            }</a>
                         </Popconfirm>
                         <Divider type="vertical"/>
                         <a onClick={() => {
@@ -196,7 +220,7 @@ class Home extends Component {
                             })
                         }}>编辑</a>
                         <Divider type="vertical"/>
-                        <a onClick={()=>{
+                        <a onClick={() => {
                             this.props.history.push(`/cargoList/${record.meetingId}/${record.meetingName}`)
                         }}>商品</a>
                         <Divider type="vertical"/>

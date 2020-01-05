@@ -1,21 +1,20 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import './style/pay.less'
 import qq from './icon/qq.png'
 import {InputItem} from 'antd-mobile'
 import API from '@/api/api';
 import util from '../../utils/base'
 
-export default (props)=>{
-    const [data,setData] = useState({});
+export default (props) => {
+    const [data, setData] = useState(null);
     const wx = window.wx;
-    useEffect(()=>{
-        API.cargoList({
-            meetingId:sessionStorage.meetId,
+    useEffect(async () => {
+        const response = await  API.cargoList({
+            meetingId: sessionStorage.meetId,
             cargoId: props.match.params.cargoId
-        }).then(res => {
-            setData(res.data[0]||[])
-        })
-    },[]);
+        });
+        setData(response.data[0] || [])
+    }, []);
 
     function wechatPay(param) {
         let that = this;
@@ -49,11 +48,11 @@ export default (props)=>{
     function handlePay() {
         API.pay({
             amount: data.discountPrice,
-            account:data.price,
+            account: data.price,
             projectName: data.goodsName,
-            userId:sessionStorage.openId||'test',
-            meetingId : sessionStorage.meetId,
-            cargoId : data.cargoId,
+            userId: sessionStorage.openId || 'test',
+            meetingId: sessionStorage.meetId,
+            cargoId: data.cargoId,
         }).then(res => {
             if (data.data) {
                 let credential = JSON.parse(data.data.credential);
@@ -63,6 +62,7 @@ export default (props)=>{
                     timestamp: credential.timeStamp, // 必填，生成签名的时间戳
                     nonceStr: credential.nonceStr, // 必填，生成签名的随机串
                     signature: credential.timeStamp, // 必填，调用js签名，
+                    channel: credential.channel, // 必填，调用js签名，
                     jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，这里只写支付的
                 });
                 wechatPay(credential);
@@ -102,30 +102,36 @@ export default (props)=>{
 
     return (
         <div>
-            <div className='goods-header'>
-                <div className='left-logo'>
-                    <img src={qq} alt=""/>
-                </div>
-                <div className='right-content'>
-                    <div className='goods-title'>
-                        {data.goodsName}
-                    </div>
-                    <div className='goods-sub'>
-                        {data.goodsType}
+            {
+                data && [
+                    <div className='goods-header'>
+                        <div className='left-logo'>
+                            <img src={qq} alt=""/>
+                        </div>
+                        <div className='right-content'>
+                            <div className='goods-title'>
+                                {data.goodsName}
+                            </div>
+                            <div className='goods-sub'>
+                                {data.goodsType}
+                            </div>
+
+                            <div className='goods-price'>
+                                <span className='price-red'>￥{(data.discountPrice / 100).toFixed(2)}</span>
+                                <span className='price-gery'>￥{(data.price / 100).toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>,
+
+                    data.goodsName && data.goodsName.indexOf('qq') > -1 ? renderQQ() : renderPhone(),
+
+                    <div className='confirm-btn' onClick={handlePay}>
+                        购买
                     </div>
 
-                    <div className='goods-price'>
-                       <span className='price-red'>￥{(data.discountPrice/100).toFixed(2)}</span>
-                       <span className='price-gery'>￥{(data.price/100).toFixed(2)}</span>
-                    </div>
-                </div>
-            </div>
+                ]
+            }
 
-            {data.goodsName && data.goodsName.indexOf('qq')>-1 ? renderQQ():renderPhone()}
-
-            <div className='confirm-btn' onClick={handlePay}>
-                购买
-            </div>
         </div>
     )
 }

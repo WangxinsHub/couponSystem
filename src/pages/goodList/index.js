@@ -146,11 +146,15 @@ class Home extends Component {
                 title: '类型',
                 key: 'goodsType',
                 dataIndex: 'goodsType',
+
             },
             {
                 title: '交货方式',
                 key: 'deliveType',
                 dataIndex: 'deliveType',
+                render: (text) => {
+                    return text == 0 ? '直冲' : text == 1 ? '卡密' : '邮递'
+                }
             },
             {
                 title: '售价',
@@ -159,8 +163,11 @@ class Home extends Component {
             },
             {
                 title: '状态',
-                key: 'cargoStatus',
-                dataIndex: 'cargoStatus',
+                key: 'goodsStatus',
+                dataIndex: 'goodsStatus',
+                render:(text)=>{
+                    return text==0?'已下架':'已上架'
+                }
             },
             {
                 title: '更新时间',
