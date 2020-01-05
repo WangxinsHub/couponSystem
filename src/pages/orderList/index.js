@@ -37,10 +37,14 @@ class Home extends Component {
      * @return {[type]} [description]
      */
     componentDidMount() {
-        this.getData({
+        let params ={
             pageNo: 0,
-            pageSize: 10
-        });
+            pageSize: 10,
+        };
+        if(this.props.match.params.mid){
+            params.meetingId = this.props.match.params.mid
+        }
+        this.getData(params);
     }
 
 

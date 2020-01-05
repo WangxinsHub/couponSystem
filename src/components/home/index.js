@@ -22,31 +22,29 @@ export default class SiderMenuWrapper extends React.PureComponent {
 
 
     componentDidMount() {
-        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
-        }else{
-            API.getUserMenu().then(data => {
-                this.setState({
-                    menuList: data.data ? data.data : []
-                }, (state) => {
-                    const menuList = this.state.menuList.filter(item => item);
-                    const menu = this.state.menu.concat(...this.leftMenu());
-                    [0, 1, 2, 3,4].map((index) => {
-                        menu[index].childMenus.map((child) => {
-                            menuList.map((apiMenu) => {
+       if(this.isPC()){
+           API.getUserMenu().then(data => {
+               this.setState({
+                   menuList: data.data ? data.data : []
+               }, (state) => {
+                   const menuList = this.state.menuList.filter(item => item);
+                   const menu = this.state.menu.concat(...this.leftMenu());
+                   [0, 1, 2, 3,4].map((index) => {
+                       menu[index].childMenus.map((child) => {
+                           menuList.map((apiMenu) => {
 
-                                if (child.menuCode === apiMenu.menuCode) {
-                                    child.show = true;
-                                    menu[index].show = true
-                                }
+                               if (child.menuCode === apiMenu.menuCode) {
+                                   child.show = true;
+                                   menu[index].show = true
+                               }
 
-                            })
-                        })
-                    });
-                    console.error(menu)
-                    this.setState({menu})
-                })
-            });
-        }
+                           })
+                       })
+                   });
+                   this.setState({menu})
+               })
+           });
+       }
 
     }
 
@@ -57,8 +55,7 @@ export default class SiderMenuWrapper extends React.PureComponent {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
-        }else{
+        if (this.isPC()){
             if(this.state.menu.length===0){
                 API.getUserMenu().then(data => {
                     this.setState({

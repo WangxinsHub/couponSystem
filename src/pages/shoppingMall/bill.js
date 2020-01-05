@@ -13,7 +13,7 @@ const Item = List.Item;
 const Brief = Item.Brief;
 
 
-export default () => {
+export default (props) => {
     function handleTabChange(tabData, index) {
         console.log(index);
         if(index == 0){
@@ -58,7 +58,9 @@ export default () => {
                         {
                             orderList&&orderList.length>0 && orderList.map((item,index)=>(
                                 <Item multipleLine
-                                      onClick={() => {}}
+                                      onClick={() => {
+                                          props.history.push( `/shoppingMall/billDetail/${item.orderId}`);
+                                      }}
                                 >
                                     {item.subject} <span className='tag-blue'>{
                                     item.deliveType == 0 ? '直冲' :   item.deliveType == 1 ? '卡密' : '邮递'

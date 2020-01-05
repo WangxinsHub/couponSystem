@@ -406,7 +406,7 @@ export default class Router extends React.Component {
             <Route exact path="/shoppingMall/login" component={this.shopLogin}/>
             <Route exact path="/shoppingMall/pay/:cargoId" component={this.pay}/>
             <Route exact path="/shoppingMall/bill" component={this.bill}/>
-            <Route exact path="/shoppingMall/billDetail" component={this.billDetail}/>
+            <Route exact path="/shoppingMall/billDetail/:orderId" component={this.billDetail}/>
             <Route exact path="/shoppingMall/result" component={this.result}/>
             <Route exact path="/shoppingMall/result/success" component={this.success}/>
             <Route exact path="/shoppingMall/meet" component={this.meet}/>
@@ -422,6 +422,7 @@ export default class Router extends React.Component {
             <Route exact path="/entryList" component={this.entryList}/>
             <Route exact path="/channelList/:data" component={this.channelList}/>
             <Route exact path="/orderList" component={this.shopcart}/>
+            <Route exact path="/orderList/:mid" component={this.shopcart}/>
             {/*<Route exact path="/shop/cargoList" component={this.cargoList}/>*/}
             {/*<Route exact path="/shop/cargoList" component={this.cargoList}/>*/}
 

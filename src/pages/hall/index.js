@@ -224,10 +224,9 @@ class Home extends Component {
                             this.props.history.push(`/cargoList/${record.meetingId}/${record.meetingName}`)
                         }}>商品</a>
                         <Divider type="vertical"/>
-                        <Popconfirm placement="top" title="确认要关闭吗？" onConfirm={() => {
-                        }} okText='确认' cancelText='取消'>
-                            <a>明细</a>
-                        </Popconfirm>
+                        <a onClick={()=>{
+                            this.props.history.push(`/orderList/${record.meetingId}`)
+                        }}>明细</a>
                         <Divider type="vertical"/>
                         <a onClick={() => {
                             this.props.history.push(`/blackWhite/0/${record.meetingId}/${record.meetingName}`)
