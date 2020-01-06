@@ -16,9 +16,10 @@ export default (props) => {
         API.mList({
             meetingId:sessionStorage.meetId
         }).then(res=>{
+            setMeet(res.data && res.data[0])
             console.log(res);
         })
-    })
+    },[])
     
     function handleSubmit() {
         API.bindSubmit({
@@ -38,10 +39,12 @@ export default (props) => {
         let counter = 60;
         if(falg){
             if(!phone){
-                message.error('请先输入手机号！')
+                message.error('请先输入手机号！');
+                setFlag(false);
+                return false
             }
 
-            setFlag(false);
+
             let timer = setInterval(() => {
                 counter--;
                 if (counter === 0) {
@@ -65,7 +68,11 @@ export default (props) => {
                     clearInterval(timer);
                     setCountText(`获取验证码`);
                     setFlag(true);
-                    message.warn(res.message)
+                    if(res.code===403){
+                        message.warn(meet.limitMessage)
+                    }else{
+                        message.warn(meet.limitMessage)
+                    }
                 }
             });
 

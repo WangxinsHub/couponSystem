@@ -54,7 +54,7 @@ class Home extends Component {
             let result, that = this;
             result = await API.adBl(values);
             if (result.message === 'success') {
-                message.success('已发送！');
+                message.success('添加成功！');
                 // Modal.info({
                 //     title: '提示',
                 //     content: (
@@ -121,14 +121,15 @@ class Home extends Component {
                 }
 
                 if (testPhone) {
-                    // var formData = new FormData();
-                    //
-                    // for (let key in values) {
-                    //     formData.append(key, values[key]);
-                    // }
-                    // // 提交表单
-                    // console.log(values);
-                    that.postData(values);
+                    var formData = new FormData();
+                    for (let key in values) {
+                        if(key!=='file'  && values[key]){
+                            formData.append(key, values[key]);
+                        }
+                    }
+                    // 提交表单
+                    if (this.state.file) formData.append("file", this.state.file);
+                    that.postData(formData);
                 } else {
                     Modal.error({
                         title: '提示',
@@ -197,11 +198,10 @@ class Home extends Component {
                         <Upload
                             {...{
                                 beforeUpload: file => {
-                                    const formData = new FormData();
-                                    formData.append('files[]', file);
+                                    console.log(file);
                                     this.setState(state => ({
                                         fileList: [file],
-                                        formData
+                                        file: file
                                     }));
                                     return false;
                                 },
@@ -212,7 +212,7 @@ class Home extends Component {
                             <Button>
                                 <Icon type="upload"/>
                             </Button>
-                            <span className='extra'> 支持扩展名：.xlsx，.xls</span>
+                            <span className='extra'> 支持扩展名：.xlsx，.xls,最多可支持1000条</span>
                         </Upload>
                     )}
                     <a href="http://shande.xajhzx.cn/service/activity/template">下载手机文件模板</a>

@@ -5,13 +5,25 @@ import card2 from './icon/card2.png';
 import API from '@/api/api';
 import mlist from './style/mlist.less'
 import qq from './icon/qq.png'
+import {Modal} from "antd-mobile";
 
 export default (props) => {
     // 声明一个叫 "count" 的 state 变量
     const [mlist, setMlist] = useState([]);
+    const [meet, setMeet] = useState('');
 
-
-
+    useEffect(()=>{
+        API.mList({
+            meetingId:sessionStorage.meetId
+        }).then(res=>{
+            setMeet(res.data && res.data[0])
+            console.log(res);
+        })
+    },[]);
+    const [modal, setModal] = useState(false);
+    function onClose(){
+        setModal(false)
+    }
 
     useEffect(() => {
         API.cargoList({
@@ -28,7 +40,21 @@ export default (props) => {
                 {
                     <img src={card1} alt=""/>
                 }
-
+                <div className='detail-btn' onClick={()=>setModal(true)}>活动详情</div>
+                <Modal
+                    visible={modal}
+                    onClose={()=>onClose()}
+                    closable
+                >
+                    <div className='modal'>
+                        <p>龙卡欢乐购活动说明</p>
+                        <p>
+                            {
+                                meet.meetingDec
+                            }
+                        </p>
+                    </div>
+                </Modal>
                 {
                     <div className='goods-type'>
                         <div className='goods-row'>
@@ -38,7 +64,7 @@ export default (props) => {
                                     <div className='goods-item' key={index} onClick={() => {
                                         props.history.push(`/shoppingMall/pay/${item.cargoId}`);
                                     }}>
-                                        <img src={qq} alt=""/>
+                                        <img src={item.goodsImg} alt=""/>
                                         <div className='goods-info'>
                                             <div className='goods-title'>{item.goodsName}</div>
                                             <div className='goods-sub'>{item.goodsType}</div>

@@ -390,6 +390,16 @@ export default class Router extends React.Component {
       },
     });
 
+    this.meetNew = lodable({
+      loader: () => {
+        return import('@/pages/shoppingMall/meetNew');
+      },
+      loading: () => {
+        return null
+      },
+    });
+
+
   };
 
   /**
@@ -409,8 +419,9 @@ export default class Router extends React.Component {
             <Route exact path="/shoppingMall/billDetail/:orderId" component={this.billDetail}/>
             <Route exact path="/shoppingMall/result" component={this.result}/>
             <Route exact path="/shoppingMall/result/success" component={this.success}/>
-            <Route exact path="/shoppingMall/meet" component={this.meet}/>
+            <Route exact path="/shoppingMall/meet" component={this.meetNew}/>
             <Route exact path="/shoppingMall/goods" component={this.goods}/>
+            <Route exact path="/shoppingMall/meetNew" component={this.meetNew}/>
             <Route exact path="/shoppingMall/redGoods" component={redgoods}/>
 
 
