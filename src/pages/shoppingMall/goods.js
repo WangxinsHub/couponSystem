@@ -15,31 +15,31 @@ export default (props) => {
 
     const [meet, setMeet] = useState('');
     const [modal, setModal] = useState(false);
-    function onClose(){
+
+    function onClose() {
         setModal(false)
     }
-    useEffect(()=>{
+
+    useEffect(() => {
         API.mList({
-            meetingId:sessionStorage.meetId
-        }).then(res=>{
+            meetingId: sessionStorage.meetId
+        }).then(res => {
             setMeet(res.data && res.data[0])
             console.log(res);
         })
-    },[]);
+    }, []);
 
 
-
-
-    useEffect( () => {
-        API.typeList().then(res=>{
-            if(res.data && res.data.length>0){
+    useEffect(() => {
+        API.typeList().then(res => {
+            if (res.data && res.data.length > 0) {
                 setType(res.data);
-                res.data.map((type)=>{
+                res.data.map((type) => {
                     API.cargoList({
-                        meetingId:sessionStorage.meetId,
-                        goodsId:type.goodsId+''
+                        meetingId: sessionStorage.meetId,
+                        goodsId: type.goodsId + ''
                     }).then(res => {
-                        type.cargo=res.data;
+                        type.cargo = res.data;
                         setMlist(res.data)
                     })
                 })
@@ -53,10 +53,10 @@ export default (props) => {
             {
                 <img src={card2} alt=""/>
             }
-            <div className='detail-btn' onClick={()=>setModal(true)}>活动详情</div>
+            <div className='detail-btn' onClick={() => setModal(true)}>活动详情</div>
             <Modal
                 visible={modal}
-                onClose={()=>onClose()}
+                onClose={() => onClose()}
                 closable
             >
                 <div className='modal'>
@@ -70,34 +70,62 @@ export default (props) => {
             </Modal>
 
             {
-                type  && type.map((type,index)=>(
-                    type.cargo && type.cargo.length>0 && <div className='goods-type' key={index}>
-                        <span className='yellow'>《</span>{type.goodsName}<span className='yellow'>》</span>
+                type && type.map((type, index) => (
+                    type.cargo && type.cargo.length > 0 && <div className='goods-type' key={index}>
+                        <span style={{marginLeft:10}}>
+                            {type.goodsName}
+                        </span>
 
-                        <div className='goods-row'>
-                            {
+                        <div className='goods-row-heng'>
+                            <div className='heng-wapper'>
+                                {
 
-                                type.cargo &&  type.cargo.map((item, index) => (
-                                    <div className='goods-item' onClick={()=>{
-                                        props.history.push(`/shoppingMall/pay/${item.goodsId}`);
-                                    }}>
-                                        <img src={item.goodsImg} alt=""/>
-                                        <div className='goods-info'>
-                                            <div className='goods-title'>{item.goodsName}</div>
-                                            <div className='goods-sub'>{item.goodsType}</div>
-                                            <div className='price'>
-                                                <span className='red'>￥{(item.discountPrice/100).toFixed(2)}</span>
-                                                <span className='gray'>￥{(item.price/100).toFixed(2)}</span>
+                                    type.cargo && type.cargo.map((item, index) => (
+                                        <div className='goods-item-heng' onClick={() => {
+                                            props.history.push(`/shoppingMall/pay/${item.cargoId}`);
+
+                                        }}>
+                                            <img src={item.goodsImg} alt=""/>
+                                            <div className='goods-info'>
+                                                <div className='goods-title'>{item.goodsName}</div>
+                                                <div className='price'>
+                                                    <span className='red'>￥{(item.discountPrice / 100).toFixed(2)}</span>
+                                                    <span className='gray'>￥{(item.price / 100).toFixed(2)}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))
-                            }
+                                    ))
+                                }
+                            </div>
+
                         </div>
 
                     </div>
                 ))
             }
+
+            <div className='goods-type' >
+                        <span style={{marginLeft:10}}>
+                            优质保险
+                        </span>
+
+                <div className='goods-row-heng'>
+                    <div className='goods-item-heng' onClick={() => {
+                       window.location.href = 'https://elife.ccb-life.com.cn/elife-wechat/#/product/product-purchase/card-activation/cardNo=/cardPwd=/batchNo=KDPC860620200106002'
+
+                    }}>
+                        <img src={qq} alt=""/>
+                        <div className='goods-info'>
+                            <div className='goods-title'>3万保险一年</div>
+                            <div className='price'>
+                                <span className='red'>￥1</span>
+                                <span className='gray'>￥10</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     );
 }

@@ -3,7 +3,6 @@ import './style/redGood.less'
 import card1 from './icon/card1.png';
 import card2 from './icon/card2.png';
 import API from '@/api/api';
-import mlist from './style/mlist.less'
 import qq from './icon/qq.png'
 import {Modal} from "antd-mobile";
 

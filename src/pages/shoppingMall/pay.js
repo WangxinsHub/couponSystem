@@ -51,11 +51,12 @@ export default (props) => {
     function handlePay() {
         API.pay({
             amount: data.discountPrice,
-            account: data.price,
+            account: sessionStorage.mobile,
             projectName: data.goodsName,
             userId: sessionStorage.openId || 'test',
             meetingId: sessionStorage.meetId,
             cargoId: data.cargoId,
+            channel: sessionStorage.channel,
         }).then(res => {
             if (res.data) {
                 let credential = JSON.parse(res.data.credential);

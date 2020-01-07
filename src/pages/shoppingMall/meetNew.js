@@ -14,10 +14,13 @@ import {message} from "antd";
 export default (props) => {
     sessionStorage.openId = util.getQueryString('openId') || 'eeea';
     sessionStorage.channel = util.getQueryString('channel') || 'channel';
+
+    sessionStorage.openId = util.getQueryString('openId') || 'eeea';
+    sessionStorage.channel = util.getQueryString('channel') || 'channel';
     // 声明一个叫 "count" 的 state 变量
     let [mlist, setMlist] = useState([]);
     useEffect(() => {
-        document.title = '龙卡商城';
+        document.title = '建行信用卡绑卡欢乐购';
         API.mList({
             pageNo: 0,
             pageSize: 100
