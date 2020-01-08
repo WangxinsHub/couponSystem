@@ -84,7 +84,6 @@ export default (props) => {
                                         <img src={item.goodsImg} alt=""/>
                                         <div className='goods-info'>
                                             <div className='goods-title'>{item.goodsName}</div>
-                                            <div className='goods-sub'>{item.goodsType}</div>
                                             <div className='price'>
                                                 <span className='red'>￥{(item.discountPrice / 100).toFixed(2)}</span>
                                                 <span className='gray'>￥{(item.price / 100).toFixed(2)}</span>
