@@ -5,6 +5,8 @@ import card2 from './icon/card2.png';
 import API from '@/api/api';
 import qq from './icon/qq.png'
 import {Modal} from "antd-mobile";
+import user from "./icon/user.png";
+import kf from './icon/kf.svg'
 
 export default (props) => {
     // 声明一个叫 "count" 的 state 变量
@@ -35,6 +37,21 @@ export default (props) => {
     console.log(mlist);
     return (
         <div className='red-g-page'>
+            <div className='user-icon' onClick={()=>{
+                props.history.push( `/shoppingMall/bill`);
+            }}>
+                <img src={user} alt=""/>
+            </div>
+
+            <div className='phone-call'>
+                <img src={kf} alt=""/>
+                <a href="tel:400-883-8840">客服</a>
+            </div>
+            <div className='fixed-logo'>
+                加汇卓信提供场景/技术支持
+            </div>
+
+
             <div className='goods-page'>
                 {
                     <img src={card1} alt=""/>
@@ -44,6 +61,7 @@ export default (props) => {
                     visible={modal}
                     onClose={()=>onClose()}
                     closable
+                    maskClosable
                 >
                     <div className='modal'>
                         <p>龙卡欢乐购活动说明</p>
