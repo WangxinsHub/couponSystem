@@ -186,7 +186,7 @@ class Home extends Component {
                 key: 'deliveType',
                 dataIndex: 'deliveType',
                 render: (text) => {
-                    return text == 0 ? '直冲' : text == 1 ? '卡密' : '邮递'
+                    return text == 0 ? '直充' : text == 1 ? '卡密' : '邮递'
                 }
             },
             {

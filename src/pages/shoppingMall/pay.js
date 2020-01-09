@@ -139,7 +139,7 @@ export default (props) => {
                     </div>,
 
                     <div className='detail-container-pay'>
-                        <p className='title-pay'>视频详情</p>
+                        <p className='title-pay'>商品详情</p>
                         <div dangerouslySetInnerHTML={{ __html: data.goodsDesc}}>
                         </div>
                     </div>

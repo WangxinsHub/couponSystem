@@ -153,7 +153,7 @@ class Home extends Component {
                 key: 'deliveType',
                 dataIndex: 'deliveType',
                 render: (text) => {
-                    return text == 0 ? '直冲' : text == 1 ? '卡密' : '邮递'
+                    return text == 0 ? '直充' : text == 1 ? '卡密' : '邮递'
                 }
             },
             {
@@ -169,7 +169,7 @@ class Home extends Component {
                 key: 'goodsStatus',
                 dataIndex: 'goodsStatus',
                 render:(text)=>{
-                    return text==0?'已下架':'已上架'
+                    return text==0?'已上架':'已下架'
                 }
             },
             {

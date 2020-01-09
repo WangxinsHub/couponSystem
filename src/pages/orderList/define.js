@@ -58,7 +58,7 @@ export default {
                 label: '全部',
                 value: null,
             },{
-                label: '直冲',
+                label: '直充',
                 value: '0',
             }, {
                 label: '卡密',

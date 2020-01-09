@@ -63,7 +63,7 @@ export default (props) => {
                                       }}
                                 >
                                     {item.subject} <span className='tag-blue'>{
-                                    item.deliveType == 0 ? '直冲' :   item.deliveType == 1 ? '卡密' : '邮递'
+                                    item.deliveType == 0 ? '直充' :   item.deliveType == 1 ? '卡密' : '邮递'
                                 }</span>
                                     <Brief>{
                                         item.orderCreateTime

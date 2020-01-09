@@ -218,7 +218,7 @@ class Home extends Component {
                         rules: [{required: true, message: '请选择交货方式'}],
                     })(
                         <Select placeholder='请选择交货方式'>
-                            <Option value={0}>直冲</Option>
+                            <Option value={0}>直充</Option>
                             <Option value={1}>卡密</Option>
                             <Option value={2}>邮递</Option>
                         </Select>
@@ -253,14 +253,19 @@ class Home extends Component {
                 </FormItem>
 
 
-                <FormItem label='图片地址' key='goodsImg'  {...inline}>
-                    {getFieldDecorator('goodsImg', {
-                        initialValue:this.state.fileUrl || record && record.goodsType,
-                        rules: [{required: true, message: '请输入图片地址'}],
-                    })(
-                        <Input style={{width: '80%'}} placeholder="请输入图片地址"/>
-                    )}
-                </FormItem>
+
+              {
+                  record && record.goodsImg &&
+                  <FormItem label='图片' key='goodsImg'  {...inline}>
+                      {getFieldDecorator('goodsImg', {
+                          initialValue:this.state.fileUrl || record && record.goodsImg,
+                          rules: [{required: true, message: '请输入图片地址'}],
+                      })(
+                        <img src={record.goodsImg} alt=""/>
+                      )}
+                  </FormItem>
+              }
+
 
                 <FormItem label='配置信息'>
                     <a onClick={() => {

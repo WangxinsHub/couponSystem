@@ -166,14 +166,27 @@ class Home extends Component {
                 key: 'deal',
                 render: (text,record) => (
                     <Fragment>
-                        <Popconfirm placement="top" title="确认要关闭吗？" onConfirm={() => {
-                           this.getData(
-                               {
-                                   pageNo:this.state.currentNo,
-                                   pageSize:this.state.pageSize,
-                                   ...searchList
-                               }
-                           )
+                        <Popconfirm placement="top" title="确认要删除吗？" onConfirm={() => {
+
+                            api.blDelete({
+                                meetingBlackListId:record.id
+                            }).then((res) => {
+                                if (res.message === 'success') {
+                                    message.success('删除成功！');
+                                } else {
+                                    message.error(res.message);
+                                }
+                                let searchList = this.state.searchList || {};
+                                this.setState({
+                                    selectedRow:null
+                                });
+
+                                this.getData({
+                                    pageNo:this.state.currentNo,
+                                    pageSize:this.state.pageSize,
+                                    ...searchList
+                                })
+                            });
                         }} okText='确认' cancelText='取消'>
                             <a>删除</a>
                         </Popconfirm>
