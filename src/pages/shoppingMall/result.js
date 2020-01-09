@@ -10,7 +10,7 @@ export default (props)=>{
                img={ <img src={warn} className="warning" alt="" />}
                title="购买受限"
                message={<div>
-                   <div>该商品每人限购3次，您已购满3次</div>
+                   <div>该商品每人限购2次，您已购满2次</div>
                    <div className='result-cancel-btn' onClick={()=>{
                        props.history.push( `/shoppingMall/meet`);
                    }}>

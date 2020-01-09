@@ -7,6 +7,7 @@ import {message} from "antd";
 
 export default (props) => {
     const [data, setData] = useState(null);
+    const [ph, setPh] = useState(null);
     const wx = window.wx;
     useEffect( () => {
           API.cargoList({
@@ -51,7 +52,7 @@ export default (props) => {
     function handlePay() {
         API.pay({
             amount: data.discountPrice,
-            account: sessionStorage.mobile,
+            account:ph,
             projectName: data.goodsName,
             userId: sessionStorage.openId || 'test',
             meetingId: sessionStorage.meetId,
@@ -92,16 +93,16 @@ export default (props) => {
     function renderPhone() {
         return (
             <div className='mall-input-field'>
-                <div className='input-label'>
-                    请输入手机号
-                </div>
+                {/*<div className='input-label'>*/}
+                {/*    请输入手机号*/}
+                {/*</div>*/}
 
                 <InputItem
                     type="phone"
-                    placeholder="输入手机号"
+                    placeholder="输入您要充值的账号"
                     autofocus
                     onChange={(e) => {
-                        console.log(e);
+                        setPh(e)
                     }}
                 />
             </div>
@@ -127,19 +128,19 @@ export default (props) => {
 
                             <div className='goods-price'>
                                 <span className='price-red'>￥{(data.discountPrice / 100).toFixed(2)}</span>
-                                <span className='price-gery'>￥{(data.price / 100).toFixed(2)}</span>
+                                <span className='price-gery' style={{textDecoration:'line-through'}}>￥{(data.price / 100).toFixed(2)}</span>
                             </div>
                         </div>
                     </div>,
 
-                    data.goodsName && data.goodsName.indexOf('qq') > -1 ? renderQQ() : renderPhone(),
+
+                   data.deliveType === 0 && data.goodsName && data.goodsName.indexOf('qq') > -1 ? renderQQ() : renderPhone(),
 
                     <div className='confirm-btn' onClick={handlePay}>
                         购买
                     </div>,
 
                     <div className='detail-container-pay'>
-                        <p className='title-pay'>商品详情</p>
                         <div dangerouslySetInnerHTML={{ __html: data.goodsDesc}}>
                         </div>
                     </div>
