@@ -58,11 +58,8 @@ export default (props) => {
                     maskClosable
                 >
                     <div className='modal'>
-                        <p>龙卡欢乐购活动说明</p>
-                        <div className={'content'}>
-                            {
-                                meet.meetingDec
-                            }
+                        <p>龙卡1元购优惠购活动说明</p>
+                        <div className={'content'} dangerouslySetInnerHTML={{ __html:  (meet.meetingDec||'').replace(/\n/g,"<br>")}}>
                         </div>
                     </div>
                 </Modal>

@@ -79,7 +79,7 @@ export default (props) => {
       <div className='user-icon' onClick={() => {
         props.history.push(`/shoppingMall/bill`);
       }}>
-        <img src={user} alt=""/>
+        <img src={user} alt=""/> <span>个人中心</span>
       </div>
 
       <div className='detail-btn' onClick={() => setModal(true)}>活动详情</div>
@@ -90,11 +90,8 @@ export default (props) => {
         maskClosable
       >
         <div className='modal'>
-          <p>龙卡欢乐购活动说明</p>
-          <div className={'content'}>
-            {
-              meet.meetingDec
-            }
+          <p>龙卡优惠购活动说明</p>
+          <div className={'content'} dangerouslySetInnerHTML={{ __html:  (meet.meetingDec||'').replace(/\n/g,"<br>")}}>
           </div>
         </div>
       </Modal>

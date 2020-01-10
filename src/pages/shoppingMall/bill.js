@@ -6,9 +6,14 @@ import './style/bill.less'
 const tabs = [
     {title: '全部'},
     {title: '待支付'},//0
-    {title: '完成'},//5
+    {title: '发货中'},//0
+    {title: '已发货'},//0
+    {title: '关闭'},//5
     {title: '退款中'},//4
+    {title: '已退款'},//4
 ];
+
+//0代支付 1发货中 2已发货 3关闭 4退款中 5已退款
 const Item = List.Item;
 const Brief = Item.Brief;
 
@@ -21,9 +26,15 @@ export default (props) => {
         }else if(index==1){
             getData(0)
         }else if(index==2){
-            getData(5)
+            getData(1)
         }else if(index==3){
+            getData(2)
+        }else if(index==4){
+            getData(3)
+        }else if(index==5){
             getData(4)
+        }else if(index==6){
+            getData(5)
         }
     }
 
@@ -38,8 +49,9 @@ export default (props) => {
         })
     }
 
-    const [orderList,setOrderList] = useState([])
+    const [orderList,setOrderList] = useState([]);
     useEffect(()=>{
+        document.title = '个人中心'
         getData();
     },[]);
 
