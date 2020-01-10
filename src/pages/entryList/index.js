@@ -104,12 +104,6 @@ class Home extends Component {
       state: this.state,
       pagination,
       callBack: (json) => {
-        if (json.searchList.rangeTime) {
-          json.searchList.startTime = json.searchList.rangeTime[0].format('YYYY/MM/DD HH:mm:ss')
-          json.searchList.endTime = json.searchList.rangeTime[1].format('YYYY/MM/DD HH:mm:ss')
-          delete json.searchList.rangeTime;
-        }
-
         this.setState(json);
         this.getData({
           ...json.searchList,
@@ -186,7 +180,7 @@ class Home extends Component {
     const data = {
       list: blList,
       pagination: {
-        total: data ? data.total : 1,
+        total: this.state.data ? this.state.data.total : 1,
         pageSize: pageSize,
         current: currentNo,
       },
@@ -220,7 +214,8 @@ class Home extends Component {
               <StandardTable
                 data={data}
                 columns={columns}
-                rowKey={columns => columns.id}                                noCheck={true}
+                rowKey={columns => columns.id}
+                onChange={this.handleStandardTableChange}
                 onCheck={true}
               />
             </div>

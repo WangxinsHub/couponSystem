@@ -140,13 +140,7 @@ class Home extends Component {
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
         const searchList = this.state.searchList || {};
-        //
-        // amount: 50
-        // createTime: "2020-01-05 14:27:52"
-        // meetingId: "1"
-        // updateTime: "2020-01-05 14:27:52"
-        // orderCreateTime: "2020-01-05 14:27:53"
-        // cargoId: "1"
+
         const columns = [
             {
                 title: '订单号',
@@ -268,7 +262,7 @@ class Home extends Component {
         const data = {
             list: blList,
             pagination: {
-                total: data ? data.total : 1,
+                total: this.state.data ? this.state.data.total : 1,
                 pageSize: pageSize,
                 current: currentNo,
             },
@@ -283,6 +277,31 @@ class Home extends Component {
                         <div className='tableList'>
 
                             <div className='tableListOperator'>
+                                  <Button type="primary" icon="plus" onClick={() => {
+                                    //window.location.href = "http://shande.xajhzx.cn/service/export";
+                                    // urlEncode
+                                    var urlEncode = function (param, key, encode) {
+                                        if (param == null) return '';
+                                        var paramStr = '';
+                                        var t = typeof (param);
+                                        if (t == 'string' || t == 'number' || t == 'boolean') {
+                                            paramStr += '&' + key + '=' + ((encode == null || encode) ? encodeURIComponent(param) : param);
+                                        } else {
+                                            for (var i in param) {
+                                                var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
+                                                paramStr += urlEncode(param[i], k, encode)
+                                            }
+                                        }
+                                        return paramStr;
+
+                                    }
+                                    var s = urlEncode({...this.state.searchList});
+                                    console.log(s.slice(1));
+                                    window.location.href = "http://shande.xajhzx.cn/meeting/mExport?" + s.slice(1);
+                                }}>
+                                    导出
+                                </Button>
+
                                 <div className='tableListForm'>
                                     <TableSearch {...searchMenu} />
                                 </div>

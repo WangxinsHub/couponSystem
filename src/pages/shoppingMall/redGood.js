@@ -14,6 +14,7 @@ export default (props) => {
     const [meet, setMeet] = useState('');
 
     useEffect(()=>{
+        document.title = '龙卡1元购'
         API.mList({
             meetingId:sessionStorage.meetId
         }).then(res=>{
@@ -58,11 +59,11 @@ export default (props) => {
                 >
                     <div className='modal'>
                         <p>龙卡欢乐购活动说明</p>
-                        <p>
+                        <div className={'content'}>
                             {
                                 meet.meetingDec
                             }
-                        </p>
+                        </div>
                     </div>
                 </Modal>
                 {
@@ -88,18 +89,19 @@ export default (props) => {
                         </div>
                     </div>
                 }
+
+                <div className='btm'>
+                    <div className='phone-call'>
+                        <img src={kf} alt=""/>
+                        <a href="tel:400-883-8840">客服</a>
+                    </div>
+                    <div className='fixed-logo'>
+                        加汇卓信提供场景/技术支持
+                    </div>
+
+                </div>
             </div>
 
-            <div className='btm'>
-                <div className='phone-call'>
-                    <img src={kf} alt=""/>
-                    <a href="tel:400-883-8840">客服</a>
-                </div>
-                <div className='fixed-logo'>
-                    加汇卓信提供场景/技术支持
-                </div>
-
-            </div>
 
         </div>
 

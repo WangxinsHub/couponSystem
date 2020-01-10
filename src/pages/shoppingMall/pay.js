@@ -50,32 +50,37 @@ export default (props) => {
 
 
     function handlePay() {
-        API.pay({
-            amount: data.discountPrice,
-            account:ph,
-            projectName: data.goodsName,
-            userId: sessionStorage.openId || 'test',
-            meetingId: sessionStorage.meetId,
-            cargoId: data.cargoId,
-            channel: sessionStorage.channel,
-        }).then(res => {
-            if (res.data) {
-                let credential = JSON.parse(res.data.credential);
-                wx.config({
-                    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                    appId: credential.appId, // 必填，公众号的唯一标识
-                    timestamp: credential.timeStamp, // 必填，生成签名的时间戳
-                    nonceStr: credential.nonceStr, // 必填，生成签名的随机串
-                    signature: credential.timeStamp, // 必填，调用js签名，
-                    channel: sessionStorage.channel, // 必填，调用js签名，
-                    jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，这里只写支付的
-                });
-                wechatPay(credential);
-            } else {
-                props.history.push( `/shoppingMall/result`);
-                message.error(res.message);
-            }
-        });
+        if(ph){
+            API.pay({
+                amount: data.discountPrice,
+                account:ph.replace(/\s+/g,""),
+                projectName: data.goodsName,
+                userId: sessionStorage.openId || 'test',
+                meetingId: sessionStorage.meetId,
+                cargoId: data.cargoId,
+                channel: sessionStorage.channel,
+            }).then(res => {
+                if (res.data) {
+                    let credential = JSON.parse(res.data.credential);
+                    wx.config({
+                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: credential.appId, // 必填，公众号的唯一标识
+                        timestamp: credential.timeStamp, // 必填，生成签名的时间戳
+                        nonceStr: credential.nonceStr, // 必填，生成签名的随机串
+                        signature: credential.timeStamp, // 必填，调用js签名，
+                        channel: sessionStorage.channel, // 必填，调用js签名，
+                        jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，这里只写支付的
+                    });
+                    wechatPay(credential);
+                } else {
+                    props.history.push( `/shoppingMall/result`);
+                    message.error(res.message);
+                }
+            });
+        }else{
+            message.error('请输入要充值的账号')
+        }
+
     }
 
     function renderQQ() {

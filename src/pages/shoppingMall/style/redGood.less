@@ -41,7 +41,6 @@
   }
   .goods-item{
     overflow: hidden;
-    padding-bottom: 8px;
     margin-left:8px ;
     margin-top: 6px;
     width: 30%;
@@ -53,6 +52,7 @@
       width: 100%;
     }
     .goods-info{
+      padding: 5px 5px;
       .price{
         text-align: center;
         .gray{
@@ -99,8 +99,12 @@
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 0;
-  top: 160px;
+  top: 63px;
+  left: 0;
+  font-weight: bold;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  color: #252072;
 }
 .am-modal-body{
   height: 450px!important;
@@ -146,7 +150,8 @@
   justify-content: center;
   align-items: center;
   font-weight:500;
-  position: fixed;
+  position: relative;
+
   bottom: 80px;
   a{
     color: black;
@@ -163,8 +168,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  position: fixed;
   bottom: 55px;
+  position: relative;
 
   font-size:10px;
   font-family:PingFang SC;
@@ -179,14 +184,19 @@
 
 .am-modal-content{
   width: 327px;
-  height: 450px!important;
-  overflow-y: scroll;
+  height: 470px!important;
   margin: auto;
   margin-top: 30px;
   border-radius: 4px;
   padding:0 30px;
+  overflow-y: hidden;
+  .content{
+    height: 400px;
+    overflow-y: scroll;
+    padding-bottom: 20px;
+    font-size: 14px;
 
-
+  }
 }
 .btm{
   margin-top: 150px;

@@ -29,7 +29,7 @@ export default (props) => {
 
     function getData(orderStatus) {
         API.orderList({
-            account:sessionStorage.openId,
+            mobile:sessionStorage.mobile,
             orderStatus
         }).then(res=>{
             if(res.code===200){

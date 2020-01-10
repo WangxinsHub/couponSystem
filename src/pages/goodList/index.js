@@ -221,7 +221,7 @@ class Home extends Component {
         const data = {
             list: blList,
             pagination: {
-                total: data ? data.total : 1,
+                total: this.state.data ? this.state.data.total : 1,
                 pageSize: pageSize,
                 current: currentNo,
             },

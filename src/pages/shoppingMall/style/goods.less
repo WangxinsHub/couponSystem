@@ -25,14 +25,8 @@ img{
   }
 }
 .goods-row-heng{
-  .heng-wapper{
-    width: 1000px;
-    display: flex;
-  }
   display: flex;
   margin-top: 6px;
-  overflow-x: scroll;
-  overflow-y: scroll;
 }
 .goods-page{
   background: url("../icon/rainbow.png");
@@ -41,12 +35,17 @@ img{
   min-height: 100vh;
   padding-bottom: 20px;
 }
+.heng-wapper{
+  width: 100%;
+  display: flex;
+}
 .goods-item-heng{
+  min-width: 47%;
   overflow: hidden;
   padding-bottom: 8px;
   margin-left:8px ;
   margin-top: 6px;
-  width: 180px;
+  white-space: nowrap;
   font-stretch: expanded;
   height:48px;
   border-radius:6px;
@@ -79,6 +78,12 @@ img{
     }
     .goods-title{
       font-size:13px;
+
+      width: 120px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+
       font-weight:500;
       color:rgba(0,0,0,1);
       text-align: center;
@@ -104,8 +109,12 @@ img{
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 0;
-  top: 160px;
+  top: 63px;
+  left: 0;
+  font-weight: bold;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  color: #252072;
 }
 .am-modal-content{
   height: auto!important;
@@ -124,18 +133,24 @@ img{
 }
 
 .user-icon{
-  width:48px;
-  height:48px;
+
   background:rgba(255,170,0,1);
-  box-shadow:0px 3px 6px rgba(0,0,0,0.32);
-  border-radius:50%;
+
   opacity:1;
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
-  right: 20px;
+  right: 0;
   bottom: 120px;
+
+  background:rgba(255,170,0,1);
+  box-shadow:0px 3px 6px rgba(0,0,0,0.16);
+  opacity:1;
+  border-radius:24px 0px 0px 24px;
+
+  width:120px;
+  height:42px;
   img{
     width: 21px;
   }
@@ -184,15 +199,24 @@ img{
 .am-modal-close{
   margin-top: 20px;
 }
+
+.btm{
+  margin-top: 150px;
+}
 .am-modal-content{
   width: 327px;
-  height: 450px;
+  height: 470px!important;
   margin: auto;
   margin-top: 30px;
   border-radius: 4px;
-  overflow-y: scroll;
   padding:0 30px;
-}
-.btm{
-  margin-top: 150px;
+  overflow-y: hidden;
+  .content{
+    height: 400px;
+    overflow-y: scroll;
+    padding-bottom: 20px;
+
+
+
+  }
 }
