@@ -1,8 +1,15 @@
 img{
   width: 100%;
 }
+.icon{
+  width: 15px;
+  display: inline-block;
+  margin-top: 5px;
+  margin-right: 2px;
+}
 .goods-type{
   margin-top: 16px;
+
 
   font-weight:500;
   font-family:PingFang SC;
@@ -39,7 +46,32 @@ img{
   width: 100%;
   display: flex;
 }
+.goods-item-heng:before{
+   width: 10px;
+   height: 10px;
+   border-radius: 10px;
+   z-index: 100000;
+   content: '';
+   position: absolute;
+   background: white;
+   left: 43px;
+   top: 10px;
+ }
+
+.goods-item-heng:after{
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  z-index: 100000;
+  content: '';
+  position: absolute;
+  background: white;
+  left: 43px;
+  top: 30px;
+}
+
 .goods-item-heng{
+  position: relative;
   min-width: 47%;
   overflow: hidden;
   padding-bottom: 8px;

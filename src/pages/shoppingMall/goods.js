@@ -8,6 +8,10 @@ import qq from './icon/rs.png'
 import {Modal} from 'antd-mobile'
 import user from './icon/user.png'
 import kf from './icon/kf.svg'
+import sp from './icon/sp.png'
+import yy from './icon/yy.png'
+import ds from './icon/ds.png'
+import bx from './icon/bx.png'
 
 export default (props) => {
   // 声明一个叫 "count" 的 state 变量
@@ -34,10 +38,15 @@ export default (props) => {
 
 
   useEffect(() => {
-    API.typeList().then(res => {
+    let count = 0 ;
+     API.typeList().then(res => {
       if (res.data && res.data.length > 0) {
-        setType(res.data);
+        let types = res.data;
+        setType(types);
+
+
         res.data.map((type) => {
+          count ++;
           API.cargoList({
             meetingId: sessionStorage.meetId,
             goodsTypeId: type.goodsId + ''
@@ -47,7 +56,7 @@ export default (props) => {
             const sliceNum = 4;
             if (res.data.length > 0) {
               var result = new Array()
-              for (var i = 0; i < arr.length; i += 4) {
+              for (var i = 0; i < arr.length; i+=2) {
                 var tmp = new Array()
                 for (var j = 0; j < 2; j++) {
                   if ((i + j) >= arr.length) {
@@ -60,7 +69,11 @@ export default (props) => {
               }
               type.cargo = result;
               console.log(result);
-              setMlist(result)
+              if(count === 6){
+                console.error(types);
+                types.reverse();
+                setMlist(result)
+              }
             }
 
           })
@@ -100,7 +113,13 @@ export default (props) => {
         type && type.map((type, index) => (
           type.cargo && type.cargo.length > 0 && <div className='goods-type' key={index}>
                         <span style={{marginLeft: 10}}>
-                            {type.goodsName}
+                          {
+                            type.goodsName  && type.goodsName.indexOf('视频')>-1 ? <img src={sp} alt="" className='icon'/>
+                            :type.goodsName  && type.goodsName.indexOf('音乐')>-1 ? <img src={yy} alt="" className='icon'/>
+                            :type.goodsName  && type.goodsName.indexOf('阅读')>-1 ? <img src={ds} alt="" className='icon'/>
+                            :type.goodsName  && type.goodsName.indexOf('保险')>-1 ? <img src={bx} alt="" className='icon'/>
+                            :null
+                          }   {type.goodsName}
                         </span>
 
             {
@@ -139,7 +158,8 @@ export default (props) => {
 
       <div className='goods-type'>
                         <span style={{marginLeft: 10}}>
-                            优质保险
+                         <img src={bx} alt="" className='icon' style={{marginRight:2}}/>
+                         <span style={{marginLeft:2}}>优质保险</span>
                         </span>
 
 
@@ -157,9 +177,8 @@ export default (props) => {
                 <div className="price"><span className="red">3.00</span></div>
               </div>
             </div>
-          </div>
 
-          <div className="heng-wapper">
+
             <div className="goods-item-heng"
                  onClick={() => {
                    window.location.href = 'https://elife.ccb-life.com.cn/elife-wechat/#/product/product-purchase/card-activation/cardNo=/cardPwd=?batchNo=KDPC860620200108001'
@@ -174,6 +193,8 @@ export default (props) => {
               </div>
             </div>
           </div>
+
+
         </div>
         <div className="goods-row-heng">
           <div className="heng-wapper">

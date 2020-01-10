@@ -25,19 +25,24 @@ class Home extends Component {
                 this.setState({
                     detail: res.data[0]
                 }, () => {
-                    let kmInfo = JSON.parse(this.state.detail.kmInfo)[0];
-                    console.log(kmInfo);
-                    if (kmInfo) {
-                        this.setState({
-                            kmInfo
-                        })
-                        JsBarcode(this.barcodeRef, kmInfo.cardPwd, {
-                            displayValue:  kmInfo.cardPwd,
-                            width: 0.8,
-                            height: 30,
-                            margin: 0,
-                        });
+                    try {
+                        let kmInfo = JSON.parse(this.state.detail.kmInfo)[0];
+                        console.log(kmInfo);
+                        if (kmInfo) {
+                            this.setState({
+                                kmInfo
+                            })
+                            JsBarcode(this.barcodeRef, kmInfo.cardPwd, {
+                                displayValue:  kmInfo.cardPwd,
+                                width: 0.8,
+                                height: 30,
+                                margin: 0,
+                            });
+                        }
+                    }catch (e) {
+                        console.log(e);
                     }
+
                 })
 
 
@@ -100,7 +105,7 @@ class Home extends Component {
                     </div>
 
                     {
-                        <div className='bill-item-bottom'>
+                        kmInfo.cardNo &&<div className='bill-item-bottom'>
                             <div className='bill-item'>
                                 <div className='bill-label'>卡号</div>
                                 <div>{kmInfo.cardNo}</div>
