@@ -92,7 +92,7 @@ export default (props) => {
       <div className='user-icon' onClick={() => {
         props.history.push(`/shoppingMall/bill`);
       }}>
-        <img src={user} alt=""/> <span>个人中心</span>
+        <img src={user} alt=""/> <span> 个人中心</span>
       </div>
 
       <div className='detail-btn' onClick={() => setModal(true)}>活动详情</div>

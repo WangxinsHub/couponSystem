@@ -20,7 +20,7 @@ class Home extends Component {
         api.orderList({
             orderId: props.match.params.orderId
         }).then(res => {
-
+            document.title = '订单详情'
             if (res.code === 200) {
                 this.setState({
                     detail: res.data[0]
@@ -96,12 +96,12 @@ class Home extends Component {
 
                     <div className='bill-item'>
                         <div className='bill-label'>应付金额</div>
-                        <div>{detail.amount}</div>
+                        <div>{(detail.amount/100).toFixed(2)} 元</div>
                     </div>
 
                     <div className='bill-item'>
                         <div className='bill-label'>实付金额</div>
-                        <div>{detail.actualAmount}</div>
+                        <div>{(detail.actualAmount/100).toFixed(2)} 元</div>
                     </div>
 
                     {
