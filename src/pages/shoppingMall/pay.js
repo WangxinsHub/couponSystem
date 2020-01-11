@@ -31,18 +31,17 @@ export default (props) => {
                 paySign: param.paySign, // 支付签名
                 success: function (res) {
                     if (res.errMsg == "chooseWXPay:ok") {
-                        message('充值成功');
                         props.history.push( `/shoppingMall/result/success`);
                     } else {
-                        message('充值失败')
+                        message.error('充值失败')
                     }
                 },
                 error(res) {
-                    message('充值失败')
+                    message.error('充值失败')
 
                 },
                 cancel: function (res) {
-                    message('取消支付')
+                    message.error('取消支付')
                 }
             });
         });
@@ -73,7 +72,7 @@ export default (props) => {
                     });
                     wechatPay(credential);
                 } else {
-                    props.history.push( `/shoppingMall/result`);
+                    // props.history.push( `/shoppingMall/result`);
                     message.error(res.message);
                 }
             });

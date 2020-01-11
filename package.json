@@ -30,6 +30,7 @@
     "react": "^16.12.0",
     "react-addons-css-transition-group": "^15.6.2",
     "react-amap-binding": "^0.0.22",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.12.0",
     "react-loadable": "^5.4.0",
     "react-redux": "^5.0.6",
