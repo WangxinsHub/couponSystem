@@ -1,11 +1,9 @@
 import React, {useState, useEffect, useRef, Component} from 'react';
 import './style/billDetail.less'
-import QRCode from "qrcode.react";
 import api from "../../api/api";
 import JsBarcode from "jsbarcode";
-import {message} from "antd";
-import util from "../../utils/base";
-
+import {message,Button} from "antd";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 class Home extends Component {
     state = {
@@ -31,13 +29,16 @@ class Home extends Component {
                         if (kmInfo) {
                             this.setState({
                                 kmInfo
+                            },()=>{
+                                JsBarcode(this.barcodeRef, kmInfo.cardPwd, {
+                                    displayValue:  kmInfo.cardPwd,
+                                    width: 0.7,
+                                    fontSize:10,
+
+                                    height: 30,
+                                });
                             })
-                            JsBarcode(this.barcodeRef, kmInfo.cardPwd, {
-                                displayValue:  kmInfo.cardPwd,
-                                width: 0.8,
-                                height: 30,
-                                margin: 0,
-                            });
+
                         }
                     }catch (e) {
                         console.log(e);
@@ -59,6 +60,7 @@ class Home extends Component {
      */
     render() {
         const {detail, kmInfo} = this.state;
+        console.log(kmInfo);
         return (
             detail && <div className={'container'}>
 
@@ -111,6 +113,10 @@ class Home extends Component {
                                 <div>{kmInfo.cardNo}</div>
                             </div>
 
+                            <div className='bill-item'>
+                                <div className='bill-label'>卡密</div>
+                                <div>{kmInfo.cardPwd}</div>
+                            </div>
 
 
                             <div className='bill-item'>
@@ -118,11 +124,19 @@ class Home extends Component {
                                 <div>{kmInfo.outDate}</div>
                             </div>
 
-                            <svg style={{width:300}}
-                                ref={(ref) => {
-                                    this.barcodeRef = ref
-                                }}
+
+                            <svg style={{display:'block'}}
+                                 ref={(ref) => {
+                                     this.barcodeRef = ref
+                                 }}
                             />
+                            <CopyToClipboard text={kmInfo.cardPwd}
+                                             onCopy={() =>{
+                                                 message.success('已复制')
+                                             }}>
+                                <Button style={{margin:'10px auto',display:'block'}} type="primary">复制卡密</Button>
+                            </CopyToClipboard>
+
                         </div>
                     }
 
