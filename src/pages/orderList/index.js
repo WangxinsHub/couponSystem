@@ -1,7 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import {is, fromJS} from 'immutable';
 import {Card, Button, Divider, message, Drawer, Spin, Badge, Popconfirm} from 'antd';
-import {PageHeaderLayout, TableSearch, StandardTable, TableCommon, Utils} from 'dt-antd';
+import {PageHeaderLayout, StandardTable, TableCommon, Utils} from 'dt-antd';
+import TableSearch from '../../components/tableSearch'
 import Define from './define';
 import tableCommon from '../../utils/tableCommon.js';
 import '@/style/list.less';
@@ -20,6 +21,7 @@ class Home extends Component {
         tips: false,
         currentNo: 1, // 当前页码
         pageSize: 10, // 每页显示条数,
+        mList:[],
     };
 
     /**
@@ -45,17 +47,37 @@ class Home extends Component {
             params.meetingId = this.props.match.params.mid
         }
         this.getData(params);
+        api.mList({
+            pageNo:0,
+            pageSize:1000
+        }).then(res=>{
+            if(res.data){
+                this.setState({
+                    mList:res.data
+                })
+            }
+        })
+
+        api.channelList({
+            pageNo:0,
+            pageSize:1000
+        }).then(res=>{
+            if(res.data){
+                this.setState({
+                    channelList:res.data
+                })
+            }
+        })
     }
 
 
     getData(params) {
         api.orderList(params).then(data => {
-            console.error(data);
             this.setState({
                 data: data,
                 blList: data.data || [],
             })
-        })
+        });
     }
 
     /**
@@ -72,7 +94,7 @@ class Home extends Component {
                 if(json.searchList.rangeTime){
                     if (json.searchList.rangeTime.length > 0) {
                         if (json.searchList.startTime === json.searchList.endTime) {
-                            json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd') + '00:00:00'
+                            json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd') + ' 00:00:00'
                             json.searchList.endTime = util.FormatDate(json.searchList.rangeTime[1], 'YYYY/MM/dd') + ' 23:59:59'
                         } else {
                             json.searchList.startTime = util.FormatDate(json.searchList.rangeTime[0], 'YYYY/MM/dd hh:mm:ss')
@@ -123,8 +145,9 @@ class Home extends Component {
             state: this.state,
             pagination,
             callBack: (json) => {
+                console.log(json.searchList.rangeTime)
                 if (json.searchList.rangeTime) {
-                    json.searchList.startTime = json.searchList.rangeTime[0].format('YYYY/MM/DD HH:mm:ss')
+                    json.searchList.startTime = json.searchList.rangeTime[0].format('YYYY/MM/DD  HH:mm:ss')
                     json.searchList.endTime = json.searchList.rangeTime[1].format('YYYY/MM/DD HH:mm:ss')
                     delete json.searchList.rangeTime;
                 }
@@ -144,8 +167,62 @@ class Home extends Component {
      * @return {[type]} [description]
      */
     render() {
-        const {tips, currentNo, pageSize, showDrawerId, showDetail, showDrawer, record, blList} = this.state;
+        const {tips, currentNo, pageSize, showDrawerId, mList, showDrawer, record, blList,channelList} = this.state;
         let {breadMenu, searchMenu} = Define;
+
+        if (mList && mList.length>0 && !Define.canMpush) {
+
+            let option = mList && mList.map((item) => ({
+                value: item.meetingId,
+                label: item.meetingName
+            }));
+
+            if (option) {
+                Define.canMpush = true
+                Define.searchMenu.open.push({
+                    id: 'meetingId',
+                    label: '会场名称',
+                    type: 'select',
+                    option: [
+                        {
+                            label: '全部',
+                            value: null,
+                        },
+                        ...option
+                    ]
+                })
+            }
+
+        }
+
+
+        if (channelList && channelList.length>0 && !Define.canCpush) {
+            console.log(channelList);
+
+            let option = channelList && channelList.map((item) => ({
+                value: item.channelId,
+                label: item.channelName
+            }));
+
+            if (option) {
+                Define.canCpush = true
+                Define.searchMenu.open.push({
+                    id: 'channelId',
+                    label: '入口渠道',
+                    type: 'select',
+                    option: [
+                        {
+                            label: '全部',
+                            value: null,
+                        },
+                        ...option
+                    ]
+                })
+            }
+
+        }
+
+
         searchMenu.searchCallBack = this.handleSearch; // 查询的回调函数
         searchMenu.resetCallBack = this.handleFormReset; // 重置的回调函数
         const searchList = this.state.searchList || {};

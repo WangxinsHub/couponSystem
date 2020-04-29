@@ -20,26 +20,11 @@ export default {
             type: 'input', // input输入框
             placeholder: '请输入手机号',
         },{
-            id: 'channelName',
-            label: '入口渠道',
-            type: 'input', // input输入框
-            placeholder: '入口渠道',
-        },{
-            id: 'channelName',
-            label: '入口渠道',
-            type: 'input', // input输入框
-            placeholder: '入口渠道',
-        },{
             id: 'subject',
             label: '商品名称',
             type: 'input', // input输入框
             placeholder: '请输入商品名称',
-        },{
-            id: 'meetingName',
-            label: '会场名称',
-            type: 'input', // input输入框
-            placeholder: '会场名称',
-        },    {
+        } ,  {
             id: 'rangeTime',
             label: '发放时间',
             type: 'rangePicker',
